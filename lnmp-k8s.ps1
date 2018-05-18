@@ -4,11 +4,14 @@ Function print_help_info(){
 Usage: lnmp-k8s.ps1 COMMAND
 
 Commands:
-  kubectl-install
-  kubectl-getinfo
+  kubectl-install    Install kubectl
+  kubectl-getinfo    Get kubectl latest version info
 
-  deploy
-  cleanup
+  minikube-install   Install minikube
+  minikube           Start minikube
+
+  deploy             deploy lnmp on k8s
+  cleanup            stop lnmp on k8s
 
 "
 }
@@ -67,6 +70,23 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
     kubectl delete secret lnmp-mysql-password
 
     kubectl delete configmap lnmp-env
+  }
+
+  "minikube" {
+    minikube.exe start `
+      --hyperv-virtual-switch="minikube" `
+      --mount `
+      --mount-string `
+      -v 10 `
+      --registry-mirror=https://registry.docker-cn.com `
+      --vm-driver="hyperv" `
+      --memory=4096
+  }
+
+  "minikube-install" {
+    wsl curl -L `
+      http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v0.26.1/minikube-windows-amd64.exe `
+      -o minikube.exe
   }
 
 }

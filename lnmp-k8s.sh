@@ -2,17 +2,45 @@
 
 KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
 
+set -ex
+
+os=`uname -s`
+
 print_help_info(){
-  echo "Usage:	$0 COMMAND
+  echo "
+
+Usage: lnmp-k8s.sh COMMAND
 
 Commands:
-  kubectl-install
-  kubectl-getinfo
+  kubectl-install    Install kubectl
+  kubectl-getinfo    Get kubectl latest version info
 
-  deploy
-  cleanup
+  minikube-install   Install minikube
+  minikube           Start minikube
+
+  deploy             deploy lnmp on k8s
+  cleanup            stop lnmp on k8s
 
 "
+}
+
+_minikube(){
+  echo
+}
+
+_minikube-install(){
+  if [ $os = 'Linux' ];then
+    url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v0.26.1/minikube-linux-amd64
+  elif [ $os = 'Darwin' ];then
+    url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v0.26.1/minikube-darwin-amd64
+  fi
+
+  curl -L $url -o minikube
+
+  chmod +x minikube
+
+  echo "
+  move minikube to your PATH"
 }
 
 _cleanup(){
@@ -79,5 +107,13 @@ case $1 in
 
     cleanup )
       _cleanup
+    ;;
+
+    minikube )
+      _minikube
+    ;;
+
+    minikube-install )
+      _minikube-install
     ;;
 esac
