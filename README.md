@@ -1,6 +1,12 @@
 # Run LNMP on k8s
 
+* [问题反馈](https://github.com/khs1994-docker/lnmp/issues/122)
+
+* **Windows** 用户务必安装 `WSL`
+
 ## Docker 桌面版支持 k8s
+
+* 由于国内网络问题，很有可能开启不了！！！
 
 ### 切换
 
