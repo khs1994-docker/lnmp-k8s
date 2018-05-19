@@ -16,6 +16,12 @@ Commands:
 "
 }
 
+################################################################################
+
+$MINIKUBE_VERSION="0.27.0"
+
+################################################################################
+
 if ($args.length -eq 0){
   print_help_info
   exit
@@ -75,8 +81,6 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
   "minikube" {
     minikube.exe start `
       --hyperv-virtual-switch="minikube" `
-      --mount `
-      --mount-string `
       -v 10 `
       --registry-mirror=https://registry.docker-cn.com `
       --vm-driver="hyperv" `
@@ -85,7 +89,7 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
 
   "minikube-install" {
     wsl curl -L `
-      http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v0.26.1/minikube-windows-amd64.exe `
+      http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-windows-amd64.exe `
       -o minikube.exe
   }
 

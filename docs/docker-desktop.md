@@ -1,6 +1,14 @@
 # Docker 桌面版支持 k8s
 
-* 由于国内网络问题，很有可能开启不了！！！
+* 由于国内网络问题，本项目提供了 gcr.io Local Docker Registry Server
+
+```bash
+$ cd ..
+
+$ ./lnmp-docker.sh gcr.io
+```
+
+具体请查看 https://github.com/khs1994-docker/lnmp/issues/520
 
 ## 切换
 

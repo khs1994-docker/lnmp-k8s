@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
+metadata:
+  name: lnmp-configs
 data:
   TZ: Asia/Shanghai
   APP_ENV: production
-metadata:
-  name: lnmp-configs

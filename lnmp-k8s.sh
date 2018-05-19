@@ -24,15 +24,32 @@ Commands:
 "
 }
 
+################################################################################
+
+MINIKUBE_VERSION=0.27.0
+
+################################################################################
+
 _minikube(){
-  echo
+  if [ `uname -s` = 'Darwin' ];then
+    minikube start \
+      -v 10 \
+      --registry-mirror=https://registry.docker-cn.com \
+      --vm-driver="hyperkit" \
+      --memory=4096
+  else
+    minikube start \
+      -v 10 \
+      --registry-mirror=https://registry.docker-cn.com \
+      --vm-driver="none"
+  fi
 }
 
 _minikube-install(){
   if [ $os = 'Linux' ];then
-    url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v0.26.1/minikube-linux-amd64
+    url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-linux-amd64
   elif [ $os = 'Darwin' ];then
-    url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v0.26.1/minikube-darwin-amd64
+    url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-darwin-amd64
   fi
 
   curl -L $url -o minikube
