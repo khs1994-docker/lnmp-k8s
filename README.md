@@ -13,7 +13,7 @@ Please see https://github.com/khs1994-docker/lnmp-k8s/blob/dev/docs/docker-deskt
 ```bash
 $ cd kubernetes
 
-$ kubectl apply -f kubernetes-dashboard.yaml
+$ kubectl apply -f deployment/kubernetes-dashboard.yaml
 
 $ kubectl proxy
 ```
