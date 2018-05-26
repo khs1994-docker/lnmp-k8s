@@ -28,8 +28,6 @@ $ kubectl config use-context docker-for-desktop
 $ kubectl config use-context minikube
 ```
 
->更多信息请查看：https://www.khs1994.com/docker/docker-win-k8s.html
-
 ### 部署 lnmp
 
 启用 `k8s` 之后，输入如下命令

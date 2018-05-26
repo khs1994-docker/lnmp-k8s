@@ -77,19 +77,19 @@ kubectl delete configmap lnmp-env
 
 _deploy(){
 
-  kubectl create -f lnmp-volumes.yaml
+  kubectl create -f deployment/lnmp-volumes.yaml
 
-  kubectl create -f lnmp-env.yaml
+  kubectl create -f deployment/lnmp-env.yaml
 
   kubectl create secret generic lnmp-mysql-password --from-literal=password=mytest
 
-  kubectl create -f lnmp-mysql.yaml
+  kubectl create -f deployment/lnmp-mysql.yaml
 
-  kubectl create -f lnmp-redis.yaml
+  kubectl create -f deployment/lnmp-redis.yaml
 
-  kubectl create -f lnmp-php7.yaml
+  kubectl create -f deployment/lnmp-php7.yaml
 
-  kubectl create -f lnmp-nginx.yaml
+  kubectl create -f deployment/lnmp-nginx.yaml
 }
 
 kubectl-install(){
