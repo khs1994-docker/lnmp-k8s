@@ -65,7 +65,7 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: khs1994/nginx:1.13.12-alpine
+      - image: khs1994/nginx:1.15.0-alpine
         name: lnmp-nginx
         args:
         - /wait-for-php.sh
