@@ -21,6 +21,7 @@ Commands:
   deploy             deploy lnmp on k8s
   cleanup            stop lnmp on k8s
 
+  dashboard          How to open Dashboard
 "
 }
 
@@ -68,11 +69,11 @@ kubectl delete service -l app=lnmp
 
 kubectl delete pvc -l app=lnmp
 
-kubectl delete pv lnmp-mysql-data lnmp-redis-data lnmp-data lnmp-nginx-conf
+kubectl delete pv -l app=lnmp
 
-kubectl delete secret lnmp-mysql-password
+kubectl delete secret -l app=lnmp
 
-kubectl delete configmap lnmp-env
+kubectl delete configmap -l app=lnmp
 }
 
 _deploy(){
@@ -132,5 +133,14 @@ case $1 in
 
     minikube-install )
       _minikube-install
+    ;;
+
+    dashboard )
+      echo "
+$ kubectl proxy
+
+open http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+
+"
     ;;
 esac

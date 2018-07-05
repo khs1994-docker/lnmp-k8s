@@ -65,10 +65,12 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: khs1994/nginx:1.15.0-alpine
+      - image: khs1994/nginx:1.15.1-alpine
         name: lnmp-nginx
         args:
-        - /wait-for-php.sh
+        - nginx
+        - -g
+        - "daemon off;"
         env:
         - name: TZ
           valueFrom:
@@ -82,22 +84,34 @@ spec:
         volumeMounts:
         - name: lnmp-data
           mountPath: /app
-        - name: lnmp-nginx-conf
+        - name: lnmp-nginx-conf-d
           mountPath: /etc/nginx/conf.d
+          readOnly: true
+        - name: lnmp-nginx-khs1994-com-tls
+          mountPath: /etc/nginx/conf.d/ssl
+          readOnly: true
+        - name: lnmp-nginx-conf
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+          readOnly: true
         resources: {}
       volumes:
-      # - name: lnmp-data
-      #   persistentVolumeClaim:
-      #     claimName: lnmp-data
-      # - name: lnmp-nginx-conf
-      #   persistentVolumeClaim:
-      #     claimName: lnmp-nginx-conf
-      #
       - name: lnmp-data
         hostPath:
           path: /data/lnmp/app
+
+      # 将 secret 挂载为文件
+      - name: lnmp-nginx-khs1994-com-tls
+        secret:
+          secretName: lnmp-nginx-khs1994-com-tls
       - name: lnmp-nginx-conf
-        hostPath:
-          path: /data/lnmp/config/nginx
+        secret:
+          secretName: lnmp-nginx-conf
+          items:
+          - key: nginx
+            path: nginx.conf
+      - name: lnmp-nginx-conf-d
+        secret:
+          secretName: lnmp-nginx-conf-d
       restartPolicy: Always
 status: {}

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: CronJob
+metadata:
+  name: lnmp-cron
+  labels:
+    app: lnmp
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: lnmp-cron
+            image: khs1994/php-fpm:7.2.7-alpine3.7
+            args:
+            - /bin/sh
+            - -c
+            - date; echo Hello from the Kubernetes cluster
+          restartPolicy: OnFailure

@@ -47,17 +47,22 @@ spec:
       containers:
       - image: mysql:8.0.11
         name: lnmp-mysql
+        # envFrom:
+        #   - configMapKeyRef:
+        #       name: env-config
         env:
+        # 将 secret 变为环境变量
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: lnmp-mysql-password
               key: password
+        # config 用作环境变量
         - name: TZ
           valueFrom:
              configMapKeyRef:
-              key: TZ
-              name: lnmp-env
+               name: lnmp-env
+               key: TZ
         - name: MYSQL_DATABASE
           value: test
         ports:

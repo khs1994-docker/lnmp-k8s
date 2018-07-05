@@ -47,7 +47,7 @@ spec:
         tier: redis
     spec:
       containers:
-      - image: redis:4.0.9-alpine
+      - image: redis:5.0-rc3-alpine
         name: lnmp-redis
         args:
         - redis-server
@@ -62,6 +62,9 @@ spec:
         volumeMounts:
         - mountPath: /data
           name: lnmp-redis-data
+        - mountPath: /redis.conf
+          name: lnmp-redis-conf
+          subPath: redis.conf
         ports:
         - containerPort: 6379
           name: lnmp-redis
@@ -70,4 +73,12 @@ spec:
       - name: lnmp-redis-data
         persistentVolumeClaim:
           claimName: lnmp-redis-data
+
+      # 将 configMap 挂载为文件
+      - name: lnmp-redis-conf
+        configMap:
+          name: lnmp-redis-conf
+          items:
+          - key: redis-conf
+            path: redis.conf
 status: {}

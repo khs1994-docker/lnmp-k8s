@@ -13,6 +13,8 @@ Commands:
   deploy             deploy lnmp on k8s
   cleanup            stop lnmp on k8s
 
+  dashboard
+
 "
 }
 
@@ -71,11 +73,11 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
 
     kubectl delete pvc -l app=lnmp
 
-    kubectl delete pv lnmp-mysql-data lnmp-redis-data lnmp-data lnmp-nginx-conf
+    kubectl delete pv -l app=lnmp
 
-    kubectl delete secret lnmp-mysql-password
+    kubectl delete secret -l app=lnmp
 
-    kubectl delete configmap lnmp-env
+    kubectl delete configmap -l app=lnmp
   }
 
   "minikube" {
@@ -91,6 +93,15 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
     wsl curl -L `
       http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-windows-amd64.exe `
       -o minikube.exe
+  }
+
+  "dashboard" {
+    echo "
+$ kubectl proxy
+
+open http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+
+"
   }
 
 }

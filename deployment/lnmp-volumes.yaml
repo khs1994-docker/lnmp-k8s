@@ -4,6 +4,7 @@ metadata:
   name: lnmp-mysql-data
   labels:
     type: local
+    app: lnmp
 spec:
   capacity:
     storage: 20Gi
@@ -18,6 +19,7 @@ metadata:
   name: lnmp-redis-data
   labels:
     type: local
+    app: lnmp
 spec:
   capacity:
     storage: 20Gi
@@ -33,6 +35,7 @@ metadata:
   name: lnmp-data
   labels:
     type: local
+    app: lnmp
 spec:
   capacity:
     storage: 20Gi
@@ -48,6 +51,7 @@ metadata:
   name: lnmp-nginx-conf
   labels:
     type: local
+    app: lnmp
 spec:
   capacity:
     storage: 20Gi
