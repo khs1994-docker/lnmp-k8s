@@ -5,16 +5,16 @@ metadata:
   labels:
     app: lnmp
 spec:
-  clusterIP: None
   ports:
   - port: 9000
   selector:
     app: lnmp
     tier: php7
+  clusterIP: None
 status:
   loadBalancer: {}
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
 kind: Deployment
 metadata:
   name: php7
@@ -34,8 +34,8 @@ spec:
         tier: php7
     spec:
       containers:
-      - image: khs1994/php-fpm:7.2.7-alpine3.7
-        name: lnmp-php7
+      - name: lnmp-php7
+        image: khs1994/php-fpm:7.2.7-alpine3.7
         args:
         - php-fpm
         - -R
@@ -51,9 +51,12 @@ spec:
               key: APP_ENV
               name: lnmp-env
         ports:
-        - containerPort: 9000
-          name: lnmp-php7
-        resources: {}
+        - name: lnmp-php7
+          containerPort: 9000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
         volumeMounts:
         - name: lnmp-data
           mountPath: /app

@@ -4,13 +4,15 @@ metadata:
   name: redis
   labels:
     app: lnmp
+    tier: redis
 spec:
-  clusterIP: None
   ports:
   - port: 6379
+    # targetPort: 6379
   selector:
     app: lnmp
     tier: redis
+  clusterIP: None
 status:
   loadBalancer: {}
 ---
@@ -27,7 +29,7 @@ spec:
     requests:
       storage: 20Gi
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
 kind: Deployment
 metadata:
   name: redis
@@ -38,6 +40,7 @@ spec:
     matchLabels:
       app: lnmp
       tier: redis
+  replicas: 1
   strategy:
     type: Recreate
   template:
@@ -47,27 +50,30 @@ spec:
         tier: redis
     spec:
       containers:
-      - image: redis:5.0-rc3-alpine
-        name: lnmp-redis
+      - name: lnmp-redis
+        image: redis:5.0-rc3-alpine
         args:
         - redis-server
         - /redis.conf
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
         env:
         - name: TZ
           valueFrom:
             configMapKeyRef:
               key: TZ
               name: lnmp-env
-        resources: {}
         volumeMounts:
-        - mountPath: /data
-          name: lnmp-redis-data
-        - mountPath: /redis.conf
-          name: lnmp-redis-conf
+        - name: lnmp-redis-data
+          mountPath: /data
+        - name: lnmp-redis-conf
+          mountPath: /redis.conf
           subPath: redis.conf
         ports:
-        - containerPort: 6379
-          name: lnmp-redis
+        - name: lnmp-redis
+          containerPort: 6379
       restartPolicy: Always
       volumes:
       - name: lnmp-redis-data
