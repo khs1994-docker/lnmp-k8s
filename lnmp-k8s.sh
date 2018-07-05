@@ -18,8 +18,8 @@ Commands:
   minikube-install   Install minikube
   minikube           Start minikube
 
-  deploy             deploy lnmp on k8s
-  cleanup            stop lnmp on k8s
+  deploy             Deploy lnmp on k8s
+  cleanup            Stop lnmp on k8s
 
   dashboard          How to open Dashboard
 "
@@ -80,9 +80,11 @@ _deploy(){
 
   kubectl create -f deployment/lnmp-volumes.yaml
 
-  kubectl create -f deployment/lnmp-env.yaml
+  kubectl create -f deployment/lnmp-configs.yaml
 
-  kubectl create secret generic lnmp-mysql-password --from-literal=password=mytest
+  # kubectl create secret generic lnmp-mysql-password --from-literal=password=mytest
+
+  kubectl create -f deployment/lnmp-secrets.yaml
 
   kubectl create -f deployment/lnmp-mysql.yaml
 

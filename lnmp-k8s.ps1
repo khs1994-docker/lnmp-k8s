@@ -1,3 +1,5 @@
+cd $PSScriptRoot
+
 Function print_help_info(){
   echo "
 
@@ -10,10 +12,10 @@ Commands:
   minikube-install   Install minikube
   minikube           Start minikube
 
-  deploy             deploy lnmp on k8s
-  cleanup            stop lnmp on k8s
+  deploy             Deploy lnmp on k8s
+  cleanup            Stop lnmp on k8s
 
-  dashboard
+  dashboard          How to open Dashboard
 
 "
 }
@@ -31,11 +33,14 @@ if ($args.length -eq 0){
 
 $KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
 
+Function get_kubectl_version(){
+  return $KUBECTL_VERSION=$(wsl curl https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+}
+
 switch ($args[0])
 {
   "kubectl-install" {
-    $KUBECTL_VERSION=$(wsl curl storage.googleapis.com/kubernetes-release/release/stable.txt)
-
+    $KUBECTL_VERSION=get_kubectl_version
     wsl curl -L ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/windows/amd64/kubectl.exe -o kubectl-Windows-x86_64.exe
 
     echo "
@@ -44,8 +49,7 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
   }
 
   "kubectl-getinfo" {
-    $KUBECTL_VERSION=$(wsl curl storage.googleapis.com/kubernetes-release/release/stable.txt)
-
+    $KUBECTL_VERSION=get_kubectl_version
     echo "Latest Stable Version is: $KUBECTL_VERSION
     "
   }
@@ -53,9 +57,11 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
   "deploy" {
     kubectl create -f deployment/lnmp-volumes.yaml
 
-    kubectl create -f deployment/lnmp-env.yaml
+    kubectl create -f deployment/lnmp-configs.yaml
 
-    kubectl create secret generic lnmp-mysql-password --from-literal=password=mytest
+    # kubectl create secret generic lnmp-mysql-password --from-literal=password=mytest
+
+    kubectl create -f deployment/lnmp-secrets.yaml
 
     kubectl create -f deployment/lnmp-mysql.yaml
 
