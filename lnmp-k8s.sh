@@ -96,10 +96,30 @@ _deploy(){
 }
 
 kubectl-install(){
+  if [ $os = 'Linux' ];then
+    command -v docker
+    if [ $? -eq 0 ];then
+      docker container rm -f khs1994-kubectl || echo > /dev/null
+      docker container create --name=khs1994-kubectl khs1994/coreos:cert
+      docker container cp khs1994-kubectl:/usr/local/bin/kubectl .
+      docker container rm -f khs1994-kubectl
+      sudo mv kubectl /usr/local/bin
+      kubectl version
+      return
+    fi
+  fi
+
   KUBECTL_VERSION=$(curl https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 
-  curl -L ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/linux/amd64/kubectl > kubectl-Linux-x86_64
-  curl -L ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/darwin/amd64/kubectl > kubectl-Darwin-x86_64
+  if [ $OS = 'Linux' ];then
+    curl -L ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/linux/amd64/kubectl > kubectl-Linux-x86_64
+    sudo mv kubectl-* /usr/local/bin/
+  elif [ $OS = 'Darwin' ];then
+    curl -L ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/darwin/amd64/kubectl > kubectl-Darwin-x86_64
+    sudo mv kubectl-* /usr/local/bin/
+  fi
+
+  kubectl version
 }
 
 kubectl-getinfo(){
