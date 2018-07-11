@@ -2,12 +2,24 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nginx
+  # namespace: my-namespace
   labels:
     app: lnmp
     tier: frontend
 spec:
+  # 暴露服务方式之一
+  type: LoadBalancer
+
+  # 暴露服务方式之一
   # type: NodePort
-  # 这里定义标签选择器
+
+  # 集群内的私有 ip ，this is default
+  # type: ClusterIP
+  # clusterIP: None
+
+  # sessionAffinity: None
+
+  # 定义标签选择器
   selector:
     app: lnmp
     tier: frontend
@@ -16,12 +28,15 @@ spec:
   - name: https
     protocol: TCP
     port: 443
-    # targetPort: 80
-    # nodePort: 28888
+    # targetPort: 443
+    # 通过访问 Service 的 port 端口转发到 Pod 的 targetPort 端口上
+
+    # 暴露服务方式之一
+    # 将 service 的 port 映射到每个 node 的一个指定内部 port 上
+    # nodePort: 443
   - name: http
     protocol: TCP
     port: 80
-  type: LoadBalancer
 status:
   loadBalancer: {}
 ---
@@ -57,6 +72,7 @@ apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and befor
 kind: Deployment
 metadata:
   name: nginx
+  # namespace: my-namespace
   labels:
     app: lnmp
     tier: frontend
@@ -76,7 +92,7 @@ spec:
       containers:
       - name: lnmp-nginx
         image: khs1994/nginx:1.15.1-alpine
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: IfNotPresent # Always
         args:
         - nginx
         - -g
@@ -87,6 +103,8 @@ spec:
             configMapKeyRef:
               key: TZ
               name: lnmp-env
+        # - name: A
+        #   value: a
         ports:
         - containerPort: 443
         - containerPort: 80
@@ -106,6 +124,9 @@ spec:
           subPath: nginx.conf
           readOnly: true
         resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
           requests:
             cpu: 100m
             memory: 100Mi
@@ -130,4 +151,5 @@ spec:
         secret:
           secretName: lnmp-nginx-conf-d
       restartPolicy: Always
+      # dnsPolicy: ClusterFirst
 status: {}
