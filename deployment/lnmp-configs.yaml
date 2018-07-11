@@ -5,8 +5,8 @@ metadata:
   labels:
     app: lnmp
 data:
-  # kubectl create configmap special-config --from-literal=special.how=very
-  # kubectl create configmap special-config --from-env-file=.env.example
+  # kubectl create configmap my-config --from-literal=special.how=very
+  # kubectl create configmap my-config --from-env-file=.env.example
   TZ: Asia/Shanghai
   APP_ENV: production
 ---

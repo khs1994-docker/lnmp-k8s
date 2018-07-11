@@ -6,12 +6,12 @@ metadata:
     app: lnmp
     tier: redis
 spec:
+  selector:
+    app: lnmp
+    tier: redis  
   ports:
   - port: 6379
     # targetPort: 6379
-  selector:
-    app: lnmp
-    tier: redis
   clusterIP: None
 status:
   loadBalancer: {}
@@ -22,6 +22,7 @@ metadata:
   name: lnmp-redis-data
   labels:
     app: lnmp
+    tier: redis
 spec:
   accessModes:
     - ReadWriteOnce
@@ -35,6 +36,7 @@ metadata:
   name: redis
   labels:
     app: lnmp
+    tier: redis
 spec:
   selector:
     matchLabels:
@@ -72,8 +74,7 @@ spec:
           mountPath: /redis.conf
           subPath: redis.conf
         ports:
-        - name: lnmp-redis
-          containerPort: 6379
+        - containerPort: 6379
       restartPolicy: Always
       volumes:
       - name: lnmp-redis-data

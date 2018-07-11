@@ -4,12 +4,13 @@ metadata:
   name: mysql
   labels:
     app: lnmp
+    tier: mysql
 spec:
-  ports:
-    - port: 3306
   selector:
     app: lnmp
     tier: mysql
+  ports:
+    - port: 3306
   clusterIP: None
 ---
 apiVersion: v1
@@ -18,12 +19,16 @@ metadata:
   name: lnmp-mysql-data
   labels:
     app: lnmp
+    tier: mysql
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: 20Gi
+  selector:
+    matchLabels:
+      app: lnmp
 ---
 apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
 kind: Deployment
@@ -31,6 +36,7 @@ metadata:
   name: mysql
   labels:
     app: lnmp
+    tier: mysql
 spec:
   selector:
     matchLabels:
@@ -48,6 +54,7 @@ spec:
       containers:
       - name: lnmp-mysql
         image: mysql:8.0.11
+        imagePullPolicy: IfNotPresent
         # envFrom:
         #   - configMapKeyRef:
         #       name: env-config
@@ -67,8 +74,7 @@ spec:
         - name: MYSQL_DATABASE
           value: test
         ports:
-        - name: lnmp-mysql
-          containerPort: 3306
+        - containerPort: 3306
         volumeMounts:
         - name: lnmp-mysql-data
           mountPath: /var/lib/mysql

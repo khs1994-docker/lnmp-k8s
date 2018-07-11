@@ -4,12 +4,13 @@ metadata:
   name: php7
   labels:
     app: lnmp
+    tier: php7
 spec:
-  ports:
-  - port: 9000
   selector:
     app: lnmp
     tier: php7
+  ports:
+  - port: 9000
   clusterIP: None
 status:
   loadBalancer: {}
@@ -20,6 +21,7 @@ metadata:
   name: php7
   labels:
     app: lnmp
+    tier: php7
 spec:
   selector:
     matchLabels:
@@ -51,8 +53,7 @@ spec:
               key: APP_ENV
               name: lnmp-env
         ports:
-        - name: lnmp-php7
-          containerPort: 9000
+        - containerPort: 9000
         resources:
           requests:
             cpu: 100m
@@ -68,5 +69,7 @@ spec:
       - name: lnmp-data
         hostPath:
           path: /data/lnmp/app
+          # path: /host_mnt/c/90621/lnmp/app
+          # path: /Users/khs1994/lnmp/app          
       restartPolicy: Always
 status: {}

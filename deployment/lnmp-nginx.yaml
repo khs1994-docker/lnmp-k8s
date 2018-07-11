@@ -4,17 +4,23 @@ metadata:
   name: nginx
   labels:
     app: lnmp
+    tier: frontend
 spec:
+  # type: NodePort
+  # 这里定义标签选择器
+  selector:
+    app: lnmp
+    tier: frontend
+
   ports:
   - name: https
     protocol: TCP
     port: 443
+    # targetPort: 80
+    # nodePort: 28888
   - name: http
     protocol: TCP
     port: 80
-  selector:
-    app: lnmp
-    tier: frontend
   type: LoadBalancer
 status:
   loadBalancer: {}
@@ -25,6 +31,7 @@ status:
 #   name: lnmp-data
 #   labels:
 #     app: lnmp
+#     tier: frontend
 # spec:
 #   accessModes:
 #     - ReadWriteOnce
@@ -38,6 +45,7 @@ status:
 #   name: lnmp-nginx-conf
 #   labels:
 #     app: lnmp
+#     tier: frontend
 # spec:
 #   accessModes:
 #     - ReadWriteOnce
@@ -51,6 +59,7 @@ metadata:
   name: nginx
   labels:
     app: lnmp
+    tier: frontend
 spec:
   selector:
     matchLabels:
@@ -67,6 +76,7 @@ spec:
       containers:
       - name: lnmp-nginx
         image: khs1994/nginx:1.15.1-alpine
+        imagePullPolicy: IfNotPresent
         args:
         - nginx
         - -g
@@ -79,8 +89,9 @@ spec:
               name: lnmp-env
         ports:
         - containerPort: 443
-        - name: lnmp-nginx
-          containerPort: 80
+        - containerPort: 80
+        # securityContext:
+        #   privileged: true
         volumeMounts:
         - name: lnmp-data
           mountPath: /app
@@ -102,6 +113,8 @@ spec:
       - name: lnmp-data
         hostPath:
           path: /data/lnmp/app
+          # path: /host_mnt/c/90621/lnmp/app
+          # path: /Users/khs1994/lnmp/app
 
       # 将 secret 挂载为文件
       - name: lnmp-nginx-khs1994-com-tls

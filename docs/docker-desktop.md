@@ -1,6 +1,6 @@
 # Docker 桌面版支持 k8s
 
-* 由于国内网络问题，本项目提供了 gcr.io Local Docker Registry Server
+* 由于国内网络问题，本项目提供了 `k8s.gcr.io` `gcr.io` Local Docker Registry Server
 
 ```bash
 $ cd ..

@@ -4,6 +4,10 @@
 
 * **Windows** 用户务必安装 `WSL`
 
+## 自己手动部署集群
+
+* https://github.com/khs1994-docker/coreos-kubernetes
+
 ## Docker Desktop
 
 Please see https://github.com/khs1994-docker/lnmp-k8s/blob/dev/docs/docker-desktop.md

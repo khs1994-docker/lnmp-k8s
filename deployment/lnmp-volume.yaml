@@ -9,7 +9,13 @@ spec:
   capacity:
     storage: 20Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteOnce    # 被单个节点mount为读写rw模式
+    # - ReadOnlyMany   # 被多个节点mount为只读ro模式
+    # - ReadWriteMany  # 被多个节点mount为读写rw模式
+  persistentVolumeReclaimPolicy: Recycle
+  # Retain 允许用户手动回收
+  # Recycle 删除 PV 上的数据
+  # Delete 删除 PV
   hostPath:
     path: /tmp/data/pv-1
 ---
@@ -23,8 +29,8 @@ metadata:
 spec:
   capacity:
     storage: 20Gi
-  accessModes:
-    - ReadWriteOnce
+  accessModes: [ "ReadWriteOnce"
+  persistentVolumeReclaimPolicy: Recycle
   hostPath:
     path: /tmp/data/pv-2
 ---
@@ -41,6 +47,7 @@ spec:
     storage: 20Gi
   accessModes:
     - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Recycle
   hostPath:
     path: /tmp/data/pv-3
 ---
@@ -57,5 +64,6 @@ spec:
     storage: 20Gi
   accessModes:
     - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Recycle  
   hostPath:
     path: /tmp/data/pv-4
