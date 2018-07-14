@@ -12,6 +12,8 @@ Service 通过 `Label Selector` 来匹配一系列的 Pod，Label Selector 允�
 
 * https://blog.csdn.net/limx59/article/details/71717275
 
+* https://www.cnblogs.com/devilwind/p/8891636.html
+
 ```bash
 
 internet
@@ -21,11 +23,23 @@ internet
 
 ```
 
+### ClusterIP
+
+ClusterIP 服务是 Kubernetes 的默认服务。它给你一个集群内的服务，集群内的其它应用都可以访问该服务。集群外部无法访问它。
+
+如果 从Internet 没法访问 ClusterIP 服务，那么我们为什么要讨论它呢？那是因为我们可以通过 Kubernetes 的 proxy 模式来访问该服务！
+
 ### Nodeport
 
 把 service 的 port 映射到每个节点内部指定 port 上，所有节点内部映射的 port 都一样。
 
+NodePort Service 是通过在节点上暴漏端口，然后通过将端口映射到具体某个服务上来实现服务暴漏，比较直观方便，但是对于集群来说，随着 Service 的不断增加，需要的端口越来越多，很容易出现端口冲突，而且不容易管理。当然对于小规模的集群服务，还是比较不错的。
+
+NodePort 服务主要有两点区别于普通的 ClusterIP 服务。第一，它的类型是 NodePort 。有一个额外的端口，称为 nodePort，它指定节点上开放的端口值 。如果你不指定这个端口，系统将选择一个随机端口。大多数时候我们应该让 Kubernetes 来选择端口，因为如评论中 thockin 所说，用户自己来选择可用端口代价太大。
+
 ### Loadbalancer
+
+LoadBlancer Service 是 Kubernetes 结合云平台的组件，如国外 GCE、AWS、国内阿里云等等，使用它向使用的底层云平台申请创建负载均衡器来实现，有局限性，对于使用云平台的集群比较方便。
 
 ### Ingress
 

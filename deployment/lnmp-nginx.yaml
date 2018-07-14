@@ -7,6 +7,8 @@ metadata:
     app: lnmp
     tier: frontend
 spec:
+  # externalIPs:
+  #   - 192.168.57.110
   # 暴露服务方式之一
   type: LoadBalancer
 
@@ -32,7 +34,7 @@ spec:
     # 通过访问 Service 的 port 端口转发到 Pod 的 targetPort 端口上
 
     # 暴露服务方式之一
-    # 将 service 的 port 映射到每个 node 的一个指定内部 port 上
+    # 将 service 的 port 映射到每个 node 的一个指定内部 port 上，如果不指定 nodePort,k8s 将随机映射
     # nodePort: 443
   - name: http
     protocol: TCP
@@ -89,6 +91,10 @@ spec:
         app: lnmp
         tier: frontend
     spec:
+      # nodeSelector:
+      #   beta.kubernetes.io/arch: amd64
+      #   beta.kubernetes.io/os: windows # linux
+      #   kubernetes.io/hostname: coreos3
       containers:
       - name: lnmp-nginx
         image: khs1994/nginx:1.15.1-alpine
@@ -119,6 +125,7 @@ spec:
         - name: lnmp-nginx-khs1994-com-tls
           mountPath: /etc/nginx/conf.d/ssl
           readOnly: true
+        # 挂载 secret configMap 为文件夹，默认会覆盖掉文件夹中的全部文件，通过以下配置，只挂载指定的文件
         - name: lnmp-nginx-conf
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
@@ -130,6 +137,18 @@ spec:
           requests:
             cpu: 100m
             memory: 100Mi
+        livenessProbe: # 探测应用是否处于健康状态，如果不健康则删除并重新创建容器
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 15
+          timeoutSeconds: 1
+        readinessProbe: # 探测应用是否启动完成并且处于正常服务状态，如果不正常则不会接收来自Kubernetes Service的流量
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
       volumes:
       - name: lnmp-data
         hostPath:
