@@ -31,11 +31,11 @@ $ kubectl proxy
 * https://www.khs1994.com/docker/minikube/README.html
 
 ```bash
-$ ./lnmp-k8s.sh minikube-install
+$ ./lnmp-k8s minikube-install
 
 # move minikube to your PATH
 
-$ ./lnmp-k8s.sh minikube
+$ ./lnmp-k8s minikube
 
 # deploy
 
@@ -70,13 +70,13 @@ $ minikube delete
 ```bash
 $ cd kubernetes
 
-$ ./lnmp-k8s.sh deploy
+$ ./lnmp-k8s deploy
 ```
 
 ## 删除 lnmp
 
 ```bash
-$ ./lnmp-k8s.sh cleanup
+$ ./lnmp-k8s cleanup
 ```
 
 ## Windows 10
