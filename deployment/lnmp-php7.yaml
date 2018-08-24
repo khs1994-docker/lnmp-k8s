@@ -47,13 +47,13 @@ spec:
         - name: TZ
           valueFrom:
             configMapKeyRef:
-              key: TZ
               name: lnmp-env
+              key: TZ
         - name: APP_ENV
           valueFrom:
             configMapKeyRef:
-              key: APP_ENV
               name: lnmp-env
+              key: APP_ENV
         ports:
         - containerPort: 9000
         resources:
@@ -63,6 +63,20 @@ spec:
         volumeMounts:
         - name: lnmp-data
           mountPath: /app
+
+        - name: lnmp-php-conf
+          mountPath: /usr/local/etc/php/php.ini
+          subPath: php.ini
+        - name: lnmp-php-conf
+          mountPath: /usr/local/etc/php/conf.d/docker-xdebug.ini
+          subPath: docker-xdebug.ini
+        - name: lnmp-php-conf
+          mountPath: /usr/local/etc/php-fpm.d/zz-docker.conf
+          subPath: zz-docker.conf
+        - name: lnmp-php-conf
+          mountPath: /tmp/config.json
+          subPath: config.json
+      restartPolicy: Always
       volumes:
       # - name: lnmp-data
       #   persistentVolumeClaim:
@@ -71,5 +85,16 @@ spec:
       - name: lnmp-data
         persistentVolumeClaim:
           claimName: lnmp-data
-      restartPolicy: Always
+      - name: lnmp-php-conf
+        configMap:
+          name: lnmp-php-conf
+          items:
+          - key: php.ini
+            path: php.ini
+          - key: docker-xdebug.ini
+            path: docker-xdebug.ini
+          - key: zz-docker.production.conf
+            path: zz-docker.conf
+          - key: composer.config.json
+            path: config.json
 status: {}

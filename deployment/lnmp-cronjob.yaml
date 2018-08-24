@@ -1,6 +1,6 @@
 # 可以运行 Laravel 调度器 Schedule
 
-apiVersion: v1
+apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   namespace: default
@@ -21,8 +21,11 @@ spec:
             - -c
             - date; echo Hello from the Kubernetes cluster
             # - php /app/Laravel/artisan schedule:run
+            volumeMounts:
+            - name: lnmp-data
+              mountPath: /app
           volumes:
           - name: lnmp-data
-             persistentVolumeClaim:
-               claimName: lnmp-data
+            persistentVolumeClaim:
+              claimName: lnmp-data
           restartPolicy: OnFailure

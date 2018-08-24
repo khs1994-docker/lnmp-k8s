@@ -88,7 +88,7 @@ spec:
           mountPath: /var/lib/mysql
         - name: lnmp-mysql-cnf
           mountPath: /etc/mysql/conf.d/docker.cnf
-          subPath: my.cnf
+          subPath: docker.cnf
       volumes:
       - name: lnmp-mysql-data
         persistentVolumeClaim:
@@ -97,7 +97,7 @@ spec:
         configMap:
           name: lnmp-mysql-cnf
           items:
-          - key: my.cnf
-            path: my.cnf
+          - key: docker.production.cnf
+            path: docker.cnf
 
       restartPolicy: Always

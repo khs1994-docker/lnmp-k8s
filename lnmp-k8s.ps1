@@ -40,12 +40,14 @@ Function get_kubectl_version(){
 
 Function _delete(){
   kubectl delete deployment -l app=lnmp
-
   kubectl delete service -l app=lnmp
-
   kubectl delete secret -l app=lnmp
-
   kubectl delete configmap -l app=lnmp
+  kubectl delete configMap lnmp-php-conf `
+                          lnmp-nginx-conf `
+                          lnmp-mysql-cnf
+
+  kubectl delete cronjob -l app=lnmp
 }
 
 switch ($args[0])
@@ -72,6 +74,18 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
         | kubectl create -f -
 
     kubectl create -f deployment/lnmp-configMap.yaml
+
+    kubectl create configmap lnmp-php-conf `
+      --from-file=php.ini=../config/php/php.development.ini `
+      --from-file=../config/php/docker-xdebug.ini `
+      --from-file=../config/php/zz-docker.production.conf `
+      --from-file=composer.config.json=../config/composer/config.json
+
+   kubectl create configmap lnmp-mysql-cnf `
+     --from-file=../config/mysql/docker.production.cnf
+
+   kubectl create configmap lnmp-nginx-conf `
+     --from-file=../config/etc/nginx/nginx.conf
 
     # kubectl create secret generic lnmp-mysql-password --from-literal=password=mytest
 
