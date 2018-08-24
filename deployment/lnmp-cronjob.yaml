@@ -1,3 +1,5 @@
+# 可以运行 Laravel 调度器 Schedule
+
 apiVersion: v1
 kind: CronJob
 metadata:
@@ -18,4 +20,5 @@ spec:
             - /bin/sh
             - -c
             - date; echo Hello from the Kubernetes cluster
+            # - php /app/Laravel/artisan schedule:run
           restartPolicy: OnFailure

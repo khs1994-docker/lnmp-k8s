@@ -213,15 +213,15 @@ data:
     server {
       listen 80;
 
-      server_name t.khs1994.com;
+      server_name www.t.khs1994.com;
 
-      return 301 https://t.khs1994.com$request_uri;
+      return 301 https://www.t.khs1994.com$request_uri;
     }
 
     server {
       listen 443 ssl http2;
 
-      server_name t.khs1994.com;
+      server_name www.t.khs1994.com;
       index index.php index.html;
       root /app/demo;
 

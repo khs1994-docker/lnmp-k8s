@@ -8,6 +8,8 @@ metadata:
     app: lnmp
     tier: frontend
 spec:
+  # 若类型为 ingress，可以不声明 type
+
   # externalIPs:
   #   - 192.168.57.110
   # 暴露服务方式之一
