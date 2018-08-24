@@ -67,9 +67,9 @@ spec:
         - name: lnmp-php-conf
           mountPath: /usr/local/etc/php/php.ini
           subPath: php.ini
-        - name: lnmp-php-conf
-          mountPath: /usr/local/etc/php/conf.d/docker-xdebug.ini
-          subPath: docker-xdebug.ini
+        # - name: lnmp-php-conf
+        #   mountPath: /usr/local/etc/php/conf.d/docker-xdebug.ini
+        #   subPath: docker-xdebug.ini
         - name: lnmp-php-conf
           mountPath: /usr/local/etc/php-fpm.d/zz-docker.conf
           subPath: zz-docker.conf
@@ -91,8 +91,8 @@ spec:
           items:
           - key: php.ini
             path: php.ini
-          - key: docker-xdebug.ini
-            path: docker-xdebug.ini
+          # - key: docker-xdebug.ini
+          #   path: docker-xdebug.ini
           - key: zz-docker.production.conf
             path: zz-docker.conf
           - key: composer.config.json

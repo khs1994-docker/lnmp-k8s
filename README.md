@@ -16,6 +16,10 @@
 
 * [腾讯云 实验室免费体验 8 小时（可循环） 产品->容器服务->免费实验室 ](https://cloud.tencent.com/redirect.php?redirect=1005&cps_key=3a5255852d5db99dcd5da4c72f05df61&from=console)
 
+## 存在的问题
+
+* Docker 桌面版运行 Laravel 响应慢。
+
 ## DashBoard
 
 ```bash

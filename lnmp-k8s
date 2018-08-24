@@ -82,9 +82,9 @@ _cleanup(){
 
 _create(){
   if [ "$os" = 'Linux' ];then
-    cat deployment/lnmp-volume.linux.yaml | kubectl create -f -
+    cat deployment/lnmp-volume.linux.example.yaml | kubectl create -f -
   elif [ "$os" = 'Darwin' ];then
-    sed '' "s#/Users/username#$HOME#g" deployment/lnmp-volume.macos.yaml \
+    sed "s#/Users/username#$HOME#g" deployment/lnmp-volume.macos.example.yaml \
     | kubectl create -f -
   fi
 
