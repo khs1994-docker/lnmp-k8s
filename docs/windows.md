@@ -17,7 +17,7 @@ $ ./lnmp-k8s.ps1 minikue-install
 
 $ ./lnmp-k8s.ps1 minikube
 
-$ ./lnmp-k8s.ps1 deploy
+$ ./lnmp-k8s.ps1 create
 ```
 
 ```bash

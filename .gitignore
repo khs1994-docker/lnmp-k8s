@@ -1,2 +1,3 @@
 kubectl-*
 minikube*
+!minikube.md

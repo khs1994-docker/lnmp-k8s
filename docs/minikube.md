@@ -9,7 +9,7 @@ $ ./lnmp-k8s minikube-install
 
 $ ./lnmp-k8s minikube
 
-# deploy
+# create
 
 $ minikube service nginx --url
 

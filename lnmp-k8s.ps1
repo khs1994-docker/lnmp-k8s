@@ -12,8 +12,9 @@ Commands:
   minikube-install   Install minikube
   minikube           Start minikube
 
-  deploy             Deploy lnmp on k8s
-  cleanup            Stop lnmp on k8s
+  create             Deploy lnmp on k8s
+  delete             Stop lnmp on k8s, keep data resource(pv and pvc)
+  cleanup            Stop lnmp on k8s, and remove all resource(pv and pvc)
 
   dashboard          How to open Dashboard
 
@@ -37,6 +38,16 @@ Function get_kubectl_version(){
   return $KUBECTL_VERSION=$(wsl curl https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 }
 
+Function _delete(){
+  kubectl delete deployment -l app=lnmp
+
+  kubectl delete service -l app=lnmp
+
+  kubectl delete secret -l app=lnmp
+
+  kubectl delete configmap -l app=lnmp
+}
+
 switch ($args[0])
 {
   "kubectl-install" {
@@ -54,7 +65,7 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
     "
   }
 
-  "deploy" {
+  "create" {
     kubectl create -f deployment/lnmp-volume.yaml
 
     kubectl create -f deployment/lnmp-configMap.yaml
@@ -72,18 +83,16 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
     kubectl create -f deployment/lnmp-nginx.yaml
   }
 
-  "cleanup" {
-    kubectl delete deployment -l app=lnmp
+  "delete" {
+    _delete
+  }
 
-    kubectl delete service -l app=lnmp
+  "cleanup" {
+    _delete
 
     kubectl delete pvc -l app=lnmp
 
     kubectl delete pv -l app=lnmp
-
-    kubectl delete secret -l app=lnmp
-
-    kubectl delete configmap -l app=lnmp
   }
 
   "minikube" {
