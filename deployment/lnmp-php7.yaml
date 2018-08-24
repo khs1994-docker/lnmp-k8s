@@ -69,13 +69,7 @@ spec:
       #     claimName: lnmp-data
       #
       - name: lnmp-data
-        hostPath:
-          # Linux
-          path: /data/lnmp/app
-          # windows please replace 90621 with your username
-          # path: /host_mnt/c/90621/lnmp/app
-
-          # macOS please replace khs1994 with your username
-          # path: /Users/khs1994/lnmp/app
+        persistentVolumeClaim:
+          claimName: lnmp-data
       restartPolicy: Always
 status: {}

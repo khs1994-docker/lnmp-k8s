@@ -45,20 +45,25 @@ spec:
 status:
   loadBalancer: {}
 ---
-# apiVersion: v1
-# kind: PersistentVolumeClaim
-# metadata:
-#   name: lnmp-data
-#   labels:
-#     app: lnmp
-#     tier: frontend
-# spec:
-#   accessModes:
-#     - ReadWriteOnce
-#   resources:
-#     requests:
-#       storage: 20Gi
-# ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lnmp-data
+  labels:
+    app: lnmp
+    tier: frontend
+spec:
+  accessModes:
+    - ReadWriteOnce
+  selector:
+    matchLabels:
+      app: lnmp
+      tier: data
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: hostpath
+---
 apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
 kind: Deployment
 metadata:
@@ -139,9 +144,13 @@ spec:
         #   timeoutSeconds: 1
       volumes:
       - name: lnmp-data
-        hostPath:
+        persistentVolumeClaim:
+          claimName: lnmp-data
+
+        # hostPath:
+          # 建议挂载 pvc，不要在这里挂载 hostPath
           # Linux
-          path: /data/lnmp/app
+          # path: /data/lnmp/app
           # windows please replace 90621 with your username
           # path: /host_mnt/c/90621/lnmp/app
 

@@ -6,6 +6,7 @@ metadata:
   labels:
     type: local
     app: lnmp
+    tier: mysql
 spec:
   capacity:
     storage: 20Gi
@@ -13,12 +14,13 @@ spec:
     - ReadWriteOnce    # 被单个节点mount为读写rw模式
     # - ReadOnlyMany   # 被多个节点mount为只读ro模式
     # - ReadWriteMany  # 被多个节点mount为读写rw模式
-  persistentVolumeReclaimPolicy: Recycle
+  persistentVolumeReclaimPolicy: Retain
   # Retain 允许用户手动回收
   # Recycle 删除 PV 上的数据
   # Delete 删除 PV
   hostPath:
-    path: /tmp/data/pv-1
+    path: /Users/username/.docker/Volumes/lnmp-mysql-data
+  storageClassName: hostpath
 
 ---
 
@@ -30,10 +32,30 @@ metadata:
   labels:
     type: local
     app: lnmp
+    tier: redis
 spec:
   capacity:
     storage: 20Gi
   accessModes: [ "ReadWriteOnce" ]
-  persistentVolumeReclaimPolicy: Delete
+  persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /tmp/data/pv-2
+    path: /Users/username/.docker/Volumes/lnmp-redis-data
+  storageClassName: hostpath
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  namespace: default
+  name: lnmp-data
+  labels:
+    type: local
+    app: lnmp
+    tier: data
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes: [ "ReadWriteOnce" ]
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /Users/username/lnmp/app
+  storageClassName: hostpath

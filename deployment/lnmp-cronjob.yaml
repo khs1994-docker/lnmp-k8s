@@ -21,4 +21,8 @@ spec:
             - -c
             - date; echo Hello from the Kubernetes cluster
             # - php /app/Laravel/artisan schedule:run
+          volumes:
+          - name: lnmp-data
+             persistentVolumeClaim:
+               claimName: lnmp-data
           restartPolicy: OnFailure

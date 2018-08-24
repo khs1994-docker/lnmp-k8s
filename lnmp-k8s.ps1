@@ -66,7 +66,10 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
   }
 
   "create" {
-    kubectl create -f deployment/lnmp-volume.yaml
+
+    Get-Content deployment/lnmp-volume.windows.example.yaml `
+        | %{Write-Output $_.Replace("/Users/username","/Users/$env:username")} `
+        | kubectl create -f -
 
     kubectl create -f deployment/lnmp-configMap.yaml
 
