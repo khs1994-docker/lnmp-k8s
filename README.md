@@ -6,15 +6,13 @@
 
 ## Kubernetes 基础设施
 
-### 自己手动部署 Kubernetes 集群(CoreOS)
+* [自己手动部署 Kubernetes 集群(CoreOS)](https://github.com/khs1994-docker/coreos-kubernetes)
 
-* https://github.com/khs1994-docker/coreos-kubernetes
+* [Docker Desktop](https://github.com/khs1994-docker/lnmp-k8s/blob/dev/docs/docker-desktop.md)
 
-### Docker Desktop
+* [MiniKube](docs/minikube.md)
 
-Please see https://github.com/khs1994-docker/lnmp-k8s/blob/dev/docs/docker-desktop.md
-
-#### DashBoard
+## DashBoard
 
 ```bash
 $ cd kubernetes
@@ -25,45 +23,6 @@ $ kubectl proxy
 ```
 
 浏览器打开 http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
-
-### Minikube
-
-* https://www.khs1994.com/docker/minikube/README.html
-
-```bash
-$ ./lnmp-k8s minikube-install
-
-# move minikube to your PATH
-
-$ ./lnmp-k8s minikube
-
-# deploy
-
-$ minikube service nginx --url
-
-http://192.168.64.98:32228
-http://192.168.64.98:30626
-
-$ curl http://192.168.64.98:30626
-```
-
-#### 挂载宿主机目录
-
-```bash
-$ minikube mount ~/lnmp:/data/lnmp
-```
-
-#### 关闭 minikube
-
-```bash
-$ minikube stop
-```
-
-#### 移除 minikube
-
-```bash
-$ minikube delete
-```
 
 ## 部署 lnmp
 
