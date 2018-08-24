@@ -50,6 +50,10 @@ $ ./lnmp-k8s delete
 $ ./lnmp-k8s cleanup
 ```
 
+## 数据持久化
+
+请查看 [data](docs/data.md)
+
 ## Windows 10
 
 Please see https://github.com/khs1994-docker/lnmp-k8s/blob/dev/docs/windows.md

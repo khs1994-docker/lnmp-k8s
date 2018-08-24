@@ -57,20 +57,6 @@ status:
 #     requests:
 #       storage: 20Gi
 # ---
-# apiVersion: v1
-# kind: PersistentVolumeClaim
-# metadata:
-#   name: lnmp-nginx-conf
-#   labels:
-#     app: lnmp
-#     tier: frontend
-# spec:
-#   accessModes:
-#     - ReadWriteOnce
-#   resources:
-#     requests:
-#       storage: 20Gi
-# ---
 apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
 kind: Deployment
 metadata:
@@ -108,10 +94,8 @@ spec:
         - name: TZ
           valueFrom:
             configMapKeyRef:
-              key: TZ
               name: lnmp-env
-        # - name: A
-        #   value: a
+              key: TZ
         ports:
         - containerPort: 443
         - containerPort: 80
@@ -126,7 +110,8 @@ spec:
         - name: lnmp-nginx-khs1994-com-tls
           mountPath: /etc/nginx/conf.d/ssl
           readOnly: true
-        # 挂载 secret configMap 为文件夹，默认会覆盖掉文件夹中的全部文件，通过以下配置，只挂载指定的文件
+        # 挂载 secret configMap 为文件夹，默认会覆盖掉文件夹中的全部文件
+        # 通过以下配置，只挂载指定的文件
         - name: lnmp-nginx-conf
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
@@ -153,11 +138,15 @@ spec:
       volumes:
       - name: lnmp-data
         hostPath:
+          # Linux
           path: /data/lnmp/app
+          # windows please replace 90621 with your username
           # path: /host_mnt/c/90621/lnmp/app
+
+          # macOS please replace khs1994 with your username
           # path: /Users/khs1994/lnmp/app
 
-      # 将 secret 挂载为文件
+      # 将 secret 挂载为文件夹，文件夹里的文件名为 secret 的 data 的 key 值
       - name: lnmp-nginx-khs1994-com-tls
         secret:
           secretName: lnmp-nginx-khs1994-com-tls
