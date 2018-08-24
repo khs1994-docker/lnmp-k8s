@@ -55,13 +55,13 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
   }
 
   "deploy" {
-    kubectl create -f deployment/lnmp-volumes.yaml
+    kubectl create -f deployment/lnmp-volume.yaml
 
-    kubectl create -f deployment/lnmp-configs.yaml
+    kubectl create -f deployment/lnmp-configMap.yaml
 
     # kubectl create secret generic lnmp-mysql-password --from-literal=password=mytest
 
-    kubectl create -f deployment/lnmp-secrets.yaml
+    kubectl create -f deployment/lnmp-secret.yaml
 
     kubectl create -f deployment/lnmp-mysql.yaml
 

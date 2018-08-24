@@ -1,6 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: default
   name: php7
   labels:
     app: lnmp
@@ -18,6 +19,7 @@ status:
 apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
 kind: Deployment
 metadata:
+  namespace: default
   name: php7
   labels:
     app: lnmp
@@ -37,7 +39,7 @@ spec:
     spec:
       containers:
       - name: lnmp-php7
-        image: khs1994/php-fpm:7.2.7-alpine3.7
+        image: khs1994/php:7.2.9-fpm-alpine
         args:
         - php-fpm
         - -R
@@ -70,6 +72,6 @@ spec:
         hostPath:
           path: /data/lnmp/app
           # path: /host_mnt/c/90621/lnmp/app
-          # path: /Users/khs1994/lnmp/app          
+          # path: /Users/khs1994/lnmp/app
       restartPolicy: Always
 status: {}
