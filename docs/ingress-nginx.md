@@ -5,6 +5,5 @@
 ```bash
 $ kubectl apply -f coreos-kubernetes/kubernetes/addons/ingress-nginx/ingress-nginx.yaml
 
-
-$ kubectl apply -f deployment/addons/ingress-nginx/cloud-generic.yaml
+$ kubectl apply -f coreos-kubernetes/kubernetes/addons/ingress-nginx/cloud-generic.yaml
 ```

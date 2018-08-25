@@ -20,7 +20,7 @@ spec:
             - /bin/sh
             - -c
             # - date; echo Hello from the Kubernetes cluster
-            - php /app/Laravel/artisan schedule:run
+            - php /app/laravel/artisan schedule:run
             volumeMounts:
             - name: lnmp-data
               mountPath: /app
@@ -28,4 +28,4 @@ spec:
           - name: lnmp-data
             persistentVolumeClaim:
               claimName: lnmp-data
-          restartPolicy: OnFailure
+          # restartPolicy: OnFailure
