@@ -73,6 +73,8 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
         | %{Write-Output $_.Replace("/Users/username","/Users/$env:username")} `
         | kubectl create -f -
 
+    kubectl create -f deployment/lnmp-pvc.yaml
+
     kubectl create -f deployment/lnmp-configMap.yaml
 
     kubectl create configmap lnmp-php-conf `
@@ -96,6 +98,8 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
     kubectl create -f deployment/lnmp-redis.yaml
 
     kubectl create -f deployment/lnmp-php7.yaml
+
+    kubectl create -f deployment/lnmp-nginx.service.yaml
 
     kubectl create -f deployment/lnmp-nginx.yaml
   }

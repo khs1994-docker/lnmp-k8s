@@ -2,6 +2,8 @@
 
 KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
 
+if ! [ -f lnmp-k8s ];then if ! [ -z "$LNMP_PATH" ];then cd $LNMP_PATH/kubernetes; else exit; fi; fi
+
 set -e
 
 os=`uname -s`
@@ -82,10 +84,15 @@ _cleanup(){
 
 _create(){
   if [ "$os" = 'Linux' ];then
-    cat deployment/lnmp-volume.linux.example.yaml | kubectl create -f -
+    # sed "s#/home/username#$HOME#g" deployment/lnmp-volume.linux.example.yaml \
+    # | kubectl create -f -
+    kubectl create -f deployment/lnmp-volume.linux.nfs.yaml
+    kubectl create -f deployment/lnmp-pvc.linux.nfs.yaml
   elif [ "$os" = 'Darwin' ];then
     sed "s#/Users/username#$HOME#g" deployment/lnmp-volume.macos.example.yaml \
     | kubectl create -f -
+
+    kubectl create -f deployment/lnmp-pvc.yaml
   fi
 
   kubectl create configmap lnmp-php-conf \
@@ -109,6 +116,12 @@ _create(){
   kubectl create -f deployment/lnmp-redis.yaml
 
   kubectl create -f deployment/lnmp-php7.yaml
+
+  if [ "$os" = 'Linux' ];then
+    kubectl create -f deployment/lnmp-nginx.service.linux.yaml
+  elif [ "$os" = 'Darwin' ];then
+    kubectl create -f deployment/lnmp-nginx.service.yaml
+  fi
 
   kubectl create -f deployment/lnmp-nginx.yaml
 }
@@ -164,10 +177,12 @@ case $1 in
     ;;
 
     delete )
+      set +e
       _delete
     ;;
 
     cleanup )
+      set +e
       _cleanup
     ;;
 

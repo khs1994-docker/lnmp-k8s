@@ -50,7 +50,7 @@ metadata:
   labels:
     type: local
     app: lnmp
-    tier: data
+    tier: code-data
 spec:
   capacity:
     storage: 20Gi

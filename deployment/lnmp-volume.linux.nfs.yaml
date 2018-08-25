@@ -15,20 +15,22 @@ spec:
   accessModes:
     # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
 
-    - ReadWriteOnce    # 被单个节点mount为读写rw模式 RWO
+    # - ReadWriteOnce    # 被单个节点mount为读写rw模式 RWO
                        # the volume can be mounted as read-write by a single node
     # - ReadOnlyMany   # 被多个节点mount为只读ro模式 ROX
                        # the volume can be mounted read-only by many nodes
-    # - ReadWriteMany  # 被多个节点mount为读写rw模式 RWX
+    - ReadWriteMany  # 被多个节点mount为读写rw模式 RWX
                        # the volume can be mounted as read-write by many nodes
   persistentVolumeReclaimPolicy: Retain
   # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaiming
   # Retain 允许用户手动回收
   # Recycle 删除 PV 上的数据 deprecated
   # Delete 删除 PV
-  hostPath:
-    path: /tmp/data/mysql
-  storageClassName: hostpath
+  nfs:
+    # FIXME: use the right IP
+    server: 192.168.57.1
+    path: "/lnmp/mysql"
+  storageClassName: slow
 
 ---
 
@@ -44,11 +46,13 @@ metadata:
 spec:
   capacity:
     storage: 20Gi
-  accessModes: [ "ReadWriteOnce" ]
+  accessModes: [ "ReadWriteMany" ]
   persistentVolumeReclaimPolicy: Retain
-  hostPath:
-    path: /tmp/data/redis
-  storageClassName: hostpath
+  nfs:
+    # FIXME: use the right IP
+    server: 192.168.57.1
+    path: "/lnmp/redis"
+  storageClassName: slow
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -62,8 +66,10 @@ metadata:
 spec:
   capacity:
     storage: 20Gi
-  accessModes: [ "ReadWriteOnce" ]
+  accessModes: [ "ReadWriteMany" ]
   persistentVolumeReclaimPolicy: Retain
-  hostPath:
-    path: /home/username/lnmp/app
-  storageClassName: hostpath
+  nfs:
+    # FIXME: use the right IP
+    server: 192.168.57.1
+    path: "/lnmp/app"
+  storageClassName: slow

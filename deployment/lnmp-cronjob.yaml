@@ -19,8 +19,8 @@ spec:
             args:
             - /bin/sh
             - -c
-            - date; echo Hello from the Kubernetes cluster
-            # - php /app/Laravel/artisan schedule:run
+            # - date; echo Hello from the Kubernetes cluster
+            - php /app/Laravel/artisan schedule:run
             volumeMounts:
             - name: lnmp-data
               mountPath: /app

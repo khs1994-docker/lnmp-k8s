@@ -6,6 +6,8 @@
 
 * **Windows** 用户务必安装 `WSL`
 
+* 本项目不建议新手使用(想用的话也可以,请积极在 Issues 反馈),本项目的目标是超大规模 Kubernetes LNMP 集群(首要考虑的是跨节点问题)
+
 ## Kubernetes 基础设施
 
 * [自己手动部署 Kubernetes 集群(CoreOS)](https://github.com/khs1994-docker/coreos-kubernetes)
@@ -16,9 +18,17 @@
 
 * [腾讯云 实验室免费体验 8 小时（可循环） 产品->容器服务->免费实验室 ](https://cloud.tencent.com/redirect.php?redirect=1005&cps_key=3a5255852d5db99dcd5da4c72f05df61&from=console)
 
-## 存在的问题
+## 注意事项
 
-* Docker 桌面版运行 Laravel 响应慢。
+* 本项目是给大家提供一个 lnmp k8s yaml 文件的模板,具体内容还请根据实际情况自行更改
+
+* 本项目专为 Laravel 设计，能够完美的在 Kubernetes 之上运行 Laravel
+
+* Docker 桌面版运行 Laravel 响应慢
+
+* Linux 版本优先考虑多节点方案,所以 `pv` 采用 `NFS` 卷,而不是 `hostPath`(执行 `$ lnmp-docker nfs` 可以快速的启动 NFS 服务端 )
+
+* Docker 桌面版不支持启动 NFS 服务端容器，若需 NFS 卷，请自行在 Linux 上部署 NFS 容器
 
 ## DashBoard
 

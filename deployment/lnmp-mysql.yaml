@@ -14,29 +14,6 @@ spec:
     - port: 3306
   clusterIP: None
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  namespace: default
-  name: lnmp-mysql-data
-  labels:
-    app: lnmp
-    tier: mysql
-spec:
-  accessModes:
-    - ReadWriteOnce
-  # volumeMode: Filesystem
-  resources:
-    requests:
-      storage: 20Gi
-  selector:
-    matchLabels:
-      app: lnmp
-      tier: mysql
-    # matchExpressions:
-      # - {key: environment, operator: In, values: [dev]}
-  storageClassName: hostpath
----
 apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
 kind: Deployment
 metadata:
@@ -100,4 +77,4 @@ spec:
           - key: docker.production.cnf
             path: docker.cnf
 
-      restartPolicy: Always
+      # restartPolicy: Never # Always、OnFailure 和 Never
