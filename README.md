@@ -12,7 +12,7 @@
 
 * [自己手动部署 Kubernetes 集群(CoreOS)](https://github.com/khs1994-docker/coreos-kubernetes)
 
-* [Docker Desktop](https://github.com/khs1994-docker/lnmp-k8s/blob/dev/docs/docker-desktop.md)
+* [Docker Desktop](docs/docker-desktop.md)
 
 * [MiniKube](docs/minikube.md)
 
@@ -22,7 +22,7 @@
 
 * `lnmp-k8s` 脚本在 Windows 或 macOS 上执行的 k8s 目标集群为 **Docker 桌面版启动的 k8s 集群**，未考虑在 Windows 或 macOS 操作 **远程 k8s 集群** 的情况。（相信有能力操作远程集群的人群不再需要本项目的一键脚本）
 
-* 本项目是给大家提供一个 lnmp k8s yaml 文件的模板,具体内容还请根据实际情况自行更改
+* 本项目是给大家提供一个 lnmp k8s yaml 文件的模板，具体内容还请根据实际情况自行更改
 
 * 本项目专为 Laravel 设计，能够完美的在 Kubernetes 之上运行 Laravel
 
@@ -31,18 +31,6 @@
 * Linux 版本优先考虑多节点方案,所以 `pv` 采用 `NFS` 卷,而不是 `hostPath`(执行 `$ lnmp-docker nfs` 可以快速的启动 NFS 服务端 )
 
 * Docker 桌面版不支持启动 NFS 服务端容器，若需 NFS 卷，请自行在 Linux 上部署 NFS 容器
-
-## DashBoard
-
-```bash
-$ cd kubernetes
-
-$ kubectl apply -f coreos-kubernetes/kubernetes/addons/dashboard.yaml
-
-$ kubectl proxy
-```
-
-浏览器打开 http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
 
 ## 部署 LNMP
 
@@ -68,9 +56,10 @@ $ cd ~/lnmp/kubernetes/deployment/configMap/nginx-conf-d
 
 $ vi filename.conf
 
-$ kubectl create configmap lnmp-nginx-conf-d-0.0.1 --from-file deployment/configMap/nginx-conf-d
+# 创建新版本的 configmap
+$ kubectl create configmap lnmp-nginx-conf-d-0.0.2 --from-file deployment/configMap/nginx-conf-d
 
-$ kubectl label configmap lnmp-nginx-conf-d-0.0.1 app=lnmp version=0.0.2
+$ kubectl label configmap lnmp-nginx-conf-d-0.0.2 app=lnmp version=0.0.2
 
 $ kubectl edit deployment nginx
 
@@ -85,7 +74,7 @@ $ kubectl edit deployment nginx
 $ ./lnmp-k8s delete
 ```
 
-## 删除 LNMP
+## 销毁 LNMP
 
 销毁所有数据
 
@@ -93,13 +82,13 @@ $ ./lnmp-k8s delete
 $ ./lnmp-k8s cleanup
 ```
 
-## 数据持久化
+# Tips
 
-请查看 [data](docs/data.md)
+* [数据持久化](docs/data.md)
 
-## Windows 10
+* [Windows 10](docs/windows.md)
 
-Please see https://github.com/khs1994-docker/lnmp-k8s/blob/dev/docs/windows.md
+* [滚动升级 不停机更新](docs/rollout.md)
 
 ## More Information
 

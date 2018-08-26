@@ -34,7 +34,13 @@ spec:
       tier: php7
       version: 0.0.1
   replicas: 2
-  strategy: {}
+  minReadySeconds: 5
+  revisionHistoryLimit: 5 # 保留几个版本
+  strategy:
+    type: RollingUpdate # Recreate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
   template:
     metadata:
       labels:

@@ -32,8 +32,20 @@ spec:
       tier: mysql
       version: 0.0.1
   replicas: 1
+  # 新创建的 Pod 状态为 Ready 持续的时间至少为多少秒才认为 Pod Available(Ready)。
+  minReadySeconds: 5
+  revisionHistoryLimit: 5 # 保留几个版本
   strategy:
-    type: Recreate
+    type: RollingUpdate # Recreate
+    rollingUpdate:
+      # 可以为整数或者百分比，默认为 desired Pods数的 25%.
+      # Scale Up 新的 ReplicaSet 时，按照比例计算出允许的 MaxSurge，计算时向上取整(比如 3.4，取4)。
+      # 滚动升级时会先启动 1 个 pod
+      maxSurge: 1
+      # 可以为整数或者百分比，默认为 desired Pods数的25%.
+      # Scale Down 旧的 ReplicaSet 时，按照比例计算出允许的 maxUnavailable，计算时向下取整(比如 3.6，取3)。
+      # 滚动升级时允许的最大 Unavailable 的 pod 个数
+      maxUnavailable: 1
   template:
     metadata:
       labels:

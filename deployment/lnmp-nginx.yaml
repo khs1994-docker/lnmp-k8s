@@ -14,7 +14,13 @@ spec:
       tier: frontend
       version: 0.0.1
   replicas: 2
-  strategy: {}
+  minReadySeconds: 5
+  revisionHistoryLimit: 5 # 保留几个版本
+  strategy:
+    type: RollingUpdate # Recreate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
   template:
     metadata:
       labels:
@@ -26,6 +32,9 @@ spec:
       #   beta.kubernetes.io/arch: amd64
       #   beta.kubernetes.io/os: windows # linux
       #   kubernetes.io/hostname: coreos3
+
+      # k8s将会给应用发送SIGTERM信号，可以用来正确、优雅地关闭应用,默认为30秒
+      terminationGracePeriodSeconds: 60
       containers:
       - name: lnmp-nginx
         image: khs1994/nginx:1.15.2-alpine
@@ -71,8 +80,11 @@ spec:
         #   httpGet:
         #     path: /
         #     port: 80
+        #     scheme: HTTP
         #   initialDelaySeconds: 15
         #   timeoutSeconds: 1
+        #   successThreshold: 1
+        #   failureThreshold: 5
         # readinessProbe: # 探测应用是否启动完成并且处于正常服务状态，如果不正常则不会接收来自Kubernetes Service的流量
         #   httpGet:
         #     path: /
