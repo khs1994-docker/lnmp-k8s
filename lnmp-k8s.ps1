@@ -1,5 +1,12 @@
 cd $PSScriptRoot
 
+$current_context=kubectl config current-context
+
+if (!($current_context -eq "docker-for-desktop")){
+   Write-Warning "This Script Support Docker for Desktop Only"
+   exit
+}
+
 Function print_help_info(){
   echo "
 
@@ -23,7 +30,7 @@ Commands:
 
 ################################################################################
 
-$MINIKUBE_VERSION="0.27.0"
+$MINIKUBE_VERSION="0.28.1"
 
 ################################################################################
 
