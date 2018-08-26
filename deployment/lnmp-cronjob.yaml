@@ -14,6 +14,12 @@ spec:
     spec:
       template:
         spec:
+          successfulJobsHistoryLimit: 0
+          failedJobsHistoryLimit: 0
+          suspend: false
+          # 并发策略
+          concurrencyPolicy: Forbid # Allow Replace
+          # startingDeadlineSeconds: 0
           containers:
           - name: lnmp-cron-0.0.1
             image: khs1994/php:7.2.9-fpm-alpine

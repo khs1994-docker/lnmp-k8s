@@ -24,6 +24,8 @@ Commands:
   delete             Stop lnmp on k8s, keep data resource(pv and pvc)
   cleanup            Stop lnmp on k8s, and remove all resource(pv and pvc)
 
+  create-pv          Create PV and PVC
+
   dashboard          How to open Dashboard
 "
 }
@@ -80,14 +82,7 @@ _cleanup(){
   kubectl delete ingress -l app=lnmp
 }
 
-_create(){
-  current_context=`kubectl config current-context`
-
-  if [ $current_context = "docker-for-desktop" -a $os = 'Darwin' ];then
-     echo "This Script Support Docker for Desktop Only"
-     exit
-  fi
-
+_create_pv(){
   if [ "$os" = 'Linux' ];then
     # sed "s#/home/username#$HOME#g" deployment/lnmp-volume.linux.example.yaml \
     # | kubectl create -f -
@@ -99,6 +94,17 @@ _create(){
 
     kubectl create -f deployment/lnmp-pvc.yaml
   fi
+}
+
+_create(){
+  current_context=`kubectl config current-context`
+
+  if [ $current_context = "docker-for-desktop" -a $os = 'Darwin' ];then
+     echo "This Script Support Docker for Desktop Only"
+     exit
+  fi
+
+  _create_pv
 
   kubectl create configmap lnmp-php-conf-0.0.1 \
     --from-file=php.ini=../config/php/php.development.ini \
@@ -195,6 +201,10 @@ case $1 in
     cleanup )
       set +e
       _cleanup
+    ;;
+
+    create-pv )
+      _create_pv
     ;;
 
     minikube )

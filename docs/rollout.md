@@ -8,7 +8,13 @@
 $ kubectl set image deployment DEPLOYMENT_NAME CONTAINER_NAME=nginx:v3 --record
 ```
 
-更新历史
+执行 `$ kubectl edit ` 编辑 YAML 文件更新
+
+```bash
+$ kubectl edit deployment DEPLOYMENT_NAME
+```
+
+查看更新历史
 
 ```bash
 $ kubectl collout history deployment DEPLOYMENT_NAME

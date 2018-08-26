@@ -23,6 +23,8 @@ Commands:
   delete             Stop lnmp on k8s, keep data resource(pv and pvc)
   cleanup            Stop lnmp on k8s, and remove all resource(pv and pvc)
 
+  create-pv          Create PV and PVC
+
   dashboard          How to open Dashboard
 
 "
@@ -53,6 +55,14 @@ Function _delete(){
   kubectl delete cronjob -l app=lnmp
 }
 
+Function _create_pv(){
+  Get-Content deployment/lnmp-volume.windows.example.yaml `
+      | %{Write-Output $_.Replace("/Users/username","/Users/$env:username")} `
+      | kubectl create -f -
+
+  kubectl create -f deployment/lnmp-pvc.yaml
+}
+
 switch ($args[0])
 {
   "kubectl-install" {
@@ -71,12 +81,7 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
   }
 
   "create" {
-
-    Get-Content deployment/lnmp-volume.windows.example.yaml `
-        | %{Write-Output $_.Replace("/Users/username","/Users/$env:username")} `
-        | kubectl create -f -
-
-    kubectl create -f deployment/lnmp-pvc.yaml
+    _create_pv
 
     kubectl create -f deployment/lnmp-configMap.yaml
 
@@ -123,6 +128,10 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
     kubectl delete pvc -l app=lnmp
     kubectl delete pv -l app=lnmp
     kubectl delete ingress -l app=lnmp
+  }
+
+  "create-pv" {
+    _create_pv
   }
 
   "minikube" {
