@@ -80,6 +80,7 @@ _cleanup(){
   _delete
   kubectl delete pvc -l app=lnmp
   kubectl delete pv -l app=lnmp
+  kubectl delete ingress -l app=lnmp
 }
 
 _create(){

@@ -112,8 +112,8 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
     _delete
 
     kubectl delete pvc -l app=lnmp
-
     kubectl delete pv -l app=lnmp
+    kubectl delete ingress -l app=lnmp
   }
 
   "minikube" {

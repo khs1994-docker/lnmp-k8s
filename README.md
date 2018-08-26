@@ -20,6 +20,8 @@
 
 ## 注意事项
 
+* `lnmp-k8s` 脚本在 Windows 或 macOS 上执行的 k8s 目标集群为 **Docker 桌面版启动的 k8s 集群**，未考虑在 Windows 或 macOS 操作 **远程 k8s 集群** 的情况。（相信有能力操作远程集群的人群不再需要本项目的一键脚本）
+
 * 本项目是给大家提供一个 lnmp k8s yaml 文件的模板,具体内容还请根据实际情况自行更改
 
 * 本项目专为 Laravel 设计，能够完美的在 Kubernetes 之上运行 Laravel
