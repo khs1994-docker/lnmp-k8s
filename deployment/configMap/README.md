@@ -14,5 +14,6 @@ $ kubectl create configmap lnmp-mysql-cnf --from-file=/path/my.cnf
 
 $ kubectl create configmap lnmp-nginx-conf --from-file=/path/nginx.conf
 
-$ kubectl create configmap lnmp-nginx-conf-d --from-file=/path/t.khs1994.com.conf
+# 从文件夹创建 configmap
+$ kubectl create configmap lnmp-nginx-conf-d --from-file=/nignx-conf-d/path/
 ```

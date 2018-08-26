@@ -39,9 +39,6 @@ _delete(){
   kubectl delete service -l app=lnmp
   kubectl delete secret -l app=lnmp
   kubectl delete configmap -l app=lnmp
-  kubectl delete configMap lnmp-php-conf \
-                           lnmp-nginx-conf \
-                           lnmp-mysql-cnf
 
   kubectl delete cronjob -l app=lnmp
 }
@@ -103,17 +100,23 @@ _create(){
     kubectl create -f deployment/lnmp-pvc.yaml
   fi
 
-  kubectl create configmap lnmp-php-conf \
+  kubectl create configmap lnmp-php-conf-0.0.1 \
     --from-file=php.ini=../config/php/php.development.ini \
     --from-file=../config/php/docker-xdebug.ini \
     --from-file=../config/php/zz-docker.production.conf \
     --from-file=composer.config.json=../config/composer/config.json
+  kubectl label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1
 
-  kubectl create configmap lnmp-mysql-cnf \
+  kubectl create configmap lnmp-mysql-cnf-0.0.1 \
    --from-file=../config/mysql/docker.production.cnf
+  kubectl label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1
 
-  kubectl create configmap lnmp-nginx-conf \
+  kubectl create configmap lnmp-nginx-conf-0.0.1 \
    --from-file=../config/etc/nginx/nginx.conf
+  kubectl label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1
+
+  kubectl create configmap lnmp-nginx-conf-d-0.0.1 --from-file=deployment/configMap/nginx-conf-d
+  kubectl label configmap lnmp-nginx-conf-d-0.0.1 app=lnmp version=0.0.1
 
   kubectl create -f deployment/lnmp-configMap.yaml
 

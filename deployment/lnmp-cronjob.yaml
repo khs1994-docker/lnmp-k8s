@@ -4,9 +4,10 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   namespace: default
-  name: lnmp-cron
+  name: lnmp-cron-0.0.1
   labels:
     app: lnmp
+    version: 0.0.1
 spec:
   schedule: "*/1 * * * *"
   jobTemplate:
@@ -14,7 +15,7 @@ spec:
       template:
         spec:
           containers:
-          - name: lnmp-cron
+          - name: lnmp-cron-0.0.1
             image: khs1994/php:7.2.9-fpm-alpine
             args:
             - /bin/sh

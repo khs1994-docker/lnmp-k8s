@@ -6,7 +6,7 @@
 
 * **Windows** 用户务必安装 `WSL`
 
-* 本项目不建议新手使用(想用的话也可以,请积极在 Issues 反馈),本项目的目标是超大规模 Kubernetes LNMP 集群(首要考虑的是跨节点问题)
+* 本项目的目标是超大规模 Kubernetes LNMP 集群(首要考虑的是跨节点问题)
 
 ## Kubernetes 基础设施
 
@@ -50,6 +50,31 @@ $ kubectl proxy
 $ cd kubernetes
 
 $ ./lnmp-k8s create
+```
+
+## PHP 项目开发
+
+```bash
+$ cd ~/lnmp/app
+
+$ mkdir my-project
+
+# 在新建的文件夹内进行 PHP 项目开发
+
+# 配置 NGINX
+$ cd ~/lnmp/kubernetes/deployment/configMap/nginx-conf-d
+
+# 新建文件(文件后缀名必须为 conf)或将新增配置追加到已有文件中
+
+$ vi filename.conf
+
+$ kubectl create configmap lnmp-nginx-conf-d-0.0.1 --from-file deployment/configMap/nginx-conf-d
+
+$ kubectl label configmap lnmp-nginx-conf-d-0.0.1 app=lnmp version=0.0.2
+
+$ kubectl edit deployment nginx
+
+# 更新配置信息，保存文件即可。
 ```
 
 ## 停止 LNMP

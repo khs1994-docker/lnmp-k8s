@@ -6,10 +6,12 @@ metadata:
   labels:
     app: lnmp
     tier: mysql
+    version: 0.0.1
 spec:
   selector:
     app: lnmp
     tier: mysql
+    version: 0.0.1
   ports:
     - port: 3306
   clusterIP: None
@@ -22,11 +24,13 @@ metadata:
   labels:
     app: lnmp
     tier: mysql
+    version: 0.0.1
 spec:
   selector:
     matchLabels:
       app: lnmp
       tier: mysql
+      version: 0.0.1
   replicas: 1
   strategy:
     type: Recreate
@@ -35,6 +39,7 @@ spec:
       labels:
         app: lnmp
         tier: mysql
+        version: 0.0.1
     spec:
       containers:
       - name: lnmp-mysql
@@ -48,13 +53,13 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: lnmp-mysql-password
+              name: lnmp-mysql-password-0.0.1
               key: password
         # config 用作环境变量
         - name: TZ
           valueFrom:
              configMapKeyRef:
-               name: lnmp-env
+               name: lnmp-env-0.0.1
                key: TZ
         - name: MYSQL_DATABASE
           value: test
@@ -72,7 +77,7 @@ spec:
           claimName: lnmp-mysql-data
       - name: lnmp-mysql-cnf
         configMap:
-          name: lnmp-mysql-cnf
+          name: lnmp-mysql-cnf-0.0.1
           items:
           - key: docker.production.cnf
             path: docker.cnf

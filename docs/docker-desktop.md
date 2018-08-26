@@ -5,7 +5,7 @@
 ```bash
 $ cd ..
 
-$ ./lnmp-docker.sh gcr.io
+$ ./lnmp-docker gcr.io
 ```
 
 具体请查看 https://github.com/khs1994-docker/lnmp/issues/520
@@ -39,6 +39,12 @@ $ lnmp-k8s create
 ```
 
 ### 删除 lnmp
+
+```bash
+$ lnmp-k8s delete
+```
+
+### 销毁 lnmp
 
 ```bash
 $ lnmp-k8s cleanup

@@ -6,11 +6,13 @@ metadata:
   labels:
     app: lnmp
     tier: frontend
+    version: 0.0.1
 spec:
   selector:
     matchLabels:
       app: lnmp
       tier: frontend
+      version: 0.0.1
   replicas: 2
   strategy: {}
   template:
@@ -18,6 +20,7 @@ spec:
       labels:
         app: lnmp
         tier: frontend
+        version: 0.0.1
     spec:
       # nodeSelector:
       #   beta.kubernetes.io/arch: amd64
@@ -35,7 +38,7 @@ spec:
         - name: TZ
           valueFrom:
             configMapKeyRef:
-              name: lnmp-env
+              name: lnmp-env-0.0.1
               key: TZ
         ports:
         - containerPort: 443
@@ -94,18 +97,18 @@ spec:
       # 将 secret 挂载为文件夹，文件夹里的文件名为 secret 的 data 的 key 值
       - name: lnmp-nginx-khs1994-com-tls
         secret:
-          secretName: lnmp-nginx-khs1994-com-tls
+          secretName: lnmp-nginx-khs1994-com-tls-0.0.1
 
       # 将 configMap 挂载为文件
       - name: lnmp-nginx-conf
         configMap:
-          name: lnmp-nginx-conf
+          name: lnmp-nginx-conf-0.0.1
           items:
           - key: nginx.conf
             path: nginx.conf
       - name: lnmp-nginx-conf-d
         configMap:
-          name: lnmp-nginx-conf-d
+          name: lnmp-nginx-conf-d-0.0.1
       restartPolicy: Always
       # dnsPolicy: ClusterFirst
 status: {}

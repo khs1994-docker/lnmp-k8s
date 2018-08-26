@@ -6,10 +6,12 @@ metadata:
   labels:
     app: lnmp
     tier: php7
+    version: 0.0.1
 spec:
   selector:
     app: lnmp
     tier: php7
+    version: 0.0.1
   ports:
   - port: 9000
   clusterIP: None
@@ -24,11 +26,13 @@ metadata:
   labels:
     app: lnmp
     tier: php7
+    version: 0.0.1
 spec:
   selector:
     matchLabels:
       app: lnmp
       tier: php7
+      version: 0.0.1
   replicas: 2
   strategy: {}
   template:
@@ -36,6 +40,7 @@ spec:
       labels:
         app: lnmp
         tier: php7
+        version: 0.0.1
     spec:
       containers:
       - name: lnmp-php7
@@ -47,12 +52,12 @@ spec:
         - name: TZ
           valueFrom:
             configMapKeyRef:
-              name: lnmp-env
+              name: lnmp-env-0.0.1
               key: TZ
         - name: APP_ENV
           valueFrom:
             configMapKeyRef:
-              name: lnmp-env
+              name: lnmp-env-0.0.1
               key: APP_ENV
         ports:
         - containerPort: 9000
@@ -87,7 +92,7 @@ spec:
           claimName: lnmp-data
       - name: lnmp-php-conf
         configMap:
-          name: lnmp-php-conf
+          name: lnmp-php-conf-0.0.1
           items:
           - key: php.ini
             path: php.ini
