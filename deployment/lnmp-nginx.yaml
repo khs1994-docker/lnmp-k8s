@@ -123,4 +123,3 @@ spec:
           name: lnmp-nginx-conf-d-0.0.1
       restartPolicy: Always
       # dnsPolicy: ClusterFirst
-status: {}

@@ -82,7 +82,18 @@ $ ./lnmp-k8s delete
 $ ./lnmp-k8s cleanup
 ```
 
-# Tips
+## 资源占用
+
+* `Core DNS` + `Dashboard` + `Heapster` + `Metrics Server` + `EFK` + `LNMP`
+
+```bash
+NAME      CPU(cores)   CPU%      MEMORY(bytes)   MEMORY%
+coreos1   217m         21%       1710Mi          58%
+coreos2   249m         24%       2258Mi          77%
+coreos3   267m         26%       2353Mi          81%
+```
+
+## Tips
 
 * [数据持久化](docs/data.md)
 

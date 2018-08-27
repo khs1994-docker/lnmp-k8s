@@ -53,6 +53,7 @@ spec:
         tier: mysql
         version: 0.0.1
     spec:
+      # restartPolicy: Never # Always、OnFailure 和 Never
       containers:
       - name: lnmp-mysql
         image: mysql:8.0.12
@@ -93,5 +94,3 @@ spec:
           items:
           - key: docker.production.cnf
             path: docker.cnf
-
-      # restartPolicy: Never # Always、OnFailure 和 Never

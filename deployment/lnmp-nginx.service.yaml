@@ -18,12 +18,16 @@ spec:
 
   # 暴露服务方式之一
   # type: NodePort
+  externalTrafficPolicy: Local
 
   # 集群内的私有 ip ，this is default
   # type: ClusterIP
   # clusterIP: None
 
   # sessionAffinity: None
+
+  # externalIPs:
+  # - 80.11.12.10
 
   # 定义标签选择器
   selector:
@@ -44,6 +48,3 @@ spec:
   - name: http
     protocol: TCP
     port: 80
-status:
-  loadBalancer: {}
----
