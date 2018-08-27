@@ -73,3 +73,25 @@ spec:
     server: 192.168.57.1
     path: "/lnmp/app"
   storageClassName: slow
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  namespace: default
+  name: lnmp-registry-data
+  labels:
+    type: local
+    app: lnmp
+    tier: registry
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes: [ "ReadWriteMany" ]
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    # FIXME: use the right IP
+    server: 192.168.57.1
+    path: "/lnmp/registry"
+  storageClassName: slow
+---

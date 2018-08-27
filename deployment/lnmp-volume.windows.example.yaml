@@ -59,3 +59,22 @@ spec:
   hostPath:
     path: /c/Users/username/lnmp/app
   storageClassName: hostpath
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  namespace: default
+  name: lnmp-registry-data
+  labels:
+    type: local
+    app: lnmp
+    tier: registry
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes: [ "ReadWriteOnce" ]
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /c/Users/username/.docker/Volumes/lnmp-registry-data
+  storageClassName: hostpath

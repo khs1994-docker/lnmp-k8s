@@ -23,6 +23,8 @@ Commands:
   delete             Stop lnmp on k8s, keep data resource(pv and pvc)
   cleanup            Stop lnmp on k8s, and remove all resource(pv and pvc)
 
+  registry           Up Registry
+
   create-pv          Create PV and PVC
 
   dashboard          How to open Dashboard
@@ -61,6 +63,17 @@ Function _create_pv(){
       | kubectl create -f -
 
   kubectl create -f deployment/lnmp-pvc.yaml
+}
+
+Function _registry(){
+  kubectl create configmap lnmp-registry-conf-0.0.1 --from-file=config.yml=../config/registry/config.gcr.io.yml
+  kubectl label configmap lnmp-registry-conf-0.0.1 app=lnmp version=0.0.1
+
+  kubectl create secret generic lnmp-registry-tls-0.0.1 --from-file=../config/registry/gcr.io.crt \
+      --from-file=../config/registry/gcr.io.key
+  kubectl label secret lnmp-registry-tls-0.0.1 app=lnmp version=0.0.1
+
+  kubectl create -f coreos-kubernetes/deployment/addons/registry.yaml
 }
 
 switch ($args[0])
@@ -128,6 +141,11 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
     kubectl delete pvc -l app=lnmp
     kubectl delete pv -l app=lnmp
     kubectl delete ingress -l app=lnmp
+  }
+
+  "registry" {
+    _create_pv
+    _registry
   }
 
   "create-pv" {

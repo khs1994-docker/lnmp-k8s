@@ -3,7 +3,7 @@
 ```bash
 $ cd kubernetes
 
-$ kubectl apply -f coreos-kubernetes/kubernetes/addons/dashboard.yaml
+$ kubectl apply -f coreos-kubernetes/deployment/addons/dashboard.yaml
 
 $ kubectl proxy
 ```

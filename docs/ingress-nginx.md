@@ -5,9 +5,19 @@
 ## 部署
 
 ```bash
-$ kubectl apply -f coreos-kubernetes/kubernetes/addons/ingress-nginx/ingress-nginx.yaml
+$ kubectl apply -f coreos-kubernetes/deployment/addons/ingress-nginx/ingress-nginx.yaml
+```
 
-$ kubectl apply -f coreos-kubernetes/kubernetes/addons/ingress-nginx/cloud-generic.yaml
+### Docker 桌面版
+
+```bash
+$ kubectl apply -f coreos-kubernetes/deployment/addons/ingress-nginx/cloud-generic.yaml
+```
+
+### Linux
+
+```bash
+$ kubectl apply -f coreos-kubernetes/deployment/addons/ingress-nginx/service-nodeport.yaml
 ```
 
 ## 定义规则

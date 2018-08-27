@@ -24,6 +24,8 @@ Commands:
   delete             Stop lnmp on k8s, keep data resource(pv and pvc)
   cleanup            Stop lnmp on k8s, and remove all resource(pv and pvc)
 
+  registry           Up Registry
+
   create-pv          Create PV and PVC
 
   dashboard          How to open Dashboard
@@ -94,6 +96,17 @@ _create_pv(){
 
     kubectl create -f deployment/lnmp-pvc.yaml
   fi
+}
+
+_registry(){
+  kubectl create configmap lnmp-registry-conf-0.0.1 --from-file=config.yml=../config/registry/config.gcr.io.yml
+  kubectl label configmap lnmp-registry-conf-0.0.1 app=lnmp version=0.0.1
+
+  kubectl create secret generic lnmp-registry-tls-0.0.1 --from-file=../config/registry/gcr.io.crt \
+      --from-file=../config/registry/gcr.io.key
+  kubectl label secret lnmp-registry-tls-0.0.1 app=lnmp version=0.0.1
+
+  kubectl create -f coreos-kubernetes/deployment/addons/registry.yaml
 }
 
 _create(){
@@ -201,6 +214,12 @@ case $1 in
     cleanup )
       set +e
       _cleanup
+    ;;
+
+    registry )
+      set +e
+      _create_pv
+      _registry
     ;;
 
     create-pv )
