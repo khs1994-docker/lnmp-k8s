@@ -3,10 +3,10 @@ Description=etcd
 Documentation=https://github.com/coreos/etcd
 Wants=network-online.target network.target
 After=network-online.target
-Requires=docker.service
 
 [Service]
 
+Type=notify
 Restart=on-failure
 RestartSec=10s
 TimeoutStartSec=0
@@ -18,29 +18,24 @@ ExecStartPre=-/usr/bin/mkdir --parents /var/lib/coreos
 ExecStartPre=-/usr/bin/docker container rm etcd
 ExecStop=-/usr/bin/docker container rm -f etcd
 
-ExecStart=/usr/bin/docker run -i -v /etc/kubernetes/certs:/etc/ssl/certs/ -v /var/lib/etcd:/var/lib/etcd \
-  --hostname=node1 \
-  --name=etcd \
-  -p 2379:2379 -p 2380:2380 \
-  quay.io/coreos/etcd:v3.3.9 \
-  etcd \
+ExecStart= /opt/bin/etcd \
   --name="node1" \
   --data-dir="/var/lib/etcd" \
-  --listen-peer-urls="https://0.0.0.0:2380" \
+  --listen-peer-urls="https://192.168.199.100:2380" \
   --listen-client-urls="https://0.0.0.0:2379" \
-  --initial-advertise-peer-urls="https://0.0.0.0:2380" \
+  --initial-advertise-peer-urls="https://192.168.199.100:2380" \
   --initial-cluster="node1=https://0.0.0.0:2380" \
   --initial-cluster-state="new" \
   --initial-cluster-token="mytoken" \
-  --advertise-client-urls="https://0.0.0.0:2379" \
-  --cert-file="/etc/ssl/certs/etcd.pem" \
-  --key-file="/etc/ssl/certs/etcd-key.pem" \
+  --advertise-client-urls="https://192.168.199.100:2379" \
+  --cert-file="/etc/kubernetes/certs/etcd.pem" \
+  --key-file="/etc/kubernetes/certs/etcd-key.pem" \
   --client-cert-auth=true \
-  --trusted-ca-file="/etc/ssl/certs/ca.pem" \
-  --peer-cert-file="/etc/ssl/certs/etcd.pem" \
-  --peer-key-file="/etc/ssl/certs/etcd-key.pem" \
+  --trusted-ca-file="/etc/kubernetes/certs/ca.pem" \
+  --peer-cert-file="/etc/kubernetes/certs/etcd.pem" \
+  --peer-key-file="/etc/kubernetes/certs/etcd-key.pem" \
   --peer-client-cert-auth=true \
-  --peer-trusted-ca-file="/etc/ssl/certs/ca.pem"
+  --peer-trusted-ca-file="/etc/kubernetes/certs/ca.pem"
 
 [Install]
 WantedBy=multi-user.target

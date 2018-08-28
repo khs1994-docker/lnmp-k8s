@@ -30,6 +30,6 @@
     "RotateKubeletClientCertificate": true,
     "RotateKubeletServerCertificate": true
   },
-  "clusterDomain": "${CLUSTER_DNS_DOMAIN}",
-  "clusterDNS": ["${CLUSTER_DNS_SVC_IP}"]
+  "clusterDomain": "cluster.local.",
+  "clusterDNS": ["10.254.0.2"]
 }

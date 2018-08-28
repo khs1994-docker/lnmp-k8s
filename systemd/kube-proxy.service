@@ -5,13 +5,17 @@ After=network.target
 
 [Service]
 
+ExecStartPre=-/usr/bin/mkdir -p /var/lib/kube-proxy
+
 WorkingDirectory=/var/lib/kube-proxy
+
 ExecStart=/opt/bin/kube-proxy \
 --config=/etc/kubernetes/kube-proxy.config.yaml \
 --alsologtostderr=true \
 --logtostderr=false \
 --log-dir=/var/log/kubernetes \
 --v=2
+
 Restart=on-failure
 RestartSec=5
 LimitNOFILE=65536

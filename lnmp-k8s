@@ -191,7 +191,33 @@ kubectl-getinfo(){
   curl https://storage.googleapis.com/kubernetes-release/release/stable.txt
 }
 
+_etcd(){
+  if ! [ -f /opt/bin/etcd ];then
+      cd /opt/bin
+      wget https://github.com/etcd-io/etcd/releases/download/v3.3.9/etcd-v3.3.9-linux-amd64.tar.gz
+      tar -zxvf etcd-v3.3.9-linux-amd64.tar.gz
+      mv etcd-v3.3.9-linux-amd64/etcd* ../
+      rm -rf *.tar.gz
+      cd -
+      return
+  fi
+
+  echo "flanneld already install"
+}
+
+_flanneld(){
+  if ! [ -f /opt/bin/flanneld ];then
+    sudo curl -fsSL https://github.com/coreos/flannel/releases/download/v0.10.0/flanneld-amd64 -o /opt/bin/flanneld
+    return
+  fi
+
+  echo "etcd already install"
+}
+
 _k8s_install(){
+  _etcd
+  _flanneld
+
   if ! [ -f systemd/certs/admin-key.pem ];then echo "Please Generate certs first $ cd coreos ; docker-compose up cfssl-single"; fi
 
   sudo mkdir -p /opt/bin
@@ -200,7 +226,7 @@ _k8s_install(){
     sudo cp coreos/kubernetes-release/release/v1.11.2/kubernetes/server/bin/* /opt/bin/
   fi
 
-  sudo cp coreos/disk/bin/generate-kubelet-bootstrap-kubeconfig.sh /opt/bin/
+  sudo cp coreos/disk/bin/*.sh /opt/bin/
 
   sudo chmod +x /opt/bin/*
 
@@ -211,7 +237,7 @@ _k8s_install(){
 
   sudo cp systemd/certs/*.kubeconfig /etc/kubernetes/
 
-  sudo cp systemd/kubelet.config.json /etc/kubernetes/
+  sudo cp systemd/kubelet.config.json systemd/kube-proxy.config.yaml /etc/kubernetes/
   sudo cp coreos/disk/system/csr-crb.yaml /etc/kubernetes/
 
   source systemd/.env.example
@@ -229,6 +255,10 @@ resources:
               secret: ${ENCRYPTION_KEY}
       - identity: {}
 EOF
+
+  sudo mkdir -p /etc/systemd/system/docker.service.d
+
+  sudo cp systemd/docker.conf /etc/systemd/system/docker.service.d/
 
   sudo systemctl daemon-reload
 
