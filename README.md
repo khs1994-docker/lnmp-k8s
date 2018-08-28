@@ -10,7 +10,7 @@
 
 ## Kubernetes 基础设施
 
-* [自己手动部署 Kubernetes 集群(CoreOS)](https://github.com/khs1994-docker/coreos-kubernetes)
+* [自己手动部署 Kubernetes 集群(CoreOS)](coreos)
 
 * [Docker Desktop](docs/docker-desktop.md)
 

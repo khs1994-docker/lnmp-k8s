@@ -20,6 +20,8 @@ Commands:
   minikube-install   Install minikube
   minikube           Start minikube
 
+  single-install     Install Single Kubernetes
+
   create             Deploy lnmp on k8s
   delete             Stop lnmp on k8s, keep data resource(pv and pvc)
   cleanup            Stop lnmp on k8s, and remove all resource(pv and pvc)
@@ -106,7 +108,7 @@ _registry(){
       --from-file=../config/registry/gcr.io.key
   kubectl label secret lnmp-registry-tls-0.0.1 app=lnmp version=0.0.1
 
-  kubectl create -f coreos-kubernetes/deployment/addons/registry.yaml
+  kubectl create -f coreos/deployment/addons/registry.yaml
 }
 
 _create(){
@@ -189,6 +191,68 @@ kubectl-getinfo(){
   curl https://storage.googleapis.com/kubernetes-release/release/stable.txt
 }
 
+_k8s_install(){
+  if ! [ -f systemd/certs/admin-key.pem ];then echo "Please Generate certs first $ cd coreos ; docker-compose up cfssl-single"; fi
+
+  sudo mkdir -p /opt/bin
+
+  if ! [ -f /opt/bin/kubeadm ];then
+    sudo cp coreos/kubernetes-release/release/v1.11.2/kubernetes/server/bin/* /opt/bin/
+  fi
+
+  sudo cp coreos/disk/bin/generate-kubelet-bootstrap-kubeconfig.sh /opt/bin/
+
+  sudo chmod +x /opt/bin/*
+
+  sudo mkdir -p /etc/kubernetes/certs
+
+  sudo cp systemd/*.service /etc/systemd/system/
+  sudo cp systemd/certs/*.pem /etc/kubernetes/certs/
+
+  sudo cp systemd/certs/*.kubeconfig /etc/kubernetes/
+
+  sudo cp systemd/kubelet.config.json /etc/kubernetes/
+  sudo cp coreos/disk/system/csr-crb.yaml /etc/kubernetes/
+
+  source systemd/.env.example
+
+  cat | sudo tee /etc/kubernetes/encryption-config.yaml <<EOF
+kind: EncryptionConfig
+apiVersion: v1
+resources:
+  - resources:
+      - secrets
+    providers:
+      - aescbc:
+          keys:
+            - name: key1
+              secret: ${ENCRYPTION_KEY}
+      - identity: {}
+EOF
+
+  sudo systemctl daemon-reload
+
+  sudo useradd -m -s /bin/bash -G root k8s || echo
+
+  sudo rm -rf /var/log/kubernetes /var/log/kube-apiserver-audit.log
+
+  sudo mkdir --parents /var/log/kubernetes
+  sudo mkdir -p /var/lib/kubelet
+  sudo chown k8s:root /var/log/kubernetes /var/lib/kubelet
+
+  sudo touch /var/log/kube-apiserver-audit.log
+  sudo chown k8s:root /var/log/kube-apiserver-audit.log
+
+  sudo mkdir -p /home/k8s/.kube
+  sudo cp systemd/certs/kubectl.kubeconfig /home/k8s/.kube/config
+
+}
+
+_k8s_start(){
+  sudo systemctl start kube-apiserver kube-controller-manager kube-scheduler \
+                       kube-proxy kubelet
+}
+
 if [ -z "$1" ];then
   print_help_info
   exit
@@ -224,6 +288,10 @@ case $1 in
 
     create-pv )
       _create_pv
+    ;;
+
+    single-install )
+      _k8s_install
     ;;
 
     minikube )

@@ -15,7 +15,7 @@ main (){
        > ca-config.json
 
   if [ -f ca-key.pem ];then
-    cp ca-key.pem ca.pem cert/
+    cp ca-key.pem ca.pem registry-ca.pem cert/
   else
     cd cert
     echo '{"CN":"kubernetes","key":{"algo":"rsa","size":2048},"names": [{"C":"CN","ST":"Beijing","L":"Beijing","O":"k8s","OU":"khs1994.com"}]}' \
@@ -98,6 +98,11 @@ main (){
    echo '{"CN":"'$CN_NAME'","hosts":[""],"key":{"algo":"rsa","size":2048},"names":[{"C":"CN","ST":"Beijing","L":"Beijing","O":"k8s","OU":"khs1994.com"}]}' \
         | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
         -hostname="$server_hosts"    - | cfssljson -bare kube-proxy
+
+   # metrics-server
+   echo '{"CN":"aggregator","hosts":[],"key":{"algo":"rsa","size":2048},"names":[{"C":"CN","ST": "BeiJing", "L": "BeiJing","O":"k8s","OU":"4Paradigm"}]}' \
+        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
+        -hostname="" - | cfssljson -bare metrics-server
 
   mv client-key.pem key.pem
   mv client.pem cert.pem

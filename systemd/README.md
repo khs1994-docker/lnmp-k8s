@@ -1,7 +1,1 @@
-# systemd unit file
-
-```bash
-$ systemctl cat name.service
-```
-
-* https://github.com/coreos/coreos-overlay/tree/master/app-admin
+# 使用 systemd 部署单节点 Kubernetes 集群

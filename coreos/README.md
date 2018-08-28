@@ -1,20 +1,8 @@
-# 1. Install CoreOS Local Server
+# Deploy Kubernetes on CoreOS
 
-# 2. Generate self-signed certificates
+* Install CoreOS Local Server
 
-**生成 Docker Daemon 远程连接自签名证书文件**
-
-https://www.khs1994.com/docker/dockerd.html
-
-```bash
-$ ./coreos
-
-$ vi .env # edit env var
-
-$ ./coreos cert
-```
-
-# 3. Install Kubernetes On CoreOS
+* Generate self-signed certificates [**生成 Docker Daemon 远程连接自签名证书文件**](https://www.khs1994.com/docker/dockerd.html)
 
 ## Overview
 
@@ -22,13 +10,7 @@ $ ./coreos cert
 
 [CoreOS Installer Nginx Server](https://www.khs1994.com/docker/coreos/install-server.html)
 
-## Supported tags and respective `Dockerfile` links
-
-* [`latest` (*alpine/Dockerfile*)](https://github.com/khs1994-website/docker-coreos/tree/master/alpine/Dockerfile)
-
 ## Overview
-
-`CoreOS` 已被 `RedHat` 收购，你还不尝试一下 `CoreOS`?
 
 ### 技能储备
 
@@ -51,7 +33,7 @@ VirtualBox 增加 hostonly 网络 （192.168.57.1）
 ### 下载安装 CoreOS 所需的相关文件
 
 ```bash
-$ ./coreos
+$ ./coreos init
 ```
 
 ### 修改 .env 文件
@@ -78,9 +60,8 @@ $ docker-compose up
 
 * https://www.khs1994.com/categories/Docker/CoreOS/ `硬盘安装 CoreOS 三节点集群`
 
-使用 `ISO` 等方式启动之后
-
 ```bash
+# create VirtualBox node
 $ ./coreos create-node N
 
 # then start node, exec this command in node console

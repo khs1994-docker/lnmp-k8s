@@ -1,0 +1,35 @@
+{
+  "kind": "KubeletConfiguration",
+  "apiVersion": "kubelet.config.k8s.io/v1beta1",
+  "authentication": {
+    "x509": {
+      "clientCAFile": "/etc/kubernetes/certs/ca.pem"
+    },
+    "webhook": {
+      "enabled": true,
+      "cacheTTL": "2m0s"
+     },
+    "anonymous": {
+      "enabled": false
+    }
+  },
+    "authorization": {
+      "mode": "Webhook",
+      "webhook": {
+     "cacheAuthorizedTTL": "5m0s",
+     "cacheUnauthorizedTTL": "30s"
+    }
+  },
+  "address": "192.168.199.100",
+  "port": 10250,
+  "readOnlyPort": 10255,
+  "cgroupDriver": "cgroupfs",
+  "hairpinMode": "promiscuous-bridge",
+  "serializeImagePulls": false,
+  "featureGates": {
+    "RotateKubeletClientCertificate": true,
+    "RotateKubeletServerCertificate": true
+  },
+  "clusterDomain": "${CLUSTER_DNS_DOMAIN}",
+  "clusterDNS": ["${CLUSTER_DNS_SVC_IP}"]
+}

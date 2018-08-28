@@ -222,6 +222,7 @@ systemd:
         --experimental-encryption-provider-config=/etc/kubernetes/encryption-config.yaml \
         --advertise-address=${MASTER_IP} \
         --bind-address=${MASTER_IP} \
+        --insecure-port=0 \
         --authorization-mode=Node,RBAC \
         --runtime-config=api/all \
         --enable-bootstrap-token-auth \
@@ -489,7 +490,7 @@ storage:
             },
             "address": "IP_1",
             "port": 10250,
-            "readOnlyPort": 0,
+            "readOnlyPort": 10255,
             "cgroupDriver": "cgroupfs",
             "hairpinMode": "promiscuous-bridge",
             "serializeImagePulls": false,

@@ -73,7 +73,7 @@ Function _registry(){
       --from-file=../config/registry/gcr.io.key
   kubectl label secret lnmp-registry-tls-0.0.1 app=lnmp version=0.0.1
 
-  kubectl create -f coreos-kubernetes/deployment/addons/registry.yaml
+  kubectl create -f coreos/deployment/addons/registry.yaml
 }
 
 switch ($args[0])

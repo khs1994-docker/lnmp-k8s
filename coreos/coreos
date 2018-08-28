@@ -8,6 +8,7 @@ CoreOS CLI 18.07
 
 Usages:
 
+init             Download CoreOS ISO
 up               Up CoreOS install Local Server
 add-node         Add node [ add-node N ]
 create-node      Create node [ create-node N ]
@@ -24,6 +25,7 @@ dashboard        Create dashboard addons [ token list ]
 efk              Create EFK addons [ list ]
 heapster         Create heapster addons [ list ]
 ingress-nginx    Create Ingress NGINX
+metrics-server   Create Metrics-server
 "
 }
 
@@ -41,7 +43,9 @@ sed -i "s!^SSH_PUB=.*!SSH_PUB=$ssh_pub!g" .env
 
 if ! [ -d $HOME/.kube ];then mkdir -p $HOME/.kube ; fi
 
-cp cert/kubectl.kubeconfig ~/.kube/config
+# cp cert/kubectl.kubeconfig ~/.kube/config
+
+_coreos_iso(){
 
 cd current
 
@@ -60,7 +64,11 @@ done
 
 cd ..
 
-KUBERNETES_VERSION=v1.11.0
+}
+
+if [ "$1" = 'init' ];then _coreos_iso ; exit; fi
+
+KUBERNETES_VERSION=v1.11.2
 
 if ! [ -d kubernetes-release/release/${KUBERNETES_VERSION} ];then
   command -v docker
@@ -84,6 +92,82 @@ if ! [ -d kubernetes-release/release/${KUBERNETES_VERSION} ];then
     mv srv.tar.gz kubernetes-server-linux-amd64-${KUBERNETES_VERSION}.tar.gz
   fi
 fi
+
+_efk(){
+  if [ "$1" = 'list' ];then
+    kubectl get pods -n kube-system -o wide|grep -E 'elasticsearch|fluentd|kibana'
+    exit
+
+  fi
+
+  cd deployment/addons/efk
+
+  kubectl apply -f .
+}
+
+_heapster(){
+  if [ "$1" = 'list' ];then
+    kubectl get pods -n kube-system | grep -E 'heapster|monitoring'
+    exit
+
+  fi
+
+  cd deployment/addons/heapster
+
+  kubectl apply -f .
+}
+
+_dashboard(){
+  if [ "$1" = 'token' ];then
+  set +e
+
+  sudo rm -rf $HOME/.kube/dashboard.kubeconfig
+
+  kubectl create sa dashboard-admin -n kube-system
+
+  kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin
+
+  ADMIN_SECRET=$(kubectl get secrets -n kube-system | grep dashboard-admin | awk '{print $1}')
+
+  DASHBOARD_LOGIN_TOKEN=$(kubectl describe secret -n kube-system ${ADMIN_SECRET} | grep -E '^token' | awk '{print $2}')
+
+  echo ${DASHBOARD_LOGIN_TOKEN}
+
+  kubectl config set-cluster kubernetes \
+    --certificate-authority=cert/ca.pem \
+    --embed-certs=true \
+    --server=${KUBE_APISERVER:-https://192.168.57.110:6443} \
+    --kubeconfig=$HOME/.kube/dashboard.kubeconfig
+
+  # 设置客户端认证参数，使用上面创建的 Token
+  kubectl config set-credentials dashboard_user \
+    --token=${DASHBOARD_LOGIN_TOKEN} \
+    --kubeconfig=$HOME/.kube/dashboard.kubeconfig
+
+  # 设置上下文参数
+  kubectl config set-context default \
+    --cluster=kubernetes \
+    --user=dashboard_user \
+    --kubeconfig=$HOME/.kube/dashboard.kubeconfig
+
+  # 设置默认上下文
+  kubectl config use-context default --kubeconfig=$HOME/.kube/dashboard.kubeconfig
+  exit
+  fi
+
+  if [ "$1" = 'list' ];then
+      kubectl get deployment kubernetes-dashboard  -n kube-system
+      kubectl --namespace kube-system get pods -o wide
+      kubectl get services kubernetes-dashboard -n kube-system
+      exit
+  fi
+
+
+  cd deployment
+
+  kubectl apply -f addons/dashboard.yaml
+
+}
 
 case "$1" in
 
@@ -155,88 +239,25 @@ case "$1" in
   ;;
 
   cleanup )
-
     docker image rm ccr.ccs.tencentyun.com/khs1994/kubernetes:${KUBERNETES_VERSION}
   ;;
 
   dashboard )
-
-   if [ "$2" = 'token' ];then
+   shift
    set +e
-
-   sudo rm -rf $HOME/.kube/dashboard.kubeconfig
-
-   kubectl create sa dashboard-admin -n kube-system
-
-   kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin
-
-   ADMIN_SECRET=$(kubectl get secrets -n kube-system | grep dashboard-admin | awk '{print $1}')
-
-   DASHBOARD_LOGIN_TOKEN=$(kubectl describe secret -n kube-system ${ADMIN_SECRET} | grep -E '^token' | awk '{print $2}')
-
-   echo ${DASHBOARD_LOGIN_TOKEN}
-
-   kubectl config set-cluster kubernetes \
-     --certificate-authority=cert/ca.pem \
-     --embed-certs=true \
-     --server=${KUBE_APISERVER:-https://192.168.57.110:6443} \
-     --kubeconfig=$HOME/.kube/dashboard.kubeconfig
-
-   # 设置客户端认证参数，使用上面创建的 Token
-   kubectl config set-credentials dashboard_user \
-     --token=${DASHBOARD_LOGIN_TOKEN} \
-     --kubeconfig=$HOME/.kube/dashboard.kubeconfig
-
-   # 设置上下文参数
-   kubectl config set-context default \
-     --cluster=kubernetes \
-     --user=dashboard_user \
-     --kubeconfig=$HOME/.kube/dashboard.kubeconfig
-
-   # 设置默认上下文
-   kubectl config use-context default --kubeconfig=$HOME/.kube/dashboard.kubeconfig
-   exit
-   fi
-
-   if [ "$2" = 'list' ];then
-       kubectl get deployment kubernetes-dashboard  -n kube-system
-       kubectl --namespace kube-system get pods -o wide
-       kubectl get services kubernetes-dashboard -n kube-system
-       exit
-   fi
-
-
-   cd deployment
-
-   kubectl apply -f addons/dashboard.yaml
-
+   _dashboard $@
   ;;
 
   efk )
-    if [ "$2" = 'list' ];then
-      kubectl get pods -n kube-system -o wide|grep -E 'elasticsearch|fluentd|kibana'
-      exit
-
-    fi
-
-    cd deployment/addons/efk
-
-    kubectl apply -f .
+    shift
+    set +e
+    _efk $@
   ;;
 
   heapster )
-    if [ "$2" = 'list' ];then
-      kubectl get pods -n kube-system | grep -E 'heapster|monitoring'
-      exit
-
-    fi
-
-    cd deployment/addons/heapster
-
-    kubectl apply -f .
-
-    cd rbac
-    kubectl apply -f .
+   shift
+   set +e
+   _heapster $@
   ;;
 
   ingress-nginx )
@@ -244,15 +265,12 @@ case "$1" in
     cd deployment/addons/ingress-nginx
 
     kubectl apply -f ingress-nginx.yaml
-    kubectl apply -f ingress-nginx-service-nodeport.yaml
+    kubectl apply -f service-nodeport.yaml
 
   ;;
 
   coredns )
-
-    cd deployment/addons
-
-    kubectl create -f coredns.yaml
+    kubectl create -f deployment/addons/coredns.yaml
 
   ;;
 
