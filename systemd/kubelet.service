@@ -5,7 +5,7 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-ExecStart=-/usr/sbin/swapoff -a
+ExecStartPre=-/usr/sbin/swapoff -a
 ExecStartPre=-/opt/bin/generate-kubelet-bootstrap-kubeconfig.sh
 
 WorkingDirectory=/var/lib/kubelet

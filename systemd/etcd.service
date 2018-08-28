@@ -14,17 +14,15 @@ LimitNOFILE=40000
 
 Environment="ETCD_DATA_DIR=/var/lib/etcd"
 
-ExecStartPre=-/usr/bin/mkdir --parents /var/lib/coreos
-ExecStartPre=-/usr/bin/docker container rm etcd
-ExecStop=-/usr/bin/docker container rm -f etcd
+ExecStartPre=-/usr/bin/mkdir --parents /var/lib/etcd
 
 ExecStart= /opt/bin/etcd \
   --name="node1" \
   --data-dir="/var/lib/etcd" \
   --listen-peer-urls="https://192.168.199.100:2380" \
-  --listen-client-urls="https://0.0.0.0:2379" \
+  --listen-client-urls="https://192.168.199.100:2379,http://127.0.0.1:2379" \
   --initial-advertise-peer-urls="https://192.168.199.100:2380" \
-  --initial-cluster="node1=https://0.0.0.0:2380" \
+  --initial-cluster="node1=https://192.168.199.100:2380" \
   --initial-cluster-state="new" \
   --initial-cluster-token="mytoken" \
   --advertise-client-urls="https://192.168.199.100:2379" \

@@ -194,10 +194,10 @@ kubectl-getinfo(){
 _etcd(){
   if ! [ -f /opt/bin/etcd ];then
       cd /opt/bin
-      wget https://github.com/etcd-io/etcd/releases/download/v3.3.9/etcd-v3.3.9-linux-amd64.tar.gz
-      tar -zxvf etcd-v3.3.9-linux-amd64.tar.gz
-      mv etcd-v3.3.9-linux-amd64/etcd* ../
-      rm -rf *.tar.gz
+      sudo wget https://github.com/etcd-io/etcd/releases/download/v3.3.9/etcd-v3.3.9-linux-amd64.tar.gz
+      sudo tar -zxvf etcd-v3.3.9-linux-amd64.tar.gz
+      sudo mv etcd-v3.3.9-linux-amd64/etcd* ../
+      sduo rm -rf *.tar.gz
       cd -
       return
   fi

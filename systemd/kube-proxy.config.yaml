@@ -5,6 +5,6 @@ clientConnection:
   kubeconfig: /etc/kubernetes/kube-proxy.kubeconfig
 clusterCIDR: 172.30.0.0/16 # ${CLUSTER_CIDR}
 healthzBindAddress: 192.168.199.100:10256
-hostnameOverride: coreos1
+hostnameOverride: node1
 metricsBindAddress: 192.168.199.100:10249
 mode: "ipvs"

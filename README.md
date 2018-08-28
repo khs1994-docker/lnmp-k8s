@@ -32,6 +32,8 @@
 
 * Docker 桌面版不支持启动 NFS 服务端容器，若需 NFS 卷，请自行在 Linux 上部署 NFS 容器
 
+* 由于虚拟机模拟集群环境硬盘空间占用太大，又不能及时回收，所以本项目支持在 Linux 单机上部署 Kubernetes (通过 systemd 管理)`$ lnmp-k8s single-install`
+
 ## 部署 LNMP
 
 ```bash
@@ -91,6 +93,23 @@ NAME      CPU(cores)   CPU%      MEMORY(bytes)   MEMORY%
 coreos1   217m         21%       1710Mi          58%
 coreos2   249m         24%       2258Mi          77%
 coreos3   267m         26%       2353Mi          81%
+```
+
+## 网络出错
+
+清理 `iptables` 规则
+
+* https://blog.csdn.net/shida_csdn/article/details/80028905
+
+```bash
+$ systemctl stop kubelet
+$ systemctl stop docker
+
+$ iptables --flush
+$ iptables -tnat --flush
+
+$ systemctl start kubelet
+$ systemctl start docker
 ```
 
 ## Tips
