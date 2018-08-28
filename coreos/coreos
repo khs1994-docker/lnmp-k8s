@@ -100,7 +100,7 @@ _efk(){
 
   fi
 
-  cd deployment/addons/efk
+  cd addons/efk
 
   kubectl apply -f .
 }
@@ -112,7 +112,7 @@ _heapster(){
 
   fi
 
-  cd deployment/addons/heapster
+  cd addons/heapster
 
   kubectl apply -f .
 }
@@ -161,9 +161,6 @@ _dashboard(){
       kubectl get services kubernetes-dashboard -n kube-system
       exit
   fi
-
-
-  cd deployment
 
   kubectl apply -f addons/dashboard.yaml
 
@@ -262,7 +259,7 @@ case "$1" in
 
   ingress-nginx )
 
-    cd deployment/addons/ingress-nginx
+    cd addons/ingress-nginx
 
     kubectl apply -f ingress-nginx.yaml
     kubectl apply -f service-nodeport.yaml
@@ -270,7 +267,7 @@ case "$1" in
   ;;
 
   coredns )
-    kubectl create -f deployment/addons/coredns.yaml
+    kubectl create -f addons/coredns.yaml
 
   ;;
 

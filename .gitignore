@@ -1,3 +1,6 @@
 kubectl-*
 minikube*
 !minikube.md
+
+.DS_Store
+test

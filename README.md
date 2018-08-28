@@ -26,7 +26,7 @@
 
 * 本项目专为 Laravel 设计，能够完美的在 Kubernetes 之上运行 Laravel
 
-* Docker 桌面版运行 Laravel 响应慢
+* Docker 桌面版 K8s 运行 Laravel 响应慢
 
 * Linux 版本优先考虑多节点方案,所以 `pv` 采用 `NFS` 卷,而不是 `hostPath`(执行 `$ lnmp-docker nfs` 可以快速的启动 NFS 服务端 )
 
@@ -59,7 +59,7 @@ $ cd ~/lnmp/kubernetes/deployment/configMap/nginx-conf-d
 $ vi filename.conf
 
 # 创建新版本的 configmap
-$ kubectl create configmap lnmp-nginx-conf-d-0.0.2 --from-file deployment/configMap/nginx-conf-d
+$ kubectl crea·te configmap lnmp-nginx-conf-d-0.0.2 --from-file deployment/configMap/nginx-conf-d
 
 $ kubectl label configmap lnmp-nginx-conf-d-0.0.2 app=lnmp version=0.0.2
 
