@@ -1,3 +1,0 @@
-[submodule "coreos-kubernetes"]
-	path = coreos-kubernetes
-	url = https://github.com/khs1994-docker/coreos-kubernetes.git

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    test: "true"
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.15.1-alpine
+    ports:
+    - containerPort: 80
