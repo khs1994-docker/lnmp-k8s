@@ -50,10 +50,10 @@ $ ./coreos init
 $ ./coreos add-node {n} # n > 3
 ```
 
-### 启动服务
+### 启动本地服务器
 
 ```bash
-$ docker-compose up
+$ ./coreos server
 ```
 
 ### 安装 CoreOS
@@ -64,6 +64,7 @@ $ docker-compose up
 # create VirtualBox node
 $ ./coreos create-node N
 
+# 在管理界面打开设置，按照实际进行微调，之后保存
 # then start node, exec this command in node console
 
 $ export LOCAL_HOST=192.168.57.1

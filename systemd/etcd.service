@@ -1,15 +1,20 @@
 [Unit]
 Description=etcd
 Documentation=https://github.com/coreos/etcd
+# Requires= 当前 unit 依赖的
 Wants=network-online.target network.target
-After=network-online.target
+After=network-online.target # 我在谁之后启动
+# Befora 我在谁之前启动
+# Conflicts 冲突
+# Condition...：当前 Unit 运行必须满足的条件，否则不会运行
+# Assert...：当前 Unit 运行必须满足的条件，否则会报启动失败
 
 [Service]
 
 Type=notify
-Restart=on-failure
-RestartSec=10s
-TimeoutStartSec=0
+Restart=on-failure # always（总是重启）、on-success、on-failure、on-abnormal、on-abort、on-watchdog
+RestartSec=10s # 自动重启当前服务间隔的秒数
+TimeoutStartSec=0 # 定义 Systemd 停止当前服务之前等待的秒数
 LimitNOFILE=40000
 
 Environment="ETCD_DATA_DIR=/var/lib/etcd"
@@ -35,5 +40,12 @@ ExecStart= /opt/bin/etcd \
   --peer-client-cert-auth=true \
   --peer-trusted-ca-file="/etc/kubernetes/certs/ca.pem"
 
+# ExecStartPost
+# ExecReload：重启当前服务时执行的命令
+# ExecStop：停止当前服务时执行的命令
+# ExecStopPost：停止当其服务之后执行的命令
 [Install]
 WantedBy=multi-user.target
+
+# Alias：当前 Unit 可用于启动的别名
+# Also：当前 Unit 激活（enable）时，会被同时激活的其他 Unit

@@ -12,6 +12,8 @@
 
 * [自己手动部署 Kubernetes 集群(CoreOS)](coreos)
 
+* [Linux 单机部署](systemd)
+
 * [Docker Desktop](docs/docker-desktop.md)
 
 * [MiniKube](docs/minikube.md)

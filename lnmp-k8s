@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
+KUBERNETES_VERSION=1.11.2
+MINIKUBE_VERSION=0.28.1
+
+################################################################################
 
 if ! [ -f lnmp-k8s ];then if ! [ -z "$LNMP_PATH" ];then cd $LNMP_PATH/kubernetes; else exit; fi; fi
 
@@ -10,7 +14,6 @@ os=`uname -s`
 
 print_help_info(){
   echo "
-
 Usage: lnmp-k8s COMMAND
 
 Commands:
@@ -20,7 +23,7 @@ Commands:
   minikube-install   Install minikube
   minikube           Start minikube
 
-  single-install     Install Single Kubernetes
+  single-install     Install Local Kubernetes（Manager by systemd）
 
   create             Deploy lnmp on k8s
   delete             Stop lnmp on k8s, keep data resource(pv and pvc)
@@ -33,12 +36,6 @@ Commands:
   dashboard          How to open Dashboard
 "
 }
-
-################################################################################
-
-MINIKUBE_VERSION=0.28.1
-
-################################################################################
 
 _delete(){
   kubectl delete deployment -l app=lnmp
@@ -218,12 +215,12 @@ _k8s_install(){
   _etcd
   _flanneld
 
-  if ! [ -f systemd/certs/admin-key.pem ];then echo "Please Generate certs first $ cd coreos ; docker-compose up cfssl-single"; fi
+  if ! [ -f systemd/certs/admin-key.pem ];then echo "Please Generate certs first $ cd coreos ; docker-compose up cfssl-single"; exit; fi
 
   sudo mkdir -p /opt/bin
 
   if ! [ -f /opt/bin/kubeadm ];then
-    sudo cp coreos/kubernetes-release/release/v1.11.2/kubernetes/server/bin/* /opt/bin/
+    sudo cp coreos/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/* /opt/bin/
   fi
 
   sudo cp coreos/disk/bin/*.sh /opt/bin/
@@ -264,11 +261,11 @@ EOF
 
   sudo useradd -m -s /bin/bash -G root k8s || echo
 
-  sudo rm -rf /var/log/kubernetes /var/log/kube-apiserver-audit.log
+  # sudo rm -rf /var/log/kubernetes /var/log/kube-apiserver-audit.log
 
   sudo mkdir --parents /var/log/kubernetes
-  sudo mkdir -p /var/lib/kubelet
-  sudo chown k8s:root /var/log/kubernetes /var/lib/kubelet
+
+  sudo chown k8s:root /var/log/kubernetes
 
   sudo touch /var/log/kube-apiserver-audit.log
   sudo chown k8s:root /var/log/kube-apiserver-audit.log

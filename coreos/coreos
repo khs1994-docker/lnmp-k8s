@@ -9,13 +9,12 @@ CoreOS CLI 18.07
 Usages:
 
 init             Download CoreOS ISO
-up               Up CoreOS install Local Server
+server           Up CoreOS install Local Server
+cert             Generate Self-Signed Certificates
+
 add-node         Add node [ add-node N ]
 create-node      Create node [ create-node N ]
-cert             Generate Self-Signed Certificates
-build            Build Docker Image
-push             Push Docker Image
-pull             Pull Docker Image
+
 cleanup          Cleanup Cache
 
 Addons:
@@ -168,32 +167,21 @@ _dashboard(){
 
 case "$1" in
 
-  up )
+  server )
   if ! [ -f cert/server-cert.pem ];then
+    cd ..
     docker-compose up cfssl
+    cd -
   fi
 
+  cd ..
   docker-compose up coreos-server
 
   ;;
 
   cert )
+    cd ..
     docker-compose up cfssl
-
-  ;;
-
-  build )
-    docker-compose -f docker-compose.build.yml build
-
-  ;;
-
-  push )
-    docker-compose push
-
-  ;;
-
-  pull )
-    docker-compose pull
 
   ;;
 
