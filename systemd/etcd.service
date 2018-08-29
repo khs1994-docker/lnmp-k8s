@@ -1,6 +1,6 @@
 [Unit]
 Description=etcd
-Documentation=https://github.com/coreos/etcd
+Documentation=https://github.com/etcd-io/etcd
 # Requires= 当前 unit 依赖的
 Wants=network-online.target network.target
 After=network-online.target # 我在谁之后启动

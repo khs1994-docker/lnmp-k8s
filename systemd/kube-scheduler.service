@@ -15,7 +15,7 @@ ExecStart=/opt/bin/kube-scheduler \
 --v=2
 Restart=on-failure
 RestartSec=5
-# User=k8s
+User=k8s
 
 [Install]
 WantedBy=multi-user.target

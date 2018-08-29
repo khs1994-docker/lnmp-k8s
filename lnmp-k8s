@@ -239,19 +239,9 @@ _k8s_install(){
 
   source systemd/.env.example
 
-  cat | sudo tee /etc/kubernetes/encryption-config.yaml <<EOF
-kind: EncryptionConfig
-apiVersion: v1
-resources:
-  - resources:
-      - secrets
-    providers:
-      - aescbc:
-          keys:
-            - name: key1
-              secret: ${ENCRYPTION_KEY}
-      - identity: {}
-EOF
+  sudo cp systemd/encryption-config.yaml /etc/kubernetes/encryption-config.yaml
+
+  sudo sed -i "s#ENCRYPTION_KEY#${ENCRYPTION_KEY}#g" /etc/kubernetes/encryption-config.yaml
 
   sudo mkdir -p /etc/systemd/system/docker.service.d
 
@@ -259,7 +249,7 @@ EOF
 
   sudo systemctl daemon-reload
 
-  sudo useradd -m -s /bin/bash -G root k8s || echo
+  sudo useradd -m -s /bin/bash -G root k8s > /dev/null 2>&1 || echo > /dev/null
 
   # sudo rm -rf /var/log/kubernetes /var/log/kube-apiserver-audit.log
 

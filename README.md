@@ -114,6 +114,15 @@ $ systemctl start kubelet
 $ systemctl start docker
 ```
 
+```bash
+$ systemctl stop firewalld && systemctl disable firewalld
+$ /usr/sbin/iptables -F && /usr/sbin/iptables -X && /usr/sbin/iptables -F -t nat && /usr/sbin/iptables -X -t nat
+$ /usr/sbin/iptables -P FORWARD ACCEPT
+$ systemctl daemon-reload && systemctl enable docker && systemctl restart docker
+$ for intf in /sys/devices/virtual/net/docker0/brif/*; do echo 1 > $intf/hairpin_mode; done
+$ sudo sysctl -p /etc/sysctl.d/kubernetes.conf
+```
+
 ## Tips
 
 * [数据持久化](docs/data.md)
