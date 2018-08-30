@@ -200,7 +200,6 @@ systemd:
         --logtostderr=false \
         --log-dir=/var/log/kubernetes \
         --v=2
-        Restart=on
         Restart=on-failure
         RestartSec=5
         User=k8s
@@ -239,7 +238,6 @@ systemd:
         --etcd-keyfile=/etc/kubernetes/certs/kubernetes-key.pem \
         --etcd-servers=${ETCD_ENDPOINTS} \
         --enable-swagger-ui=true \
-        --allow-privileged=true \
         --apiserver-count=3 \
         --audit-log-maxage=30 \
         --audit-log-maxbackup=3 \
@@ -491,10 +489,13 @@ storage:
             },
             "address": "IP_1",
             "port": 10250,
-            "readOnlyPort": 10255,
+            "readOnlyPort": 0,
             "cgroupDriver": "cgroupfs",
             "hairpinMode": "promiscuous-bridge",
             "serializeImagePulls": false,
+            "rotateCertificates": true,
+            "serverTLSBootstrap": true,
+            "maxPods": 2000,
             "featureGates": {
               "RotateKubeletClientCertificate": true,
               "RotateKubeletServerCertificate": true
