@@ -31,7 +31,6 @@ ExecStart=/opt/bin/kube-controller-manager \
 --v=2 \
 --horizontal-pod-autoscaler-use-rest-clients=true
 
-Restart=on
 Restart=on-failure
 RestartSec=5
 User=k8s

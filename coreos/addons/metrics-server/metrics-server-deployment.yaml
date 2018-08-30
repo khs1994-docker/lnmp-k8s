@@ -52,8 +52,8 @@ spec:
         image: anjia0532/metrics-server-amd64:v0.2.1
         command:
         - /metrics-server
-        # - --source=kubernetes.summary_api:https://kubernetes.default?&kubeletHttps=true&kubeletPort=10250
-        - --source=kubernetes.summary_api:https://kubernetes.default?kubeletHttps=false&kubeletPort=10255&insecure=true
+        - --source=kubernetes.summary_api:https://kubernetes.default?&kubeletHttps=true&kubeletPort=10250
+        # - --source=kubernetes.summary_api:https://kubernetes.default?kubeletHttps=false&kubeletPort=10255&insecure=true
         ports:
         - containerPort: 443
           name: https
