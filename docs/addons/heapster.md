@@ -23,3 +23,5 @@ $ kubectl delete service heapster monitoring-grafana monitoring-influxdb -n kube
 
 $ kubectl delete deployment heapster monitoring-grafana monitoring-influxdb -n kube-system
 ```
+
+## grafana
