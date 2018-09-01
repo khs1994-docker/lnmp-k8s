@@ -3,7 +3,8 @@ Description=etcd
 Documentation=https://github.com/etcd-io/etcd
 # Requires= 当前 unit 依赖的
 Wants=network-online.target network.target
-After=network-online.target # 我在谁之后启动
+# 我在谁之后启动
+After=network-online.target
 # Befora 我在谁之前启动
 # Conflicts 冲突
 # Condition...：当前 Unit 运行必须满足的条件，否则不会运行
@@ -12,9 +13,12 @@ After=network-online.target # 我在谁之后启动
 [Service]
 
 Type=notify
-Restart=on-failure # always（总是重启）、on-success、on-failure、on-abnormal、on-abort、on-watchdog
-RestartSec=10s # 自动重启当前服务间隔的秒数
-TimeoutStartSec=0 # 定义 Systemd 停止当前服务之前等待的秒数
+Restart=on-failure
+# always（总是重启）、on-success、on-failure、on-abnormal、on-abort、on-watchdog
+RestartSec=10s
+# 自动重启当前服务间隔的秒数
+TimeoutStartSec=0
+# 定义 Systemd 停止当前服务之前等待的秒数
 LimitNOFILE=40000
 
 Environment="ETCD_DATA_DIR=/var/lib/etcd"
