@@ -24,7 +24,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  namespace: default
+  namespace: {{ .Values.namespace }}
   name: lnmp-mysql-data
   labels:
     app: lnmp
@@ -51,7 +51,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  namespace: default
+  namespace: {{ .Values.namespace }}
   name: lnmp-redis-data
   labels:
     app: lnmp

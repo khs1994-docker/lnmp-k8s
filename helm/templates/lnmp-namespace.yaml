@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  # kubectl create namespace new-namespace
+  name: {{ .Values.namespace }}
+  labels:
+    app: lnmp

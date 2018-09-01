@@ -5,8 +5,10 @@
 example:
   enabled: false
 
-nameOverride: ""
+nameOverride: "lnmp"
 fullnameOverride: "khs1994-docker"
+
+namespace: lnmp
 
 TZ: Asia/Shanghai
 
