@@ -2,6 +2,24 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   namespace: default
+  name: lnmp-data
+  labels:
+    type: local
+    app: lnmp
+    tier: code-data
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes: [ "ReadWriteOnce" ]
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /home/username/app
+  storageClassName: hostpath
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  namespace: default
   name: lnmp-mysql-data
   labels:
     type: local
@@ -50,25 +68,6 @@ spec:
     path: /tmp/data/redis
   storageClassName: hostpath
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  namespace: default
-  name: lnmp-data
-  labels:
-    type: local
-    app: lnmp
-    tier: code-data
-spec:
-  capacity:
-    storage: 20Gi
-  accessModes: [ "ReadWriteOnce" ]
-  persistentVolumeReclaimPolicy: Retain
-  hostPath:
-    path: /home/username/lnmp/app
-  storageClassName: hostpath
----
-
 apiVersion: v1
 kind: PersistentVolume
 metadata:
