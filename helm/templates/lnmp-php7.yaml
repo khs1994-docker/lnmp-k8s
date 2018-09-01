@@ -98,7 +98,7 @@ spec:
             path: php.ini
           # - key: docker-xdebug.ini
           #   path: docker-xdebug.ini
-          - key: zz-docker.production.conf
+          - key: zz-docker.conf
             path: zz-docker.conf
           - key: composer.config.json
             path: config.json

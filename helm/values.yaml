@@ -28,7 +28,7 @@ mysql:
   # pv_path: /Users/username/.docker/Volumes/lnmp-mysql-data
   pv_path: /var/lib/lnmp/mysql-data
   image: mysql:8.0.12
-  password: bXl0ZXN0Cg==
+  password: mytest
 
 redis:
   # pv_path: /c/Users/username/.docker/Volumes/lnmp-redis-data

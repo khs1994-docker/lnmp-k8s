@@ -92,5 +92,5 @@ spec:
         configMap:
           name: lnmp-mysql-cnf-{{ .Chart.Version }}
           items:
-          - key: docker.production.cnf
+          - key: docker.cnf
             path: docker.cnf

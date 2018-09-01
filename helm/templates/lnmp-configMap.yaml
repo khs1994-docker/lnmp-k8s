@@ -19,6 +19,59 @@ metadata:
     app: lnmp
     version: {{ .Chart.Version }}
 data:
-  redis.conf: |
-    maxmemory 2mb
-    maxmemory-policy allkeys-lru
+  redis.conf: | {{ range .Files.Lines "config/redis/redis.production.conf" }}
+    {{ . }}{{ end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: lnmp-php-conf-{{ .Chart.Version }}
+  labels:
+    app: lnmp
+    version: {{ .Chart.Version }}
+data:
+  php.ini: | {{ range .Files.Lines "config/php/ini/php.production.ini" }}
+    {{ . }}{{ end }}
+  docker-xdebug.ini: | {{ range .Files.Lines "config/php/docker-xdebug.ini" }}
+    {{ . }}{{ end }}
+  zz-docker.conf: | {{ range .Files.Lines "config/php/zz-docker.production.conf" }}
+    {{ . }}{{ end }}
+  composer.config.json: | {{ range .Files.Lines "config/php/composer/config.production.json" }}
+    {{ . }}{{ end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: lnmp-mysql-cnf-{{ .Chart.Version }}
+  labels:
+    app: lnmp
+    version: {{ .Chart.Version }}
+data:
+  docker.cnf: | {{ range .Files.Lines "config/mysql/docker.production.cnf" }}
+    {{ . }}{{ end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: lnmp-nginx-conf-{{ .Chart.Version }}
+  labels:
+    app: lnmp
+    version: {{ .Chart.Version }}
+data:
+  nginx.conf: | {{ range .Files.Lines "config/nginx/nginx.production.conf" }}
+    {{ . }}{{ end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: lnmp-nginx-conf-d-{{ .Chart.Version }}
+  labels:
+    app: lnmp
+    version: {{ .Chart.Version }}
+data:
+  www.t.khs1994.com.conf: | {{ range .Files.Lines "config/nginx/conf.d/t.khs1994.com.production.conf" }}
+    {{ . }}{{ end }}

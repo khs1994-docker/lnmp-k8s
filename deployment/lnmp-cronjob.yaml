@@ -35,4 +35,4 @@ spec:
           - name: lnmp-data
             persistentVolumeClaim:
               claimName: lnmp-data
-          # restartPolicy: OnFailure
+          restartPolicy: Never # OnFailure
