@@ -45,8 +45,6 @@ registry:
 nginx:
   image: khs1994/nginx:1.15.2-alpine
   replicaCount: 2
-  service:
-    type: NodePort # LoadBalancer
 
 php:
   image: khs1994/php:7.2.9-fpm-alpine
@@ -60,7 +58,7 @@ image:
   pullPolicy: IfNotPresent
 
 service:
-  type: ClusterIP
+  type: NodePort # ClusterIP # LoadBalancer
   port: 80
 
 ingress:
