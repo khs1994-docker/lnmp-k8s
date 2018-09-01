@@ -4,7 +4,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   namespace: {{ .Values.namespace }}
-  name: lnmp-cron-{{ .Chart.Version }}
+  name: lnmp-cron
   labels:
     app: lnmp
     version: {{ .Chart.Version }}
@@ -21,7 +21,7 @@ spec:
           concurrencyPolicy: Forbid # Allow Replace
           # startingDeadlineSeconds: 0
           containers:
-          - name: lnmp-cron-{{ .Chart.Version }}
+          - name: lnmp-cron
             image: khs1994/php:7.2.9-fpm-alpine
             args:
             - /bin/sh

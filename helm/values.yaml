@@ -6,7 +6,7 @@ example:
   enabled: false
 
 nameOverride: "lnmp"
-fullnameOverride: "khs1994-docker"
+fullnameOverride: "fullname"
 
 namespace: lnmp
 
@@ -14,30 +14,39 @@ TZ: Asia/Shanghai
 
 APP_ENV: production
 
-app_root_pv: "/c/Users/username/lnmp/app"
+# app_root_pv: "/c/Users/username/app"
+# app_root_pv: "/Users/username/app"
+# app_root_pv: "/home/username/app"
+app_root_pv: "/home/khs1994/app"
 
 nfs:
-  enabled: true
+  enabled: false
   server: 192.168.57.1
 
 mysql:
-  pv_path: /c/Users/username/.docker/Volumes/lnmp-mysql-data
+  # pv_path: /c/Users/username/.docker/Volumes/lnmp-mysql-data
+  # pv_path: /Users/username/.docker/Volumes/lnmp-mysql-data
+  pv_path: /var/lib/lnmp/mysql-data
   image: mysql:8.0.12
   password: bXl0ZXN0Cg==
 
 redis:
-  pv_path: /c/Users/username/.docker/Volumes/lnmp-redis-data
+  # pv_path: /c/Users/username/.docker/Volumes/lnmp-redis-data
+  # pv_path: /Users/username/.docker/Volumes/lnmp-redis-data
+  pv_path: /var/lib/lnmp/redis-data
   image: redis:5.0-rc4-alpine
 
 registry:
-  pv_path: /c/Users/username/.docker/Volumes/lnmp-registry-data
+  # pv_path: /c/Users/username/.docker/Volumes/lnmp-registry-data
+  # pv_path: /Users/username/.docker/Volumes/lnmp-registry-data
+  pv_path: /var/lib/lnmp/registry-data
   image: registry:latest
 
 nginx:
   image: khs1994/nginx:1.15.2-alpine
   replicaCount: 2
   service:
-    type: LoadBalancer # NodePort
+    type: NodePort # LoadBalancer
 
 php:
   image: khs1994/php:7.2.9-fpm-alpine

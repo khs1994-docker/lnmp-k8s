@@ -18,9 +18,11 @@ spec:
   type: LoadBalancer
   {{end}}
   # 暴露服务方式之一
+  {{if eq .Values.nginx.service.type "NodePort"}}
   type: NodePort
   externalTrafficPolicy: Local
   # sessionAffinity: None
+  {{end}}
 
   # 集群内的私有 ip ，this is default
   # type: ClusterIP
@@ -44,12 +46,12 @@ spec:
 
     # 暴露服务方式之一
     # 将 service 的 port 映射到每个 node 的 port 上，如果不指定 nodePort,k8s 将随机映射
-    {{- if eq .Values.nginx.service.type "NodePort" -}}
+    {{if eq .Values.nginx.service.type "NodePort"}}
     nodePort: 443
-    {{- end }}
+    {{end}}
   - name: http
     protocol: TCP
     port: 80
-    {{- if eq .Values.nginx.service.type "NodePort" -}}
+    {{if eq .Values.nginx.service.type "NodePort"}}
     nodePort: 80
-    {{- end }}
+    {{end}}
