@@ -1,14 +1,35 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  name: lnmp-data
+  labels:
+    app: lnmp
+    tier: code-data
+spec:
+  selector:
+    matchLabels:
+      app: lnmp
+      tier: code-data
+  resources:
+    requests:
+      storage: 20Gi
+  {{- if .Values.nfs.enabled }}
+  storageClassName: slow
+  accessModes: ["ReadWriteMany"]
+  {{ else }}
+  storageClassName: hostpath
+  accessModes: ["ReadWriteOnce"]
+  {{- end }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
   namespace: default
   name: lnmp-mysql-data
   labels:
     app: lnmp
     tier: mysql
 spec:
-  accessModes:
-    - ReadWriteOnce
   # volumeMode: Filesystem
   resources:
     requests:
@@ -19,10 +40,12 @@ spec:
       tier: mysql
     # matchExpressions:
       # - {key: environment, operator: In, values: [dev]}
-  {{- if }}
-  storageClassName: hostpath
-  {{ else }}
+  {{- if .Values.nfs.enabled }}
   storageClassName: slow
+  accessModes: ["ReadWriteMany"]
+  {{ else }}
+  storageClassName: hostpath
+  accessModes: ["ReadWriteOnce"]
   {{- end }}
 ---
 apiVersion: v1
@@ -34,8 +57,6 @@ metadata:
     app: lnmp
     tier: redis
 spec:
-  accessModes:
-    - ReadWriteOnce
   selector:
     matchLabels:
       app: lnmp
@@ -43,26 +64,13 @@ spec:
   resources:
     requests:
       storage: 20Gi
+  {{- if .Values.nfs.enabled }}
+  storageClassName: slow
+  accessModes: ["ReadWriteMany"]
+  {{ else }}
   storageClassName: hostpath
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: lnmp-data
-  labels:
-    app: lnmp
-    tier: code-data
-spec:
-  accessModes:
-    - ReadWriteOnce
-  selector:
-    matchLabels:
-      app: lnmp
-      tier: code-data
-  resources:
-    requests:
-      storage: 20Gi
-  storageClassName: hostpath
+  accessModes: ["ReadWriteOnce"]
+  {{- end }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -72,8 +80,6 @@ metadata:
     app: lnmp
     tier: registry
 spec:
-  accessModes:
-    - ReadWriteOnce
   selector:
     matchLabels:
       app: lnmp
@@ -81,4 +87,10 @@ spec:
   resources:
     requests:
       storage: 20Gi
+  {{- if .Values.nfs.enabled }}
+  storageClassName: slow
+  accessModes: ["ReadWriteMany"]
+  {{ else }}
   storageClassName: hostpath
+  accessModes: ["ReadWriteOnce"]
+  {{- end }}

@@ -2,15 +2,51 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+example:
+  enabled: false
+
+nameOverride: ""
+fullnameOverride: "khs1994-docker"
+
+TZ: Asia/Shanghai
+
+APP_ENV: production
+
+app_root_pv: "/c/Users/username/lnmp/app"
+
+nfs:
+  enabled: true
+  server: 192.168.57.1
+
+mysql:
+  pv_path: /c/Users/username/.docker/Volumes/lnmp-mysql-data
+  image: mysql:8.0.12
+  password: bXl0ZXN0Cg==
+
+redis:
+  pv_path: /c/Users/username/.docker/Volumes/lnmp-redis-data
+  image: redis:5.0-rc4-alpine
+
+registry:
+  pv_path: /c/Users/username/.docker/Volumes/lnmp-registry-data
+  image: registry:latest
+
+nginx:
+  image: khs1994/nginx:1.15.2-alpine
+  replicaCount: 2
+  service:
+    type: LoadBalancer # NodePort
+
+php:
+  image: khs1994/php:7.2.9-fpm-alpine
+  replicaCount: 2
+
 replicaCount: 1
 
 image:
   repository: nginx
   tag: stable
   pullPolicy: IfNotPresent
-
-nameOverride: ""
-fullnameOverride: "khs1994-docker"
 
 service:
   type: ClusterIP

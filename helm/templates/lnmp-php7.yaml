@@ -6,12 +6,12 @@ metadata:
   labels:
     app: lnmp
     tier: php7
-    version: 0.0.1
+    version: {{ .Chart.Version }}
 spec:
   selector:
     app: lnmp
     tier: php7
-    version: 0.0.1
+    version: {{ .Chart.Version }}
   ports:
   - port: 9000
   clusterIP: None
@@ -24,14 +24,14 @@ metadata:
   labels:
     app: lnmp
     tier: php7
-    version: 0.0.1
+    version: {{ .Chart.Version }}
 spec:
   selector:
     matchLabels:
       app: lnmp
       tier: php7
-      version: 0.0.1
-  replicas: 2
+      version: {{ .Chart.Version }}
+  replicas: {{ .Values.php.replicaCount }}
   minReadySeconds: 5
   revisionHistoryLimit: 5 # 保留几个版本
   strategy:
@@ -44,11 +44,11 @@ spec:
       labels:
         app: lnmp
         tier: php7
-        version: 0.0.1
+        version: {{ .Chart.Version }}
     spec:
       containers:
       - name: lnmp-php7
-        image: khs1994/php:7.2.9-fpm-alpine
+        image: {{ .Values.php.image }}
         args:
         - php-fpm
         - -R
@@ -56,12 +56,12 @@ spec:
         - name: TZ
           valueFrom:
             configMapKeyRef:
-              name: lnmp-env-0.0.1
+              name: lnmp-env-{{ .Chart.Version }}
               key: TZ
         - name: APP_ENV
           valueFrom:
             configMapKeyRef:
-              name: lnmp-env-0.0.1
+              name: lnmp-env-{{ .Chart.Version }}
               key: APP_ENV
         ports:
         - containerPort: 9000
@@ -92,7 +92,7 @@ spec:
           claimName: lnmp-data
       - name: lnmp-php-conf
         configMap:
-          name: lnmp-php-conf-0.0.1
+          name: lnmp-php-conf-{{ .Chart.Version }}
           items:
           - key: php.ini
             path: php.ini

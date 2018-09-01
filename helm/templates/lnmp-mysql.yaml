@@ -6,12 +6,12 @@ metadata:
   labels:
     app: lnmp
     tier: mysql
-    version: 0.0.1
+    version: {{ .Chart.Version }}
 spec:
   selector:
     app: lnmp
     tier: mysql
-    version: 0.0.1
+    version: {{ .Chart.Version }}
   ports:
     - port: 3306
   clusterIP: None
@@ -24,13 +24,13 @@ metadata:
   labels:
     app: lnmp
     tier: mysql
-    version: 0.0.1
+    version: {{ .Chart.Version }}
 spec:
   selector:
     matchLabels:
       app: lnmp
       tier: mysql
-      version: 0.0.1
+      version: {{ .Chart.Version }}
   replicas: 1
   # 新创建的 Pod 状态为 Ready 持续的时间至少为多少秒才认为 Pod Available(Ready)。
   minReadySeconds: 5
@@ -51,12 +51,12 @@ spec:
       labels:
         app: lnmp
         tier: mysql
-        version: 0.0.1
+        version: {{ .Chart.Version }}
     spec:
       # restartPolicy: Never # Always、OnFailure 和 Never
       containers:
       - name: lnmp-mysql
-        image: mysql:8.0.12
+        image: {{ .Values.mysql.image }}
         imagePullPolicy: IfNotPresent
         # envFrom:
         #   - configMapKeyRef:
@@ -66,13 +66,13 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: lnmp-mysql-password-0.0.1
+              name: lnmp-mysql-password-{{ .Chart.Version }}
               key: password
         # config 用作环境变量
         - name: TZ
           valueFrom:
              configMapKeyRef:
-               name: lnmp-env-0.0.1
+               name: lnmp-env-{{ .Chart.Version }}
                key: TZ
         - name: MYSQL_DATABASE
           value: test
@@ -90,7 +90,7 @@ spec:
           claimName: lnmp-mysql-data
       - name: lnmp-mysql-cnf
         configMap:
-          name: lnmp-mysql-cnf-0.0.1
+          name: lnmp-mysql-cnf-{{ .Chart.Version }}
           items:
           - key: docker.production.cnf
             path: docker.cnf

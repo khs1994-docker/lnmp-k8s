@@ -6,12 +6,12 @@ metadata:
   labels:
     app: lnmp
     tier: redis
-    version: 0.0.1
+    version: {{ .Chart.Version }}
 spec:
   selector:
     app: lnmp
     tier: redis
-    version: 0.0.1
+    version: {{ .Chart.Version }}
   ports:
   - port: 6379
     # targetPort: 6379
@@ -25,13 +25,13 @@ metadata:
   labels:
     app: lnmp
     tier: redis
-    version: 0.0.1
+    version: {{ .Chart.Version }}
 spec:
   selector:
     matchLabels:
       app: lnmp
       tier: redis
-      version: 0.0.1
+      version: {{ .Chart.Version }}
   replicas: 1
   minReadySeconds: 5
   revisionHistoryLimit: 5 # 保留几个版本
@@ -45,11 +45,11 @@ spec:
       labels:
         app: lnmp
         tier: redis
-        version: 0.0.1
+        version: {{ .Chart.Version }}
     spec:
       containers:
       - name: lnmp-redis
-        image: redis:5.0-rc4-alpine
+        image: {{ .Values.redis.image }}
         args:
         - redis-server
         - /redis.conf
@@ -61,7 +61,7 @@ spec:
         - name: TZ
           valueFrom:
             configMapKeyRef:
-              name: lnmp-env-0.0.1
+              name: lnmp-env-{{ .Chart.Version }}
               key: TZ
         volumeMounts:
         - name: lnmp-redis-data
@@ -79,7 +79,7 @@ spec:
       # 将 configMap 挂载为文件
       - name: lnmp-redis-conf
         configMap:
-          name: lnmp-redis-conf-0.0.1
+          name: lnmp-redis-conf-{{ .Chart.Version }}
           items:
           - key: redis.conf
             path: redis.conf

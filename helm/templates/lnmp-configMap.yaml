@@ -2,24 +2,22 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: default
-  name: lnmp-env-0.0.1
+  name: lnmp-env-{{ .Chart.Version }}
   labels:
     app: lnmp
-    version: 0.0.1
+    version: {{ .Chart.Version }}
 data:
-  TZ: Asia/Shanghai
-  APP_ENV: production
-
+  TZ: {{ .Values.TZ }}
+  APP_ENV: {{ .Values.APP_ENV }}
 ---
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: default
-  name: lnmp-redis-conf-0.0.1
+  name: lnmp-redis-conf-{{ .Chart.Version }}
   labels:
     app: lnmp
-    version: 0.0.1
+    version: {{ .Chart.Version }}
 data:
   redis.conf: |
     maxmemory 2mb

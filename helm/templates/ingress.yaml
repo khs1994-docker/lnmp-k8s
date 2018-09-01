@@ -1,3 +1,4 @@
+{{- if .Values.example.enabled -}}
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "lnmp.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
@@ -35,4 +36,5 @@ spec:
               serviceName: {{ $fullName }}
               servicePort: http
   {{- end }}
+{{- end }}
 {{- end }}

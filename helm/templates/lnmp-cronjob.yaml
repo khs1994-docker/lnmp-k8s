@@ -4,10 +4,10 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   namespace: default
-  name: lnmp-cron-0.0.1
+  name: lnmp-cron-{{ .Chart.Version }}
   labels:
     app: lnmp
-    version: 0.0.1
+    version: {{ .Chart.Version }}
 spec:
   schedule: "*/1 * * * *"
   jobTemplate:
@@ -21,7 +21,7 @@ spec:
           concurrencyPolicy: Forbid # Allow Replace
           # startingDeadlineSeconds: 0
           containers:
-          - name: lnmp-cron-0.0.1
+          - name: lnmp-cron-{{ .Chart.Version }}
             image: khs1994/php:7.2.9-fpm-alpine
             args:
             - /bin/sh
