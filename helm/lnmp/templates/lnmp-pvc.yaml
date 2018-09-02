@@ -5,11 +5,13 @@ metadata:
   labels:
     app: lnmp
     tier: code-data
+    env: {{ .Values.APP_ENV }}
 spec:
   selector:
     matchLabels:
       app: lnmp
       tier: code-data
+      env: {{ .Values.APP_ENV }}
   resources:
     requests:
       storage: 20Gi
@@ -28,6 +30,7 @@ metadata:
   labels:
     app: lnmp
     tier: mysql
+    env: {{ .Values.APP_ENV }}
 spec:
   # volumeMode: Filesystem
   resources:
@@ -37,6 +40,7 @@ spec:
     matchLabels:
       app: lnmp
       tier: mysql
+      env: {{ .Values.APP_ENV }}
     # matchExpressions:
       # - {key: environment, operator: In, values: [dev]}
   {{- if .Values.nfs.enabled }}
@@ -54,11 +58,13 @@ metadata:
   labels:
     app: lnmp
     tier: redis
+    env: {{ .Values.APP_ENV }}
 spec:
   selector:
     matchLabels:
       app: lnmp
       tier: redis
+      env: {{ .Values.APP_ENV }}
   resources:
     requests:
       storage: 20Gi
@@ -77,11 +83,13 @@ metadata:
   labels:
     app: lnmp
     tier: registry
+    env: {{ .Values.APP_ENV }}
 spec:
   selector:
     matchLabels:
       app: lnmp
       tier: registry
+      env: {{ .Values.APP_ENV }}
   resources:
     requests:
       storage: 20Gi

@@ -1,11 +1,12 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: lnmp-data
+  name: lnmp-data-{{ .Values.APP_ENV }}
   labels:
     type: local
     app: lnmp
     tier: code-data
+    env: {{ .Values.APP_ENV }}
 spec:
   capacity:
     storage: 20Gi
@@ -19,7 +20,7 @@ spec:
   {{- if .Values.nfs.enabled -}}
   nfs:
     server: {{ .Values.nfs.server }}
-    path: "/lnmp/app"
+    path: /lnmp/app/{{ .Values.APP_ENV }}
   storageClassName: slow
   {{- else }}
   hostPath:
@@ -38,11 +39,12 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: lnmp-mysql-data
+  name: lnmp-mysql-data-{{ .Values.APP_ENV }}
   labels:
     type: local
     app: lnmp
     tier: mysql
+    env: {{ .Values.APP_ENV }}
 spec:
   capacity:
     storage: 20Gi
@@ -61,7 +63,7 @@ spec:
   nfs:
     # FIXME: use the right IP
     server: {{ .Values.nfs.server }}
-    path: "/lnmp/mysql"
+    path: /lnmp/mysql/{{ .Values.APP_ENV }}
   storageClassName: slow
   {{- else }}
   hostPath:
@@ -81,11 +83,12 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: lnmp-redis-data
+  name: lnmp-redis-data-{{ .Values.APP_ENV }}
   labels:
     type: local
     app: lnmp
     tier: redis
+    env: {{ .Values.APP_ENV }}
 spec:
   capacity:
     storage: 20Gi
@@ -99,7 +102,7 @@ spec:
   {{- if .Values.nfs.enabled -}}
   nfs:
     server: {{ .Values.nfs.server }}
-    path: "/lnmp/redis"
+    path: /lnmp/redis/{{ .Values.APP_ENV }}
   storageClassName: slow
   {{- else }}
   hostPath:
@@ -118,11 +121,12 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: lnmp-registry-data
+  name: lnmp-registry-data-{{ .Values.APP_ENV }}
   labels:
     type: local
     app: lnmp
     tier: registry
+    env: {{ .Values.APP_ENV }}
 spec:
   capacity:
     storage: 20Gi
@@ -136,7 +140,7 @@ spec:
   {{- if .Values.nfs.enabled -}}
   nfs:
     server: {{ .Values.nfs.server }}
-    path: "/lnmp/registry"
+    path: /lnmp/registry/{{ .Values.APP_ENV }}
   storageClassName: slow
   {{- else }}
   hostPath:

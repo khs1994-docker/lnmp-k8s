@@ -1,5 +1,7 @@
 # Volumes
 
+* PV 是全局的
+
 ```bash
 $ kubectl get storageclass
 ```
