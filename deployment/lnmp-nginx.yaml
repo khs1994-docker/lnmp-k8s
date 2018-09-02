@@ -95,17 +95,6 @@ spec:
       - name: lnmp-data
         persistentVolumeClaim:
           claimName: lnmp-data
-
-        # hostPath:
-          # 建议挂载 pvc，不要在这里挂载 hostPath
-          # Linux
-          # path: /data/lnmp/app
-          # windows please replace 90621 with your username
-          # path: /host_mnt/c/90621/lnmp/app
-
-          # macOS please replace khs1994 with your username
-          # path: /Users/khs1994/lnmp/app
-
       # 将 secret 挂载为文件夹，文件夹里的文件名为 secret 的 data 的 key 值
       - name: lnmp-nginx-khs1994-com-tls
         secret:

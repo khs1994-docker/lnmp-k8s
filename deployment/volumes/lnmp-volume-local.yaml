@@ -35,3 +35,21 @@ spec:
     requests:
       storage: 5Gi
   storageClassName: local-storage
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lnmp-pod
+  labels:
+    app: lnmp
+spec:
+  containers:
+  - name: "lnmp-pod"
+    image: "khs1994/nginx:1.15.3-alpine"
+    volumeMounts:
+    - name: lnmp-data
+      mountPath: /app
+  volumes:
+  - name: lnmp-data
+    hostPath:
+      path: /data/lnmp/app
