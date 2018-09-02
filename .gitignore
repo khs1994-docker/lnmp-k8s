@@ -4,3 +4,5 @@ minikube*
 
 .DS_Store
 test
+
+.env

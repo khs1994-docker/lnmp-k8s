@@ -3,7 +3,6 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  namespace: {{ .Values.namespace }}
   name: lnmp-cron
   labels:
     app: lnmp

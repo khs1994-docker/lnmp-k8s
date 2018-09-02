@@ -1,51 +1,106 @@
 # Helm LNMP
 
+## 部署 Helm
+
+* https://github.com/khs1994-docker/lnmp-k8s/blob/master/docs/helm.md
+
 ## 配置文件
 
 * https://docs.helm.sh/chart_template_guide/#accessing-files-inside-templates
 
 由于配置文件只能在 `templates` 文件夹中，不能复用 `khs1994-docker/lnmp` 中的配置
 
-## 部署
+## 部署 LNMP
 
 * https://docs.helm.sh/chart_template_guide/#the-chart-template-developer-s-guide
 
-```bash
-$ kubectl create namespace lnmp
+### Debug
 
-# Debug
-# $ helm install --dry-run --debug ./lnmp --tls
+```bash
+$ helm install --dry-run --debug ./lnmp --tls
 ```
 
 ### 开发环境
 
 ```bash
-$ helm install ./lnmp --name lnmp \
-    --set APP_ENV=development
+# Windows
+$ helm install ./lnmp `
+    --name lnmp-development `
+    --namespace lnmp-development `
+    --set APP_ENV=development `
+    --set platform=windows `
+    --set username=$env:username `
+    --tls
+
+$ helm install ./lnmp \
+    --name lnmp-development \
+    --namespace lnmp-development \
+    --set APP_ENV=development \
+    --set platform=$(uname -s) \
+    --set username=$(whoami) \
     --tls
 ```
 
 ### 测试环境
 
 ```bash
-$ helm install ./lnmp --name lnmp \
-    --set APP_ENV=testing
+# Windows
+$ helm install ./lnmp `
+    --name lnmp-testing `
+    --namespace lnmp-testing `
+    --set APP_ENV=testing `
+    --set platform=windows `
+    --set username=$env:username `
+    --tls
+
+$ helm install ./lnmp \
+    --name lnmp-testing \
+    --namespace lnmp-testing \
+    --set APP_ENV=testing \
+    --set platform=$(uname -s) \
+    --set username=$(whoami) \
     --tls
 ```
 
 ### 预上线环境
 
 ```bash
-$ helm install ./lnmp --name lnmp \
-    --set APP_ENV=staging
+# Windows
+$ helm install ./lnmp `
+    --name lnmp `
+    --namespace lnmp-staging `
+    --set APP_ENV=staging `
+    --set platform=windows `
+    --set username=$env:username `
+    --tls
+
+$ helm install ./lnmp \
+    --name lnmp \
+    --namespace lnmp-staging \
+    --set APP_ENV=staging \
+    --set platform=$(uname -s) \
+    --set username=$(whoami) \
     --tls
 ```
 
 ### 生产环境
 
 ```bash
-$ helm install ./lnmp --name lnmp \
-    --set APP_ENV=production
+# Windows
+$ helm install ./lnmp `
+    --name lnmp-production `
+    --namespace lnmp-production `
+    --set APP_ENV=production `
+    --set platform=windows `
+    --set username=$env:username `
+    --tls
+
+$ helm install ./lnmp \
+    --name lnmp-production \
+    --namespace lnmp-production \
+    --set APP_ENV=production \
+    --set platform=$(uname -s) \
+    --set username=$(whoami) \
     --tls
 ```
 
@@ -54,7 +109,7 @@ $ helm install ./lnmp --name lnmp \
 ```bash
 $ helm list --tls
 
-$ helm delete NAME --tls
+$ helm delete NAME --purge --tls
 ```
 
 ## 回退

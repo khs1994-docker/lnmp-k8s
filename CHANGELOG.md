@@ -2,6 +2,8 @@
 
 ## v18.06
 
+* Helm enable ingress default
+
 * Default PHP Folder `app` juxtaposition with `lnmp`
 
 * Kubernetes `1.11.2`

@@ -8,7 +8,7 @@
 
 * 本项目的目标是超大规模 Kubernetes LNMP 集群(首要考虑的是跨节点问题)
 
-## Kubernetes 基础设施
+## Kubernetes 基础设施(从 0 开始搭建 Kubernetes 集群)
 
 * [自己手动部署 Kubernetes 集群(CoreOS)](coreos)
 

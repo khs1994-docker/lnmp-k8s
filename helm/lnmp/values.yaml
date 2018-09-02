@@ -8,20 +8,21 @@ example:
 nameOverride: "lnmp"
 fullnameOverride: "fullname"
 
-namespace: lnmp
-
 TZ: Asia/Shanghai
 
 APP_ENV: production
 
-# app_root_pv: "/c/Users/username/app"
-# app_root_pv: "/Users/username/app"
-# app_root_pv: "/home/username/app"
-app_root_pv: "/home/khs1994/app"
+platform: Linux
+platform: windows
+platform: Darwin
+
+username: khs1994
+
+domain: t.khs1994.com
 
 nfs:
   enabled: false
-  server: 192.168.57.1
+  server: 192.168.199.100
 
 mysql:
   # pv_path: /c/Users/username/.docker/Volumes/lnmp-mysql-data
@@ -63,9 +64,12 @@ service:
 
 ingress:
   enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  # annotations: {}
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/secure-backends: "true"
   path: /
   hosts:
     - chart-example.local

@@ -73,8 +73,8 @@ Function _registry(){
   kubectl create configmap lnmp-registry-conf-0.0.1 --from-file=config.yml=../config/registry/config.gcr.io.yml
   kubectl label configmap lnmp-registry-conf-0.0.1 app=lnmp version=0.0.1
 
-  kubectl create secret generic lnmp-registry-tls-0.0.1 --from-file=../config/registry/gcr.io.crt \
-      --from-file=../config/registry/gcr.io.key
+  kubectl create secret generic lnmp-registry-tls-0.0.1 --from-file=../config/registry/gcr.io.crt `
+      --from-file=../config/registry/gcr.io.kek `
   kubectl label secret lnmp-registry-tls-0.0.1 app=lnmp version=0.0.1
 
   kubectl create -f coreos/addons/registry.yaml
