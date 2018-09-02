@@ -15,10 +15,10 @@ spec:
   resources:
     requests:
       storage: 20Gi
-  {{- if .Values.nfs.enabled }}
+  {{if .Values.nfs.enabled -}}
   storageClassName: slow
   accessModes: ["ReadWriteMany"]
-  {{ else }}
+  {{- else -}}
   storageClassName: hostpath
   accessModes: ["ReadWriteOnce"]
   {{- end }}
@@ -43,10 +43,10 @@ spec:
       env: {{ .Values.APP_ENV }}
     # matchExpressions:
       # - {key: environment, operator: In, values: [dev]}
-  {{- if .Values.nfs.enabled }}
+  {{if .Values.nfs.enabled -}}
   storageClassName: slow
   accessModes: ["ReadWriteMany"]
-  {{ else }}
+  {{- else -}}
   storageClassName: hostpath
   accessModes: ["ReadWriteOnce"]
   {{- end }}
@@ -68,10 +68,10 @@ spec:
   resources:
     requests:
       storage: 20Gi
-  {{- if .Values.nfs.enabled }}
+  {{if .Values.nfs.enabled -}}
   storageClassName: slow
   accessModes: ["ReadWriteMany"]
-  {{ else }}
+  {{- else -}}
   storageClassName: hostpath
   accessModes: ["ReadWriteOnce"]
   {{- end }}
@@ -93,10 +93,10 @@ spec:
   resources:
     requests:
       storage: 20Gi
-  {{- if .Values.nfs.enabled }}
+  {{if .Values.nfs.enabled -}}
   storageClassName: slow
   accessModes: ["ReadWriteMany"]
-  {{ else }}
+  {{- else -}}
   storageClassName: hostpath
   accessModes: ["ReadWriteOnce"]
   {{- end }}

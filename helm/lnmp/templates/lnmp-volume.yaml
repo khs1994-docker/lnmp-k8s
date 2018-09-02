@@ -11,18 +11,18 @@ spec:
   capacity:
     storage: 20Gi
   accessModes:
-    {{- if .Values.nfs.enabled -}}
+    {{if .Values.nfs.enabled -}}
     - ReadWriteMany
-    {{- else }}
+    {{- else -}}
     - ReadWriteOnce
     {{- end }}
   persistentVolumeReclaimPolicy: Retain
-  {{- if .Values.nfs.enabled -}}
+  {{if .Values.nfs.enabled -}}
   nfs:
     server: {{ .Values.nfs.server }}
     path: /lnmp/app/{{ .Values.APP_ENV }}
   storageClassName: slow
-  {{- else }}
+  {{- else -}}
   hostPath:
     {{if eq .Values.platform "Linux" -}}
     path: /home/{{ .Values.username }}/app-{{ .Values.APP_ENV }}
@@ -49,23 +49,23 @@ spec:
   capacity:
     storage: 20Gi
   accessModes:
-    {{- if .Values.nfs.enabled -}}
+    {{if .Values.nfs.enabled -}}
     - ReadWriteMany    # 被单个节点mount为读写rw模式
     # - ReadOnlyMany   # 被多个节点mount为只读ro模式
-    {{- else }}
+    {{- else -}}
     - ReadWriteOnce  # 被多个节点mount为读写rw模式
     {{- end }}
   persistentVolumeReclaimPolicy: Retain
   # Retain 允许用户手动回收
   # Recycle 删除 PV 上的数据
   # Delete 删除 PV
-  {{- if .Values.nfs.enabled -}}
+  {{if .Values.nfs.enabled -}}
   nfs:
     # FIXME: use the right IP
     server: {{ .Values.nfs.server }}
     path: /lnmp/mysql/{{ .Values.APP_ENV }}
   storageClassName: slow
-  {{- else }}
+  {{- else -}}
   hostPath:
     {{if eq .Values.platform "Linux" -}}
     path: /var/lib/lnmp/mysql-{{ .Values.APP_ENV }}
@@ -93,18 +93,18 @@ spec:
   capacity:
     storage: 20Gi
   accessModes:
-    {{- if .Values.nfs.enabled -}}
+    {{if .Values.nfs.enabled -}}
     - ReadWriteMany
-    {{- else }}
+    {{- else -}}
     - ReadWriteOnce
     {{- end }}
   persistentVolumeReclaimPolicy: Retain
-  {{- if .Values.nfs.enabled -}}
+  {{if .Values.nfs.enabled -}}
   nfs:
     server: {{ .Values.nfs.server }}
     path: /lnmp/redis/{{ .Values.APP_ENV }}
   storageClassName: slow
-  {{- else }}
+  {{- else -}}
   hostPath:
     {{if eq .Values.platform "Linux" -}}
     path: /var/lib/lnmp/redis-{{ .Values.APP_ENV }}
@@ -131,18 +131,18 @@ spec:
   capacity:
     storage: 20Gi
   accessModes:
-    {{- if .Values.nfs.enabled -}}
+    {{if .Values.nfs.enabled -}}
     - ReadWriteMany
-    {{- else }}
+    {{- else -}}
     - ReadWriteOnce
     {{- end }}
   persistentVolumeReclaimPolicy: Retain
-  {{- if .Values.nfs.enabled -}}
+  {{if .Values.nfs.enabled -}}
   nfs:
     server: {{ .Values.nfs.server }}
     path: /lnmp/registry/{{ .Values.APP_ENV }}
   storageClassName: slow
-  {{- else }}
+  {{- else -}}
   hostPath:
     {{if eq .Values.platform "Linux" -}}
     path: /var/lib/lnmp/registry-{{ .Values.APP_ENV }}
