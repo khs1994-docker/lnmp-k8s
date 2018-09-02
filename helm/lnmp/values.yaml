@@ -58,7 +58,7 @@ image:
   pullPolicy: IfNotPresent
 
 service:
-  type: NodePort # ClusterIP # LoadBalancer
+  type: ClusterIP # NodePort # LoadBalancer
   port: 80
 
 ingress:

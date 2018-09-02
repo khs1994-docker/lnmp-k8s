@@ -37,6 +37,10 @@ Commands:
 "
 }
 
+if ! [ -f systemd/.env ];then
+  cp systemd/.env.example systemd/.env
+fi
+
 _delete(){
   kubectl delete deployment -l app=lnmp
   kubectl delete service -l app=lnmp

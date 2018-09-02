@@ -32,3 +32,4 @@ services:
       - ./coreos/cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
     env_file:
       - ./systemd/.env.example
+      - ./systemd/.env

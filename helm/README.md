@@ -15,8 +15,38 @@ $ kubectl create namespace lnmp
 
 # Debug
 # $ helm install --dry-run --debug ./lnmp --tls
+```
 
-$ helm install ./lnmp --name lnmp --tls
+### 开发环境
+
+```bash
+$ helm install ./lnmp --name lnmp \
+    --set APP_ENV=development
+    --tls
+```
+
+### 测试环境
+
+```bash
+$ helm install ./lnmp --name lnmp \
+    --set APP_ENV=testing
+    --tls
+```
+
+### 预上线环境
+
+```bash
+$ helm install ./lnmp --name lnmp \
+    --set APP_ENV=staging
+    --tls
+```
+
+### 生产环境
+
+```bash
+$ helm install ./lnmp --name lnmp \
+    --set APP_ENV=production
+    --tls
 ```
 
 ## 删除

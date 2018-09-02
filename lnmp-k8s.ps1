@@ -38,6 +38,10 @@ $MINIKUBE_VERSION="0.28.1"
 
 ################################################################################
 
+if (!(Test-Path systemd/.env)){
+  Copy-Item systemd/.env.example systemd/.env
+}
+
 if ($args.length -eq 0){
   print_help_info
   exit
