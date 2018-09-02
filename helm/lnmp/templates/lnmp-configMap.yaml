@@ -17,8 +17,19 @@ metadata:
     app: lnmp
     version: {{ .Chart.Version }}
 data:
+  {{ if eq .Values.APP_ENV "development" }}
+  redis.conf: | {{ range .Files.Lines "config/redis/redis.development.conf" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "testing" -}}
+  redis.conf: | {{ range .Files.Lines "config/redis/redis.testing.conf" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "staging" -}}
+  redis.conf: | {{ range .Files.Lines "config/redis/redis.staging.conf" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "production" -}}
   redis.conf: | {{ range .Files.Lines "config/redis/redis.production.conf" }}
     {{ . }}{{ end }}
+  {{- end }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -28,6 +39,34 @@ metadata:
     app: lnmp
     version: {{ .Chart.Version }}
 data:
+  {{ if eq .Values.APP_ENV "development" }}
+  php.ini: | {{ range .Files.Lines "config/php/ini/php.development.ini" }}
+    {{ . }}{{ end }}
+  docker-xdebug.ini: | {{ range .Files.Lines "config/php/docker-xdebug.ini" }}
+    {{ . }}{{ end }}
+  zz-docker.conf: | {{ range .Files.Lines "config/php/zz-docker.development.conf" }}
+    {{ . }}{{ end }}
+  composer.config.json: | {{ range .Files.Lines "config/php/composer/config.development.json" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "testing" -}}
+  php.ini: | {{ range .Files.Lines "config/php/ini/php.testing.ini" }}
+    {{ . }}{{ end }}
+  docker-xdebug.ini: | {{ range .Files.Lines "config/php/docker-xdebug.ini" }}
+    {{ . }}{{ end }}
+  zz-docker.conf: | {{ range .Files.Lines "config/php/zz-docker.testing.conf" }}
+    {{ . }}{{ end }}
+  composer.config.json: | {{ range .Files.Lines "config/php/composer/config.testing.json" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "staging" -}}
+  php.ini: | {{ range .Files.Lines "config/php/ini/php.staging.ini" }}
+    {{ . }}{{ end }}
+  docker-xdebug.ini: | {{ range .Files.Lines "config/php/docker-xdebug.ini" }}
+    {{ . }}{{ end }}
+  zz-docker.conf: | {{ range .Files.Lines "config/php/zz-docker.staging.conf" }}
+    {{ . }}{{ end }}
+  composer.config.json: | {{ range .Files.Lines "config/php/composer/config.staging.json" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "production" -}}
   php.ini: | {{ range .Files.Lines "config/php/ini/php.production.ini" }}
     {{ . }}{{ end }}
   docker-xdebug.ini: | {{ range .Files.Lines "config/php/docker-xdebug.ini" }}
@@ -36,6 +75,7 @@ data:
     {{ . }}{{ end }}
   composer.config.json: | {{ range .Files.Lines "config/php/composer/config.production.json" }}
     {{ . }}{{ end }}
+  {{- end }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -45,8 +85,19 @@ metadata:
     app: lnmp
     version: {{ .Chart.Version }}
 data:
+  {{ if eq .Values.APP_ENV "development" }}
+  docker.cnf: | {{ range .Files.Lines "config/mysql/docker.development.cnf" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "testing" -}}
+  docker.cnf: | {{ range .Files.Lines "config/mysql/docker.testing.cnf" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "staging" -}}
+  docker.cnf: | {{ range .Files.Lines "config/mysql/docker.staging.cnf" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "production" -}}
   docker.cnf: | {{ range .Files.Lines "config/mysql/docker.production.cnf" }}
     {{ . }}{{ end }}
+  {{- end }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -56,8 +107,19 @@ metadata:
     app: lnmp
     version: {{ .Chart.Version }}
 data:
+  {{if eq .Values.APP_ENV "development" }}
+  nginx.conf: | {{ range .Files.Lines "config/nginx/nginx.development.conf" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "testing" -}}
+  nginx.conf: | {{ range .Files.Lines "config/nginx/nginx.testing.conf" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "staging" -}}
+  nginx.conf: | {{ range .Files.Lines "config/nginx/nginx.staging.conf" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "production" -}}
   nginx.conf: | {{ range .Files.Lines "config/nginx/nginx.production.conf" }}
     {{ . }}{{ end }}
+  {{- end }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -67,5 +129,16 @@ metadata:
     app: lnmp
     version: {{ .Chart.Version }}
 data:
+  {{ if eq .Values.APP_ENV "development" }}
+  www.t.khs1994.com.conf: | {{ range .Files.Lines "config/nginx/conf.d/t.khs1994.com.development.conf" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "testing" -}}
+  www.t.khs1994.com.conf: | {{ range .Files.Lines "config/nginx/conf.d/t.khs1994.com.testing.conf" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "staging" -}}
+  www.t.khs1994.com.conf: | {{ range .Files.Lines "config/nginx/conf.d/t.khs1994.com.staging.conf" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "production" -}}
   www.t.khs1994.com.conf: | {{ range .Files.Lines "config/nginx/conf.d/t.khs1994.com.production.conf" }}
     {{ . }}{{ end }}
+  {{- end }}
