@@ -42,7 +42,7 @@ registry:
   image: registry:latest
 
 nginx:
-  image: khs1994/nginx:1.15.2-alpine
+  image: khs1994/nginx:1.15.3-alpine
   replicaCount: 2
 
 php:

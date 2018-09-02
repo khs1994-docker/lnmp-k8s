@@ -138,3 +138,7 @@ $ helm package ./lnmp
 
 $ helm install --name lnmp lnmp-0.0.1.tgz --set service.type=NodePort --tls
 ```
+
+## More Information
+
+* https://www.kubernetes.org.cn/3435.html
