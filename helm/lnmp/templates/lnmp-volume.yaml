@@ -23,15 +23,15 @@ spec:
   storageClassName: slow
   {{- else }}
   hostPath:
-    {{if eq .Values.platform "Linux" }}
-    path: /home/{{.Values.username}}/app-{{ .Values.APP_ENV }}
-    {{end}}
-    {{if eq .Values.platform "windows" }}
+    {{if eq .Values.platform "Linux" -}}
+    path: /home/{{ .Values.username }}/app-{{ .Values.APP_ENV }}
+    {{- end -}}
+    {{- if eq .Values.platform "windows" -}}
     path: /c/Users/{{ .Values.username }}/app-{{ .Values.APP_ENV }}
-    {{end}}
-    {{if eq .Values.platform "Darwin" }}
+    {{- end -}}
+    {{- if eq .Values.platform "Darwin" -}}
     path: /Users/{{ .Values.username }}/app-{{ .Values.APP_ENV }}
-    {{end}}
+    {{- end }}
   storageClassName: hostpath
   {{- end }}
 ---
@@ -65,15 +65,15 @@ spec:
   storageClassName: slow
   {{- else }}
   hostPath:
-    {{if eq .Values.platform "Linux" }}
+    {{if eq .Values.platform "Linux" -}}
     path: /var/lib/lnmp/mysql-{{ .Values.APP_ENV }}
-    {{end}}
-    {{if eq .Values.platform "windows" }}
+    {{- end -}}
+    {{- if eq .Values.platform "windows" -}}
     path: /c/Users/{{ .Values.username }}/.docker/Volumes/lnmp-mysql-data-{{ .Values.APP_ENV }}
-    {{end}}
-    {{if eq .Values.platform "Darwin" }}
+    {{- end -}}
+    {{- if eq .Values.platform "Darwin" -}}
     path: /Users/{{ .Values.username }}/.docker/Volumes/lnmp-mysql-data-{{ .Values.APP_ENV }}
-    {{end}}
+    {{- end }}
   storageClassName: hostpath
   {{- end }}
 ---
@@ -103,15 +103,15 @@ spec:
   storageClassName: slow
   {{- else }}
   hostPath:
-    {{if eq .Values.platform "Linux" }}
+    {{if eq .Values.platform "Linux" -}}
     path: /var/lib/lnmp/redis-{{ .Values.APP_ENV }}
-    {{end}}
-    {{if eq .Values.platform "windows" }}
+    {{- end -}}
+    {{- if eq .Values.platform "windows" -}}
     path: /c/Users/{{ .Values.username }}/.docker/Volumes/lnmp-redis-data-{{ .Values.APP_ENV }}
-    {{end}}
-    {{if eq .Values.platform "Darwin" }}
+    {{- end -}}
+    {{- if eq .Values.platform "Darwin" -}}
     path: /Users/{{ .Values.username }}/.docker/Volumes/lnmp-redis-data-{{ .Values.APP_ENV }}
-    {{end}}
+    {{- end }}
   storageClassName: hostpath
   {{- end }}
 ---
@@ -140,14 +140,14 @@ spec:
   storageClassName: slow
   {{- else }}
   hostPath:
-    {{if eq .Values.platform "Linux" }}
+    {{if eq .Values.platform "Linux" -}}
     path: /var/lib/lnmp/registry-{{ .Values.APP_ENV }}
-    {{end}}
-    {{if eq .Values.platform "windows" }}
+    {{- end -}}
+    {{- if eq .Values.platform "windows" -}}
     path: /c/Users/{{ .Values.username }}/.docker/Volumes/lnmp-registry-data-{{ .Values.APP_ENV }}
-    {{end}}
-    {{if eq .Values.platform "Darwin" }}
+    {{- end -}}
+    {{- if eq .Values.platform "Darwin" -}}
     path: /Users/{{ .Values.username }}/.docker/Volumes/lnmp-registry-data-{{ .Values.APP_ENV }}
-    {{end}}
+    {{- end }}
   storageClassName: hostpath
   {{- end }}

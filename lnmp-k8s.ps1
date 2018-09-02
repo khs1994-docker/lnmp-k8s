@@ -29,6 +29,11 @@ Commands:
 
   dashboard          How to open Dashboard
 
+  helm-development   Install Helm LNMP In Development
+  helm-testing       Install Helm LNMP In Testing
+  helm-staging       Install Helm LNMP In Staging
+  helm-production    Install Helm LNMP In Production
+
 "
 }
 
@@ -78,6 +83,18 @@ Function _registry(){
   kubectl label secret lnmp-registry-tls-0.0.1 app=lnmp version=0.0.1
 
   kubectl create -f coreos/addons/registry.yaml
+}
+
+Function _helm($environment){
+  cd helm
+  helm install ./lnmp `
+      --name lnmp-$environment `
+      --namespace lnmp-$environment `
+      --set APP_ENV=$environment `
+      --set platform=windows `
+      --set username=$env:username `
+      --tls
+  cd $PSScriptRoot
 }
 
 switch ($args[0])
@@ -178,6 +195,22 @@ $ kubectl proxy
 open http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
 
 "
+  }
+
+  "helm-development" {
+    _helm development
+  }
+
+  "helm-testing" {
+    _helm testing
+  }
+
+  "helm-staging" {
+    _helm staging
+  }
+
+  "helm-production" {
+    _helm production
   }
 
 }

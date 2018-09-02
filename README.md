@@ -97,31 +97,9 @@ coreos2   249m         24%       2258Mi          77%
 coreos3   267m         26%       2353Mi          81%
 ```
 
-## 网络出错
+## Helm (终极方案)
 
-清理 `iptables` 规则
-
-* https://blog.csdn.net/shida_csdn/article/details/80028905
-
-```bash
-$ systemctl stop kubelet
-$ systemctl stop docker
-
-$ iptables --flush
-$ iptables -tnat --flush
-
-$ systemctl start kubelet
-$ systemctl start docker
-```
-
-```bash
-$ systemctl stop firewalld && systemctl disable firewalld
-$ /usr/sbin/iptables -F && /usr/sbin/iptables -X && /usr/sbin/iptables -F -t nat && /usr/sbin/iptables -X -t nat
-$ /usr/sbin/iptables -P FORWARD ACCEPT
-$ systemctl daemon-reload && systemctl enable docker && systemctl restart docker
-$ for intf in /sys/devices/virtual/net/docker0/brif/*; do echo 1 > $intf/hairpin_mode; done
-$ sudo sysctl -p /etc/sysctl.d/kubernetes.conf
-```
+* 完美支持 `开发` `测试` `预上线` `生产` 四种环境
 
 ## Tips
 
@@ -130,6 +108,8 @@ $ sudo sysctl -p /etc/sysctl.d/kubernetes.conf
 * [Windows 10](docs/windows.md)
 
 * [滚动升级 不停机更新](docs/rollout.md)
+
+* [pod 网络出错](docs/network.md)
 
 ## More Information
 

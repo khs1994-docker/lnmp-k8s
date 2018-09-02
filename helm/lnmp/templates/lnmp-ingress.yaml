@@ -15,7 +15,7 @@ spec:
     - {{ .Values.APP_ENV }}.{{ .Values.domain }}
     secretName: lnmp-ingress-tls-{{ .Chart.Version }}
   rules:
-  - hosts: {{ .Values.APP_ENV }}.{{ .Values.domain }}
+  - host: {{ .Values.APP_ENV }}.{{ .Values.domain }}
     http:
       paths:
       - path: /

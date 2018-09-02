@@ -1,5 +1,5 @@
 # 可以运行 Laravel 调度器 Schedule
-
+{{- if .Values.cronjob.enabled -}}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
@@ -35,3 +35,4 @@ spec:
             persistentVolumeClaim:
               claimName: lnmp-data
           restartPolicy: Never # OnFailure
+{{- end }}

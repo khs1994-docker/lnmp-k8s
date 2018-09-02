@@ -13,10 +13,8 @@ TZ: Asia/Shanghai
 APP_ENV: production
 
 platform: Linux
-platform: windows
-platform: Darwin
-
-username: khs1994
+# platform: windows
+# platform: Darwin
 
 domain: t.khs1994.com
 
@@ -51,6 +49,11 @@ php:
   image: khs1994/php:7.2.9-fpm-alpine
   replicaCount: 2
 
+cronjob:
+  enabled: false
+
+################################################################################
+
 replicaCount: 1
 
 image:
@@ -59,7 +62,9 @@ image:
   pullPolicy: IfNotPresent
 
 service:
-  type: ClusterIP # NodePort # LoadBalancer
+  type: ClusterIP
+  # type: NodePort
+  # type: LoadBalancer
   port: 80
 
 ingress:
