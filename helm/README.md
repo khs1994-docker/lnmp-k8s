@@ -16,7 +16,7 @@
 
 * [官方文档-模板配置](https://docs.helm.sh/chart_template_guide/#the-chart-template-developer-s-guide)
 
-* 实际使用中每次业务升级变化最大的是 NGINX 和 PHP 部分，数据库，缓存可能不发生任何变化，建议根据实际自行修改。
+* 实际使用中每次业务升级变化最大的是 NGINX 和 PHP 部分，数据库，缓存可能不发生任何变化，建议根据实际情况将 LNMP 架构分解成 NGINX & PHP + MySQL + Redis + N +N 等多个 Helm 包。本项目为了方便部署将 LNMP 整合进一个 Helm 包。
 
 ### Debug
 
