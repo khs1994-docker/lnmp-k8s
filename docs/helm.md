@@ -14,7 +14,7 @@
 
 下载二进制文件，放入 PATH
 
-把客户端证书放入指定文件夹，减少命令参数，这点和启用了 TLS 认证的原理一样
+把客户端证书放入指定文件夹，减少命令参数，这点和启用了 Dockerd TLS 认证的原理一样
 
 ```bash
 $ cp /etc/kubernetes/certs/ca.pem $(helm home)/ca.pem
