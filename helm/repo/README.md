@@ -3,9 +3,9 @@
 ## 打包
 
 ```bash
-$ cd lnmp
+$ cd nginx-php
 
-$ helm package . --dependency-update
+$ helm package . [--dependency-update]
 
 # $ helm install --name lnmp lnmp-0.0.1.tgz --set service.type=NodePort --tls
 
@@ -39,7 +39,7 @@ $ cd repo
 
 $ mc cp index.yaml myminio/charts
 
-$ mc cp lnmp-0.0.1.tgz myminio/charts
+$ mc cp nginx-php-0.0.1.tgz myminio/charts
 ```
 
 ### helm 增加 repo
@@ -47,7 +47,7 @@ $ mc cp lnmp-0.0.1.tgz myminio/charts
 ```bash
 $ helm repo add khs1994-docker https://storage.khs1994.com/charts
 
-$ helm install khs1994-docker/lnmp --dry-run --debug --tls
+$ helm install khs1994-docker/nginx-php --dry-run --debug --tls --set KEY=VALUE
 ```
 
 ## More Information

@@ -85,15 +85,24 @@ Function _registry(){
   kubectl create -f coreos/addons/registry.yaml
 }
 
-Function _helm($environment){
+Function _helm($environment, $debug=0){
   cd helm
-  helm install ./lnmp `
-      --name lnmp-$environment `
+
+  if ($debug){
+    $opts="--debug","--dry-run"
+  }
+
+  Foreach ($item in "redis","mysql","nginx-php")
+  {
+  helm install ./$item `
+      --name lnmp-$item-$environment `
       --namespace lnmp-$environment `
       --set APP_ENV=$environment `
       --set platform=windows `
       --set username=$env:username `
-      --tls
+      --tls $( Foreach ($opt in $opts){ echo $opt} )
+  }
+
   cd $PSScriptRoot
 }
 
@@ -198,19 +207,19 @@ open http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernet
   }
 
   "helm-development" {
-    _helm development
+    _helm development $args[1]
   }
 
   "helm-testing" {
-    _helm testing
+    _helm testing $args[1]
   }
 
   "helm-staging" {
-    _helm staging
+    _helm staging $args[1]
   }
 
   "helm-production" {
-    _helm production
+    _helm production $args[1]
   }
 
 }

@@ -4,6 +4,7 @@ KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
 KUBERNETES_VERSION=1.11.2
 MINIKUBE_VERSION=0.28.1
 
+HELM_SERVICES=("redis" "mysql" "nginx-php")
 ################################################################################
 
 if ! [ -f lnmp-k8s ];then if ! [ -z "$LNMP_PATH" ];then cd $LNMP_PATH/kubernetes; else exit; fi; fi
@@ -279,6 +280,23 @@ if [ -z "$1" ];then
   exit
 fi
 
+_helm(){
+  lnmp_app_env=$1
+
+  if [ "--debug" = $2 ];then $opt="--dry-run --debug"; fi
+
+  for service in ${HELM_SERVICES[@]}
+  do
+    helm install ./$service \
+        --name lnmp-$service-${lnmp_app_env} \
+        --namespace lnmp-${lnmp_app_env} \
+        --set APP_ENV=${lnmp_app_env} \
+        --set platform=$(uname -s) \
+        --set username=$(whoami) \
+        --tls "$opt"
+  done
+}
+
 case $1 in
     kubectl-install )
       kubectl-install
@@ -321,6 +339,23 @@ case $1 in
 
     minikube-install )
       _minikube-install
+    ;;
+
+    helm-development )
+    shift
+    _helm development "$@"
+    ;;
+    helm-testing )
+    shift
+    _helm testing "$@"
+    ;;
+    helm-staging )
+    shift
+    _helm staging "$@"
+    ;;
+    helm-production )
+    shift
+    _helm production "$@"
     ;;
 
     dashboard )

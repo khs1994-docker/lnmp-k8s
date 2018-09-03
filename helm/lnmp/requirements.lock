@@ -1,9 +1,0 @@
-dependencies:
-- name: mysql
-  repository: https://storage.khs1994.com/charts
-  version: 0.0.1
-- name: redis
-  repository: https://storage.khs1994.com/charts
-  version: 0.0.1
-digest: sha256:f0007a00e97e5837959f063b55376aebb6a632ad99fe4ecb01f0cf7561d35bdb
-generated: 2018-09-03T14:26:12.3933995+08:00

@@ -1,5 +1,0 @@
-apiVersion: v1
-appVersion: "0.0.1"
-description: A LNMP Helm chart for Kubernetes
-name: lnmp
-version: 0.0.1

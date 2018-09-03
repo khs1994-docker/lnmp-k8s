@@ -5,7 +5,7 @@
 example:
   enabled: false
 
-nameOverride: "lnmp"
+nameOverride: "nginx-php"
 fullnameOverride: "fullname"
 
 TZ: Asia/Shanghai
