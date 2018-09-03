@@ -49,7 +49,7 @@ $ ./lnmp-k8s create
 ## PHP 项目开发
 
 ```bash
-$ cd ~/lnmp/app
+$ cd ~/app
 
 $ mkdir my-project
 

@@ -4,6 +4,8 @@
 
 * Fix Helm error
 
+* Ingress-NGINX 0.19.0
+
 ## 1.11.2-0
 
 * Helm enable ingress default
