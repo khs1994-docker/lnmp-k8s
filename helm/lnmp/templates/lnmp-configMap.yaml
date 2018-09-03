@@ -12,28 +12,6 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: lnmp-redis-conf-{{ .Chart.Version }}
-  labels:
-    app: lnmp
-    version: {{ .Chart.Version }}
-data:
-  {{ if eq .Values.APP_ENV "development" }}
-  redis.conf: | {{ range .Files.Lines "config/redis/redis.development.conf" }}
-    {{ . }}{{ end }}
-  {{- else if eq .Values.APP_ENV "testing" -}}
-  redis.conf: | {{ range .Files.Lines "config/redis/redis.testing.conf" }}
-    {{ . }}{{ end }}
-  {{- else if eq .Values.APP_ENV "staging" -}}
-  redis.conf: | {{ range .Files.Lines "config/redis/redis.staging.conf" }}
-    {{ . }}{{ end }}
-  {{- else if eq .Values.APP_ENV "production" -}}
-  redis.conf: | {{ range .Files.Lines "config/redis/redis.production.conf" }}
-    {{ . }}{{ end }}
-  {{- end }}
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
   name: lnmp-php-conf-{{ .Chart.Version }}
   labels:
     app: lnmp
@@ -74,28 +52,6 @@ data:
   zz-docker.conf: | {{ range .Files.Lines "config/php/zz-docker.production.conf" }}
     {{ . }}{{ end }}
   composer.config.json: | {{ range .Files.Lines "config/php/composer/config.production.json" }}
-    {{ . }}{{ end }}
-  {{- end }}
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: lnmp-mysql-cnf-{{ .Chart.Version }}
-  labels:
-    app: lnmp
-    version: {{ .Chart.Version }}
-data:
-  {{ if eq .Values.APP_ENV "development" }}
-  docker.cnf: | {{ range .Files.Lines "config/mysql/docker.development.cnf" }}
-    {{ . }}{{ end }}
-  {{- else if eq .Values.APP_ENV "testing" -}}
-  docker.cnf: | {{ range .Files.Lines "config/mysql/docker.testing.cnf" }}
-    {{ . }}{{ end }}
-  {{- else if eq .Values.APP_ENV "staging" -}}
-  docker.cnf: | {{ range .Files.Lines "config/mysql/docker.staging.cnf" }}
-    {{ . }}{{ end }}
-  {{- else if eq .Values.APP_ENV "production" -}}
-  docker.cnf: | {{ range .Files.Lines "config/mysql/docker.production.cnf" }}
     {{ . }}{{ end }}
   {{- end }}
 ---

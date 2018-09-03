@@ -128,15 +128,7 @@ $ helm delete NAME --purge --tls
 ## 回退
 
 ```bash
-$ helm rollback
-```
-
-## 打包
-
-```bash
-$ helm package ./lnmp
-
-$ helm install --name lnmp lnmp-0.0.1.tgz --set service.type=NodePort --tls
+$ helm rollback RELEASE_NAME N
 ```
 
 ## More Information

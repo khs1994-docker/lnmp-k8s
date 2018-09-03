@@ -6,3 +6,5 @@ minikube*
 test
 
 .env
+
+vim.exe.*

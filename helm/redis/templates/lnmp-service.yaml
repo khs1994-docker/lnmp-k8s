@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    app: lnmp
+    tier: redis
+    version: {{ .Chart.Version }}
+spec:
+  selector:
+    app: lnmp
+    tier: redis
+    version: {{ .Chart.Version }}
+  ports:
+  - port: 6379
+    # targetPort: 6379
+  clusterIP: None

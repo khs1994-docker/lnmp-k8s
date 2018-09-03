@@ -22,25 +22,6 @@ nfs:
   enabled: false
   server: 192.168.199.100
 
-mysql:
-  # pv_path: /c/Users/username/.docker/Volumes/lnmp-mysql-data
-  # pv_path: /Users/username/.docker/Volumes/lnmp-mysql-data
-  pv_path: /var/lib/lnmp/mysql-data
-  image: mysql:8.0.12
-  password: mytest
-
-redis:
-  # pv_path: /c/Users/username/.docker/Volumes/lnmp-redis-data
-  # pv_path: /Users/username/.docker/Volumes/lnmp-redis-data
-  pv_path: /var/lib/lnmp/redis-data
-  image: redis:5.0-rc4-alpine
-
-registry:
-  # pv_path: /c/Users/username/.docker/Volumes/lnmp-registry-data
-  # pv_path: /Users/username/.docker/Volumes/lnmp-registry-data
-  pv_path: /var/lib/lnmp/registry-data
-  image: registry:latest
-
 nginx:
   image: khs1994/nginx:1.15.3-alpine
   replicaCount: 2

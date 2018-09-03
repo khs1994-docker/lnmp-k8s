@@ -1,20 +1,23 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: lnmp-data
+  name: lnmp-mysql-data
   labels:
     app: lnmp
-    tier: code-data
+    tier: mysql
     env: {{ .Values.APP_ENV }}
 spec:
-  selector:
-    matchLabels:
-      app: lnmp
-      tier: code-data
-      env: {{ .Values.APP_ENV }}
+  # volumeMode: Filesystem
   resources:
     requests:
       storage: 20Gi
+  selector:
+    matchLabels:
+      app: lnmp
+      tier: mysql
+      env: {{ .Values.APP_ENV }}
+    # matchExpressions:
+      # - {key: environment, operator: In, values: [dev]}
   {{if .Values.nfs.enabled -}}
   storageClassName: slow
   accessModes: ["ReadWriteMany"]

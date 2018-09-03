@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    app: lnmp
+    tier: mysql
+    version: {{ .Chart.Version }}
+spec:
+  selector:
+    app: lnmp
+    tier: mysql
+    version: {{ .Chart.Version }}
+  ports:
+    - port: 3306
+  clusterIP: None

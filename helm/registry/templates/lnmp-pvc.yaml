@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: lnmp-data
+  name: lnmp-registry-data
   labels:
     app: lnmp
-    tier: code-data
+    tier: registry
     env: {{ .Values.APP_ENV }}
 spec:
   selector:
     matchLabels:
       app: lnmp
-      tier: code-data
+      tier: registry
       env: {{ .Values.APP_ENV }}
   resources:
     requests:
