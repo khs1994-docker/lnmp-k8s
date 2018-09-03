@@ -2,6 +2,8 @@
 
 ## 1.11.2-1
 
+* Fix Helm error
+
 ## 1.11.2-0
 
 * Helm enable ingress default

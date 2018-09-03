@@ -7,7 +7,7 @@ $ cd nginx-php
 
 $ helm package . [--dependency-update]
 
-# $ helm install --name lnmp lnmp-0.0.1.tgz --set service.type=NodePort --tls
+# $ helm install --name lnmp-nginx-php nginx-php-0.0.1.tgz --set service.type=NodePort --tls
 
 # index.yaml
 $ helm repo index . --merge ../repo/index.yaml --url https://storage.khs1994.com/charts
