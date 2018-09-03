@@ -34,6 +34,11 @@ Commands:
 
   create-pv          Create PV and PVC
 
+  helm-development   Install Helm LNMP In Development
+  helm-testing       Install Helm LNMP In Testing
+  helm-staging       Install Helm LNMP In Staging
+  helm-production    Install Helm LNMP In Production
+
   dashboard          How to open Dashboard
 "
 }
@@ -281,9 +286,10 @@ if [ -z "$1" ];then
 fi
 
 _helm(){
+  cd helm
   lnmp_app_env=$1
 
-  if [ "--debug" = $2 ];then $opt="--dry-run --debug"; fi
+  if [ "--debug" = "$2" ];then opt="--dry-run --debug"; fi
 
   for service in ${HELM_SERVICES[@]}
   do
@@ -293,7 +299,7 @@ _helm(){
         --set APP_ENV=${lnmp_app_env} \
         --set platform=$(uname -s) \
         --set username=$(whoami) \
-        --tls "$opt"
+        --tls $opt
   done
 }
 
