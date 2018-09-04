@@ -1,7 +1,5 @@
 # Run LNMP on Kubernetes
 
-> 本项目是 [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp) 的子项目，为避免软件配置文件重复，建议在 khs1994-docker/lnmp 中使用，不要单独使用本项目
-
 * [问题反馈](https://github.com/khs1994-docker/lnmp/issues/122)
 
 * **Windows** 用户务必安装 `WSL`

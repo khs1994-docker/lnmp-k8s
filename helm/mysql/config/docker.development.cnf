@@ -70,6 +70,8 @@ slow_query_log = 1
 # 慢查询阈值
 long_query_time = 2    # default 10.000000 单位 s
 
+# slow-query-log-file=/var/log/mysql/slow.development.log
+
 # 未使用索引的查询也被记录到慢查询日志中（可选项）
 
 log_queries_not_using_indexes = 1

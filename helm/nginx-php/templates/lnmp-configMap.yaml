@@ -27,6 +27,8 @@ data:
     {{ . }}{{ end }}
   composer.config.json: | {{ range .Files.Lines "config/php/composer/config.development.json" }}
     {{ . }}{{ end }}
+  docker.ini: | {{ range .Files.Lines "config/php/conf.d/docker.development.ini" }}
+    {{ . }}{{ end }}
   {{- else if eq .Values.APP_ENV "testing" -}}
   php.ini: | {{ range .Files.Lines "config/php/ini/php.testing.ini" }}
     {{ . }}{{ end }}
@@ -35,6 +37,8 @@ data:
   zz-docker.conf: | {{ range .Files.Lines "config/php/zz-docker.testing.conf" }}
     {{ . }}{{ end }}
   composer.config.json: | {{ range .Files.Lines "config/php/composer/config.testing.json" }}
+    {{ . }}{{ end }}
+  docker.ini: | {{ range .Files.Lines "config/php/conf.d/docker.testing.ini" }}
     {{ . }}{{ end }}
   {{- else if eq .Values.APP_ENV "staging" -}}
   php.ini: | {{ range .Files.Lines "config/php/ini/php.staging.ini" }}
@@ -45,6 +49,8 @@ data:
     {{ . }}{{ end }}
   composer.config.json: | {{ range .Files.Lines "config/php/composer/config.staging.json" }}
     {{ . }}{{ end }}
+  docker.ini: | {{ range .Files.Lines "config/php/conf.d/docker.staging.ini" }}
+    {{ . }}{{ end }}
   {{- else if eq .Values.APP_ENV "production" -}}
   php.ini: | {{ range .Files.Lines "config/php/ini/php.production.ini" }}
     {{ . }}{{ end }}
@@ -53,6 +59,8 @@ data:
   zz-docker.conf: | {{ range .Files.Lines "config/php/zz-docker.production.conf" }}
     {{ . }}{{ end }}
   composer.config.json: | {{ range .Files.Lines "config/php/composer/config.production.json" }}
+    {{ . }}{{ end }}
+  docker.ini: | {{ range .Files.Lines "config/php/conf.d/docker.production.ini" }}
     {{ . }}{{ end }}
   {{- end }}
 ---

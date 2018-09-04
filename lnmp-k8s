@@ -129,18 +129,19 @@ _create(){
   _create_pv
 
   kubectl create configmap lnmp-php-conf-0.0.1 \
-    --from-file=php.ini=../config/php/php.development.ini \
-    --from-file=../config/php/docker-xdebug.ini \
-    --from-file=../config/php/zz-docker.production.conf \
-    --from-file=composer.config.json=../config/composer/config.json
+             --from-file=php.ini=helm/nginx-php/config/php/ini/php.development.ini \
+                     --from-file=helm/nginx-php/config/php/docker-xdebug.ini \
+                     --from-file=helm/nginx-php/config/php/zz-docker.development.conf \
+--from-file=composer.config.json=helm/nginx-php/config/php/composer/config.development.json \
+          --from-file=docker.ini=helm/nginx-php/config/php/conf.d/docker.ini
   kubectl label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1
 
   kubectl create configmap lnmp-mysql-cnf-0.0.1 \
-   --from-file=../config/mysql/docker.production.cnf
+   --from-file=helm/mysql/config/docker.development.cnf
   kubectl label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1
 
   kubectl create configmap lnmp-nginx-conf-0.0.1 \
-   --from-file=../config/etc/nginx/nginx.conf
+   --from-file=helm/nginx-php/config/nginx/nginx.development.conf
   kubectl label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1
 
   kubectl create configmap lnmp-nginx-conf-d-0.0.1 --from-file=deployment/configMap/nginx-conf-d

@@ -84,7 +84,12 @@ spec:
         - name: lnmp-mysql-cnf
           mountPath: /etc/mysql/conf.d/docker.cnf
           subPath: docker.cnf
+        # - name: lnmp-mysql-log
+        #   mountPath: /var/log/mysql
       volumes:
+      # - name: lnmp-mysql-log
+      #   hostPath:
+      #     path: /var/log/mysql
       - name: lnmp-mysql-data
         persistentVolumeClaim:
           claimName: lnmp-mysql-data
