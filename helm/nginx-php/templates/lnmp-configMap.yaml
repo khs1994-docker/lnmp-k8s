@@ -8,6 +8,7 @@ metadata:
 data:
   TZ: {{ .Values.TZ }}
   APP_ENV: {{ .Values.APP_ENV }}
+  APP_LOG: {{ .Values.APP_LOG }}
 ---
 apiVersion: v1
 kind: ConfigMap

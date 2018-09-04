@@ -9,6 +9,7 @@ metadata:
 data:
   TZ: Asia/Shanghai
   APP_ENV: production
+  APP_LOG: errorlog
 
 ---
 

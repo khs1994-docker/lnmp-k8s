@@ -11,6 +11,7 @@ fullnameOverride: "fullname"
 TZ: Asia/Shanghai
 
 APP_ENV: production
+APP_LOG: errorlog
 
 platform: Linux
 # platform: windows

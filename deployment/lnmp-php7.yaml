@@ -63,6 +63,11 @@ spec:
             configMapKeyRef:
               name: lnmp-env-0.0.1
               key: APP_ENV
+        - name: APP_LOG
+          valueFrom:
+            configMapKeyRef:
+              name: lnmp-env-0.0.1
+              key: APP_LOG
         ports:
         - containerPort: 9000
         resources:
