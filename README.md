@@ -63,7 +63,7 @@ $ cd ~/lnmp/kubernetes/deployment/configMap/nginx-conf-d
 $ vi filename.conf
 
 # 创建新版本的 configmap
-$ kubectl crea·te configmap lnmp-nginx-conf-d-0.0.2 --from-file deployment/configMap/nginx-conf-d
+$ kubectl create configmap lnmp-nginx-conf-d-0.0.2 --from-file deployment/configMap/nginx-conf-d
 
 $ kubectl label configmap lnmp-nginx-conf-d-0.0.2 app=lnmp version=0.0.2
 
