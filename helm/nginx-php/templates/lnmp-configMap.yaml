@@ -9,6 +9,7 @@ data:
   TZ: {{ .Values.TZ }}
   APP_ENV: {{ .Values.APP_ENV }}
   APP_LOG: {{ .Values.APP_LOG }}
+  LOG_CHANNEL: {{ .Values.LOG_CHANNEL }}
 ---
 apiVersion: v1
 kind: ConfigMap

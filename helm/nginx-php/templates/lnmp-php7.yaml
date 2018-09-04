@@ -71,9 +71,14 @@ spec:
               key: APP_ENV
         - name: APP_LOG
           valueFrom:
-             configMapKeyRef:
-               name: lnmp-env-{{ .Chart.Version }}
-               key: APP_LOG
+            configMapKeyRef:
+              name: lnmp-env-{{ .Chart.Version }}
+              key: APP_LOG
+        - name: LOG_CHANNEL
+          valueFrom:
+            configMapKeyRef:
+              name: lnmp-env-{{ .Chart.Version }}
+              key: LOG_CHANNEL
         ports:
         - containerPort: 9000
         {{ if (eq .Values.APP_ENV "development") or eq .Values.APP_ENV "testing" }}

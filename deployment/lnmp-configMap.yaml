@@ -10,6 +10,7 @@ data:
   TZ: Asia/Shanghai
   APP_ENV: production
   APP_LOG: errorlog
+  LOG_CHANNEL: errorlog
 
 ---
 

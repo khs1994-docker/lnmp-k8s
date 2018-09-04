@@ -11,7 +11,10 @@ fullnameOverride: "fullname"
 TZ: Asia/Shanghai
 
 APP_ENV: production
+# laravel 5.5
 APP_LOG: errorlog
+# laravel 5.6+
+LOG_CHANNEL: errorlog
 
 platform: Linux
 # platform: windows
