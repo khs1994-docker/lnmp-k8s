@@ -14,6 +14,7 @@ spec:
     spec:
       template:
         spec:
+          # 指定可以保留多少完成和失败的 Job。
           successfulJobsHistoryLimit: 0
           failedJobsHistoryLimit: 0
           suspend: false

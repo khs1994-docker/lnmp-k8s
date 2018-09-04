@@ -44,6 +44,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  namespace: default
   name: lnmp-data
   labels:
     app: lnmp
@@ -63,6 +64,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  namespace: default
   name: lnmp-registry-data
   labels:
     app: lnmp

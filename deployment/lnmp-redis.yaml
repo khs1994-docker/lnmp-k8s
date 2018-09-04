@@ -53,6 +53,9 @@ spec:
         args:
         - redis-server
         - /redis.conf
+        - --daemonize no
+        - --bind 0.0.0.0
+        - --appendonly yes
         resources:
           requests:
             cpu: 100m

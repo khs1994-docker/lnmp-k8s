@@ -290,7 +290,7 @@ _helm(){
   lnmp_app_env=$1
 
   if [ "--debug" = "$2" ];then opt="--dry-run --debug"; fi
-
+  set +e
   for service in ${HELM_SERVICES[@]}
   do
     helm install ./$service \
