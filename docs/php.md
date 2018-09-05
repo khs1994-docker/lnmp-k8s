@@ -1,3 +1,11 @@
-# PHP
+# PHP On Kubernetes
 
-* 在 Kubernetes 中运行服务，开发环境中无法使用 `Xdebug`，不能使用 `PHPUnit`
+## Xdebug
+
+使用 `Ingress` 暴露服务无法使用
+
+## PHPUnit
+
+在 IDE 中无法使用
+
+可以将服务的端口都暴露出来，这样就可以使用了。

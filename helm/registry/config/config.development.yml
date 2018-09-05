@@ -14,6 +14,23 @@ storage:
     blobdescriptor: inmemory
   filesystem:
     rootdirectory: /var/lib/registry
+    maxthreads: 100
+  # s3:
+  #   accesskey: awsaccesskey
+  #   secretkey: awssecretkey
+  #   region: us-west-1
+  #   regionendpoint: http://storage.t.khs1994.com
+  #   bucket: registry
+  #   encrypt: true
+  #   keyid: mykeyid
+  #   secure: true
+  #   v4auth: true
+  #   chunksize: 5242880
+  #   multipartcopychunksize: 33554432
+  #   multipartcopymaxconcurrency: 100
+  #   multipartcopythresholdsize: 33554432
+  #   # rootdirectory: /s3/object/name/prefix
+  #   rootdirectory: /
 # auth:
 #   htpasswd:
 #     realm: basic-realm

@@ -1,5 +1,7 @@
 cd $PSScriptRoot
 
+$global:helm_services="redis","mysql","nginx-php","registry"
+
 $current_context=kubectl config current-context
 
 if (!($current_context -eq "docker-for-desktop")){
@@ -92,7 +94,7 @@ Function _helm($environment, $debug=0){
     $opts="--debug","--dry-run"
   }
 
-  Foreach ($item in "redis","mysql","nginx-php")
+  Foreach ($item in $helm_services)
   {
   helm install ./$item `
       --name lnmp-$item-$environment `
