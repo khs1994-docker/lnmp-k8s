@@ -10,16 +10,26 @@
 
 ## 客户端
 
-* 证书直接用之前生成的，具体原理和 Dockerd TLS 一样
+证书直接用之前生成的，具体原理和 Dockerd TLS 一样
+
+之前没有生成证书，使用如下命令生成证书
+
+```bash
+$ docker-compose up cfssl
+```
 
 下载二进制文件，放入 PATH
 
 把客户端证书放入指定文件夹，减少命令参数，这点和启用了 Dockerd TLS 认证的原理一样
 
 ```bash
-$ cp /etc/kubernetes/certs/ca.pem $(helm home)/ca.pem
-$ cp /etc/kubernetes/certs/cert.pem $(helm home)/cert.pem
-$ cp /etc/kubernetes/certs/key.pem $(helm home)/key.pem
+$ mkdir -p ~/.helm
+
+$ cp coreos/cert/ca.pem $(helm home)/ca.pem
+$ cp coreos/cert/cert.pem $(helm home)/cert.pem
+$ cp coreos/cert/key.pem $(helm home)/key.pem
+$ cp coreos/cert/server-cert.pem $(helm home)/server-cert.pem
+$ cp coreos/cert/server-key.pem $(helm home)/server-key.pem
 ```
 
 ### Winodws、macOS Docker 桌面版 k8s 集群
@@ -39,9 +49,11 @@ $ docker-compose up cfssl-single
 * 由于网络问题，替换为国内源
 
 ```bash
-$ helm init --tiller-tls --tiller-tls-cert /etc/kubernetes/certs/server-cert.pem \
-      --tiller-tls-key /etc/kubernetes/certs/server-key.pem \
-      --tiller-tls-verify --tls-ca-cert /etc/kubernetes/certs/ca.pem \
+$ cd ~/.helm
+
+$ helm init --tiller-tls --tiller-tls-cert ./server-cert.pem \
+      --tiller-tls-key ./server-key.pem \
+      --tiller-tls-verify --tls-ca-cert ./ca.pem \
       --service-account=tiller \
       --upgrade -i \
       anjia0532/kubernetes-helm.tiller:v2.10.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
