@@ -1,7 +1,6 @@
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: default
   name: registry
   labels:
     app: lnmp
@@ -24,7 +23,6 @@ spec:
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  namespace: default
   name: registry
   labels:
     app: lnmp

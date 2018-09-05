@@ -1,0 +1,16 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: registry
+  labels:
+    app: lnmp
+    tier: registry
+    version: {{ .Chart.Version }}
+spec:
+  selector:
+    app: lnmp
+    tier: registry
+    version: {{ .Chart.Version }}
+  ports:
+  - name: http
+    port: 443

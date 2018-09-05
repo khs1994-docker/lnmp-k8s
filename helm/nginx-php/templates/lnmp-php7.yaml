@@ -11,15 +11,18 @@ spec:
     app: lnmp
     tier: php7
     version: {{ .Chart.Version }}
+  {{ if (eq .Values.platform "windows") or eq .Values.platform "Darwin" }}
+  type: LoadBalancer
+  {{- else -}}
   type: NodePort
   externalTrafficPolicy: Local
+  {{- end }}
   ports:
   - name: php-fpm
     port: 9000
   {{ if (eq .Values.APP_ENV "development") or eq .Values.APP_ENV "testing" }}
   - name: xdebug
     port: 9001
-    nodePort: 9001
   {{- end }}
   # clusterIP: None
 ---

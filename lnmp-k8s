@@ -4,7 +4,7 @@ KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
 KUBERNETES_VERSION=1.11.2
 MINIKUBE_VERSION=0.28.1
 
-HELM_SERVICES=("redis" "mysql" "nginx-php")
+HELM_SERVICES=("redis" "mysql" "nginx-php" "registry")
 ################################################################################
 
 if ! [ -f lnmp-k8s ];then if ! [ -z "$LNMP_PATH" ];then cd $LNMP_PATH/kubernetes; else exit; fi; fi
@@ -108,11 +108,11 @@ _create_pv(){
 }
 
 _registry(){
-  kubectl -n lnmp create configmap lnmp-registry-conf-0.0.1 --from-file=config.yml=../config/registry/config.gcr.io.yml
+  kubectl -n lnmp create configmap lnmp-registry-conf-0.0.1 --from-file=config.yml=helm/registry/config/config.development.yml
   kubectl -n lnmp label configmap lnmp-registry-conf-0.0.1 app=lnmp version=0.0.1
 
-  kubectl -n lnmp create secret generic lnmp-registry-tls-0.0.1 --from-file=../config/registry/gcr.io.crt \
-      --from-file=../config/registry/gcr.io.key
+  kubectl -n lnmp create secret generic lnmp-registry-tls-0.0.1 --from-file=tls.crt=helm/registry/config/ssl/public.crt \
+      --from-file=tls.key=helm/registry/config/ssl/private.key
   kubectl -n lnmp label secret lnmp-registry-tls-0.0.1 app=lnmp version=0.0.1
 
   kubectl -n lnmp create -f coreos/addons/registry.yaml
@@ -121,7 +121,7 @@ _registry(){
 _create(){
   current_context=`kubectl config current-context`
 
-  if [ $current_context = "docker-for-desktop" -a $os = 'Darwin' ];then
+  if [ $current_context != "docker-for-desktop" -a $os = 'Darwin' ];then
      echo "This Script Support Docker for Desktop Only"
      exit
   fi

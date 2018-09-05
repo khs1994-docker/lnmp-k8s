@@ -9,7 +9,7 @@ platform: Linux
 # platform: windows
 # platform: Darwin
 
-domain: t.khs1994.com
+registry_domain: docker.t.khs1994.com
 
 nfs:
   enabled: false
@@ -17,3 +17,19 @@ nfs:
 
 registry:
   image: registry:latest
+
+ingress:
+  enabled: true
+  # annotations: {}
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+  path: /
+  hosts:
+    - docker.t.khs1994.com
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local

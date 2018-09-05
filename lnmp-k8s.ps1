@@ -75,11 +75,11 @@ Function _create_pv(){
 }
 
 Function _registry(){
-  kubectl -n lnmp create configmap lnmp-registry-conf-0.0.1 --from-file=config.yml=../config/registry/config.gcr.io.yml
+  kubectl -n lnmp create configmap lnmp-registry-conf-0.0.1 --from-file=config.yml=helm/registry/config/config.development.yml
   kubectl -n lnmp label configmap lnmp-registry-conf-0.0.1 app=lnmp version=0.0.1
 
-  kubectl -n lnmp create secret generic lnmp-registry-tls-0.0.1 --from-file=../config/registry/gcr.io.crt `
-      --from-file=../config/registry/gcr.io.kek `
+  kubectl -n lnmp create secret generic lnmp-registry-tls-0.0.1 --from-file=tls.crt=helm/registry/config/ssl/public.crt `
+      --from-file=tls.key=helm/registry/config/ssl/private.key `
   kubectl -n lnmp label secret lnmp-registry-tls-0.0.1 app=lnmp version=0.0.1
 
   kubectl -n lnmp create -f coreos/addons/registry.yaml
