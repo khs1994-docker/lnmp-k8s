@@ -9,14 +9,13 @@ metadata:
 spec:
   # 若类型为 ingress，可以不声明 type
 
-  # externalIPs:
-  #   - 192.168.57.110
-  # 暴露服务方式之一
   {{if eq .Values.service.type "LoadBalancer"}}
+  # 暴露服务方式之一
   type: LoadBalancer
   {{- end}}
-  # 暴露服务方式之一
+
   {{if eq .Values.service.type "NodePort"}}
+  # 暴露服务方式之一
   type: NodePort
   externalTrafficPolicy: Local
   # sessionAffinity: None

@@ -7,6 +7,7 @@ metadata:
     tier: registry
     version: {{ .Chart.Version }}
 spec:
+  # type: NodePort
   selector:
     app: lnmp
     tier: registry
@@ -14,3 +15,4 @@ spec:
   ports:
   - name: http
     port: 443
+    # nodePort: 443
