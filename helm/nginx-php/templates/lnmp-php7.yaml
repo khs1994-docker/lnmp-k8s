@@ -11,7 +11,9 @@ spec:
     app: lnmp
     tier: php7
     version: {{ .Chart.Version }}
-  {{ if (eq .Values.platform "windows") or eq .Values.platform "Darwin" }}
+  {{ if eq .Values.platform "windows" }}
+  type: LoadBalancer
+  {{- else if eq .Values.platform "Darwin" -}}
   type: LoadBalancer
   {{- else -}}
   type: NodePort
@@ -20,7 +22,10 @@ spec:
   ports:
   - name: php-fpm
     port: 9000
-  {{ if (eq .Values.APP_ENV "development") or eq .Values.APP_ENV "testing" }}
+  {{ if eq .Values.APP_ENV "development" }}
+  - name: xdebug
+    port: 9001
+  {{- else if eq .Values.APP_ENV "testing" -}}
   - name: xdebug
     port: 9001
   {{- end }}
@@ -84,7 +89,9 @@ spec:
               key: LOG_CHANNEL
         ports:
         - containerPort: 9000
-        {{ if (eq .Values.APP_ENV "development") or eq .Values.APP_ENV "testing" }}
+        {{ if eq .Values.APP_ENV "development" }}
+        - containerPort: 9001
+        {{- else if eq .Values.APP_ENV "testing" -}}
         - containerPort: 9001
         {{- end }}
         resources:
@@ -97,11 +104,15 @@ spec:
         - name: lnmp-php-conf
           mountPath: /usr/local/etc/php/php.ini
           subPath: php.ini
-          {{ if (eq .Values.APP_ENV "development") or eq .Values.APP_ENV "testing" }}
+        {{ if eq .Values.APP_ENV "development" }}
         - name: lnmp-php-conf
           mountPath: /usr/local/etc/php/conf.d/docker-xdebug.ini
           subPath: docker-xdebug.ini
-          {{- end }}
+        {{- else if eq .Values.APP_ENV "testing" -}}
+        - name: lnmp-php-conf
+          mountPath: /usr/local/etc/php/conf.d/docker-xdebug.ini
+          subPath: docker-xdebug.ini
+        {{- end }}
         - name: lnmp-php-conf
           mountPath: /usr/local/etc/php/conf.d/docker.ini
           subPath: docker.ini
