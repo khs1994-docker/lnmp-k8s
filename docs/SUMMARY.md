@@ -19,8 +19,13 @@
 
 ## 插件
 
+* [CoreDNS](addons/coredns.md)
 * [Ingress-nginx](ingress.md)
 * [Dashboard](addons/dashboard.md)
+* [日志 EFK](addons/efk,md)
+* [监控 Heapster](addons/heapster.md)
+* [监控 Metrics Server](addons/metrics-server.md)
+* [监控 Prometheus Operator](addons/prometheus-operator.md)
 
 ## COMMAND
 
@@ -37,3 +42,11 @@
 ## 滚动升级
 
 * [rollout](rollout.md)
+
+## LOG
+
+* LOG
+    * [NGINX](log/nginx.md)
+    * [MySQL](log/mysql.md)
+    * [PHP](log/php.md)
+    * [Redis](log/redis.md)

@@ -59,11 +59,11 @@ Function get_kubectl_version(){
 }
 
 Function _delete(){
-  kubectl delete deployment -l app=lnmp
-  kubectl delete service -l app=lnmp
-  kubectl delete secret -l app=lnmp
-  kubectl delete configmap -l app=lnmp
-  kubectl delete cronjob -l app=lnmp
+  kubectl -n lnmp delete deployment -l app=lnmp
+  kubectl -n lnmp delete service -l app=lnmp
+  kubectl -n lnmp delete secret -l app=lnmp
+  kubectl -n lnmp delete configmap -l app=lnmp
+  kubectl -n lnmp delete cronjob -l app=lnmp
 }
 
 Function _create_pv(){
@@ -71,18 +71,18 @@ Function _create_pv(){
       | %{Write-Output $_.Replace("/Users/username","/Users/$env:username")} `
       | kubectl create -f -
 
-  kubectl create -f deployment/lnmp-pvc.yaml
+  kubectl -n lnmp create -f deployment/lnmp-pvc.yaml
 }
 
 Function _registry(){
-  kubectl create configmap lnmp-registry-conf-0.0.1 --from-file=config.yml=../config/registry/config.gcr.io.yml
-  kubectl label configmap lnmp-registry-conf-0.0.1 app=lnmp version=0.0.1
+  kubectl -n lnmp create configmap lnmp-registry-conf-0.0.1 --from-file=config.yml=../config/registry/config.gcr.io.yml
+  kubectl -n lnmp label configmap lnmp-registry-conf-0.0.1 app=lnmp version=0.0.1
 
-  kubectl create secret generic lnmp-registry-tls-0.0.1 --from-file=../config/registry/gcr.io.crt `
+  kubectl -n lnmp create secret generic lnmp-registry-tls-0.0.1 --from-file=../config/registry/gcr.io.crt `
       --from-file=../config/registry/gcr.io.kek `
-  kubectl label secret lnmp-registry-tls-0.0.1 app=lnmp version=0.0.1
+  kubectl -n lnmp label secret lnmp-registry-tls-0.0.1 app=lnmp version=0.0.1
 
-  kubectl create -f coreos/addons/registry.yaml
+  kubectl -n lnmp create -f coreos/addons/registry.yaml
 }
 
 Function _helm($environment, $debug=0){
@@ -124,42 +124,43 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
   }
 
   "create" {
+    kubectl create namespace lnmp
     _create_pv
 
-    kubectl create -f deployment/lnmp-configMap.yaml
+    kubectl -n lnmp create -f deployment/lnmp-configMap.yaml
 
-    kubectl create configmap lnmp-nginx-conf-d-0.0.1 --from-file=deployment/configMap/nginx-conf-d
-    kubectl label configmap lnmp-nginx-conf-d-0.0.1 app=lnmp version=0.0.1
+    kubectl -n lnmp create configmap lnmp-nginx-conf-d-0.0.1 --from-file=deployment/configMap/nginx-conf-d
+    kubectl -n lnmp label configmap lnmp-nginx-conf-d-0.0.1 app=lnmp version=0.0.1
 
-    kubectl create configmap lnmp-php-conf-0.0.1 `
+    kubectl -n lnmp create configmap lnmp-php-conf-0.0.1 `
              --from-file=php.ini=helm/nginx-php/config/php/ini/php.development.ini `
                      --from-file=helm/nginx-php/config/php/docker-xdebug.ini `
-                     --from-file=helm/nginx-php/config/php/zz-docker.development.conf `
+      --from-file=zz-docker.conf=helm/nginx-php/config/php/zz-docker.development.conf `
 --from-file=composer.config.json=helm/nginx-php/config/php/composer/config.development.json `
-          --from-file=docker.ini=helm/nginx-php/config/php/conf.d/docker.ini
-    kubectl label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1
+          --from-file=docker.ini=helm/nginx-php/config/php/conf.d/docker.development.ini
+    kubectl -n lnmp label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1
 
-    kubectl create configmap lnmp-mysql-cnf-0.0.1 `
-     --from-file=helm/mysql/config/docker.development.cnf
-    kubectl label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1
+    kubectl -n lnmp create configmap lnmp-mysql-cnf-0.0.1 `
+     --from-file=docker.cnf=helm/mysql/config/docker.development.cnf
+    kubectl -n lnmp label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1
 
-    kubectl create configmap lnmp-nginx-conf-0.0.1 `
-     --from-file=helm/nginx-php/config/nginx/nginx.development.conf
-    kubectl label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1
+    kubectl -n lnmp create configmap lnmp-nginx-conf-0.0.1 `
+     --from-file=nginx.conf=helm/nginx-php/config/nginx/nginx.development.conf
+    kubectl -n lnmp label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1
 
-    # kubectl create secret generic lnmp-mysql-password --from-literal=password=mytest
+    # kubectl -n lnmp create secret generic lnmp-mysql-password --from-literal=password=mytest
 
-    kubectl create -f deployment/lnmp-secret.yaml
+    kubectl -n lnmp create -f deployment/lnmp-secret.yaml
 
-    kubectl create -f deployment/lnmp-mysql.yaml
+    kubectl -n lnmp create -f deployment/lnmp-mysql.yaml
 
-    kubectl create -f deployment/lnmp-redis.yaml
+    kubectl -n lnmp create -f deployment/lnmp-redis.yaml
 
-    kubectl create -f deployment/lnmp-php7.yaml
+    kubectl -n lnmp create -f deployment/lnmp-php7.yaml
 
-    kubectl create -f deployment/lnmp-nginx.service.yaml
+    kubectl -n lnmp create -f deployment/lnmp-nginx.service.yaml
 
-    kubectl create -f deployment/lnmp-nginx.yaml
+    kubectl -n lnmp create -f deployment/lnmp-nginx.yaml
   }
 
   "delete" {
@@ -169,9 +170,9 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
   "cleanup" {
     _delete
 
-    kubectl delete pvc -l app=lnmp
-    kubectl delete pv -l app=lnmp
-    kubectl delete ingress -l app=lnmp
+    kubectl -n lnmp delete pvc -l app=lnmp
+    kubectl -n lnmp delete pv -l app=lnmp
+    kubectl -n lnmp delete ingress -l app=lnmp
   }
 
   "registry" {
@@ -221,6 +222,10 @@ open http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernet
 
   "helm-production" {
     _helm production $args[1]
+  }
+
+  Default {
+    Write-Warning "Command not found"
   }
 
 }

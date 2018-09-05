@@ -36,17 +36,15 @@
 
 * 由于虚拟机模拟集群环境硬盘空间占用太大，又不能及时回收，所以本项目支持在 Linux 单机上部署 Kubernetes (通过 systemd 管理)`$ lnmp-k8s single-install`
 
-## 部署 LNMP
+## Demo
 
 ```bash
 $ cd kubernetes
 
+# 部署 LNMP
 $ ./lnmp-k8s create
-```
 
-## PHP 项目开发
-
-```bash
+# PHP 项目开发
 $ cd ~/app
 
 $ mkdir my-project
@@ -68,33 +66,14 @@ $ kubectl label configmap lnmp-nginx-conf-d-0.0.2 app=lnmp version=0.0.2
 $ kubectl edit deployment nginx
 
 # 更新配置信息，保存文件即可。
-```
 
-## 停止 LNMP
+# 停止 LNMP 保留数据
 
-保留数据
-
-```bash
 $ ./lnmp-k8s delete
-```
 
-## 销毁 LNMP
+# 销毁 LNMP 销毁所有数据
 
-销毁所有数据
-
-```bash
 $ ./lnmp-k8s cleanup
-```
-
-## 资源占用
-
-* `Core DNS` + `Dashboard` + `Heapster` + `Metrics Server` + `EFK` + `LNMP`
-
-```bash
-NAME      CPU(cores)   CPU%      MEMORY(bytes)   MEMORY%
-coreos1   217m         21%       1710Mi          58%
-coreos2   249m         24%       2258Mi          77%
-coreos3   267m         26%       2353Mi          81%
 ```
 
 ## [Helm (终极方案)](helm)
@@ -110,6 +89,17 @@ coreos3   267m         26%       2353Mi          81%
 * [滚动升级 不停机更新](docs/rollout.md)
 
 * [pod 网络出错](docs/network.md)
+
+## 资源占用
+
+* `Core DNS` + `Dashboard` + `Heapster` + `Metrics Server` + `EFK` + `LNMP`
+
+```bash
+NAME      CPU(cores)   CPU%      MEMORY(bytes)   MEMORY%
+coreos1   217m         21%       1710Mi          58%
+coreos2   249m         24%       2258Mi          77%
+coreos3   267m         26%       2353Mi          81%
+```
 
 ## More Information
 
