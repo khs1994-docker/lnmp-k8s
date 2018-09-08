@@ -59,7 +59,7 @@ metadata:
     addonmanager.kubernetes.io/mode: Reconcile
 spec:
   serviceName: elasticsearch-logging
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       k8s-app: elasticsearch-logging

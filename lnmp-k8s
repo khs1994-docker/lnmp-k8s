@@ -4,10 +4,16 @@ KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
 KUBERNETES_VERSION=1.11.2
 MINIKUBE_VERSION=0.28.1
 
-HELM_SERVICES=("redis" "mysql" "nginx-php" "registry")
+# HELM_SERVICES=("redis" "mysql" "nginx-php" "registry")
+
 ################################################################################
 
 if ! [ -f lnmp-k8s ];then if ! [ -z "$LNMP_PATH" ];then cd $LNMP_PATH/kubernetes; else exit; fi; fi
+
+if ! [ -f .env ];then cp .env.example .env; fi
+
+source ./.env.example
+source ./.env
 
 set -e
 
@@ -25,6 +31,7 @@ Commands:
   minikube           Start minikube
 
   single-install     Install Local Kubernetes（Manager by systemd）
+  single-start       Start Local Kubernetes (Manager by systemd)
 
   create             Deploy lnmp on k8s
   delete             Stop lnmp on k8s, keep data resource(pv and pvc)
@@ -306,6 +313,16 @@ _helm(){
   done
 }
 
+_single_start(){
+  echo "
+$ sudo systemctl start kube-apiserver
+$ sudo systemctl start kube-controller-manager
+$ sudo systemctl start kube-scheduler
+$ sudo systemctl start kube-proxy
+$ sudo systemctl start kubelket
+"
+}
+
 case $1 in
     kubectl-install )
       kubectl-install
@@ -340,6 +357,10 @@ case $1 in
 
     single-install )
       _k8s_install
+    ;;
+
+    single-start )
+      _single_start
     ;;
 
     minikube )

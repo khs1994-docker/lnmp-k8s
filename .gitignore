@@ -6,5 +6,6 @@ minikube*
 test
 
 .env
+.env.ps1
 
 vim.exe.*

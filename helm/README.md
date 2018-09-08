@@ -18,6 +18,8 @@
 
 ### 四种环境
 
+编辑 `.env` 文件或 `.env.ps1` (Windows Only) 修改启用的 helm 包。
+
 ```bash
 $ ./lnmp-k8s helm-development [--debug]
 

@@ -14,6 +14,8 @@
 
 之前没有生成证书，使用如下命令生成证书
 
+编辑 `./coreos/.env` 文件中的变量
+
 ```bash
 $ docker-compose up cfssl
 ```
@@ -34,7 +36,7 @@ $ cp coreos/cert/server-key.pem $(helm home)/server-key.pem
 
 ### Winodws、macOS Docker 桌面版 k8s 集群
 
-生成证书
+编辑 `systemd/.env` 中的变量，之后生成证书
 
 ```bash
 $ ./lnmp-k8s

@@ -1,6 +1,14 @@
 cd $PSScriptRoot
 
-$global:helm_services="redis","mysql","nginx-php","registry"
+if (!(Test-Path .env.ps1 )){
+  cp .env.example.ps1 .env.ps1
+}
+
+. "$PSScriptRoot/.env.example.ps1"
+
+if (Test-Path .env.ps1 ){
+  . "$PSScriptRoot/.env.ps1"
+}
 
 $current_context=kubectl config current-context
 
