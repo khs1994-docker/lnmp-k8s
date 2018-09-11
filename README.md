@@ -1,5 +1,7 @@
 # Run LNMP on Kubernetes
 
+[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+
 * [问题反馈](https://github.com/khs1994-docker/lnmp/issues/122)
 
 * **Windows** 用户务必安装 `WSL`
@@ -16,7 +18,7 @@
 
 * [MiniKube](docs/minikube.md)
 
-* [腾讯云 实验室免费体验 8 小时（可循环） 产品->容器服务->免费实验室 ](https://cloud.tencent.com/redirect.php?redirect=1005&cps_key=3a5255852d5db99dcd5da4c72f05df61&from=console)
+* [腾讯云 实验室免费体验 8 小时（可循环） ](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 ## 注意事项
 

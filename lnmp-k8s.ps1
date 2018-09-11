@@ -4,6 +4,14 @@ if (!(Test-Path .env.ps1 )){
   cp .env.example.ps1 .env.ps1
 }
 
+if (!(Test-Path .env )){
+  cp .env.example .env
+}
+
+if (!(Test-Path coreos/.env )){
+  cp coreos/.env.example coreos/.env
+}
+
 . "$PSScriptRoot/.env.example.ps1"
 
 if (Test-Path .env.ps1 ){

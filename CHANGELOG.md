@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.11.3
+
+
 ## 1.11.2-1
 
 * Helm add docker registry

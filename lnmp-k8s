@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
-KUBERNETES_VERSION=1.11.2
+KUBERNETES_VERSION=1.11.3
 MINIKUBE_VERSION=0.28.1
 
 # HELM_SERVICES=("redis" "mysql" "nginx-php" "registry")
@@ -11,6 +11,7 @@ MINIKUBE_VERSION=0.28.1
 if ! [ -f lnmp-k8s ];then if ! [ -z "$LNMP_PATH" ];then cd $LNMP_PATH/kubernetes; else exit; fi; fi
 
 if ! [ -f .env ];then cp .env.example .env; fi
+if ! [ -f coreos/.env ];then cp coreos/.env.example coreos/.env; fi
 
 source ./.env.example
 source ./.env

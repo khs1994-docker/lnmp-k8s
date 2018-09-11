@@ -1,5 +1,7 @@
 #!/bin/bash
 
+KUBERNETES_VERSION=v1.11.3
+
 set -e
 
 print_help_info(){
@@ -66,8 +68,6 @@ cd ..
 }
 
 if [ "$1" = 'init' ];then _coreos_iso ; exit; fi
-
-KUBERNETES_VERSION=v1.11.2
 
 if ! [ -d kubernetes-release/release/${KUBERNETES_VERSION} ];then
   command -v docker
