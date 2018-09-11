@@ -1,6 +1,6 @@
 # Helm With TLS
 
-## 安装客户端
+## 安装客户端 helm
 
 * https://github.com/helm/helm
 
@@ -93,3 +93,7 @@ $ cd ~/lnmp/kubernetes
 
 $ kubectl apply -f coreos/addons/helm/rbac-config.yaml
 ```
+
+## Helm 仓库 Charts
+
+* https://github.com/helm/charts

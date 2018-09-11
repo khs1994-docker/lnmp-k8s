@@ -4,7 +4,7 @@
 error_log= /var/log/php-fpm/php.error.log
 ```
 
-**PHP 错误日志** 和 **xdebug 日志** 不能输出到 **标准错误输出** ,方案是输出到节点 hostPath /var/log/pho/error.log
+**PHP 错误日志** 和 **xdebug 日志** 不能输出到 **标准错误输出** ,方案是输出到节点 hostPath /var/log/php.error.log 之后由日志收集软件进行处理
 
 ## PHP-FPM
 

@@ -11,7 +11,7 @@ $ kubectl run nginx \
 # exec
 
 ```bash
-$ kubectl exec -i -t nginx -- sh
+$ kubectl exec -it nginx -- sh
 ```
 
 # expose

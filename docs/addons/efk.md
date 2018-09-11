@@ -6,7 +6,7 @@
 
 * 虚拟机每个节点内存分配 3G，之前分配了 2G 一直报错
 
-* 如果把 es-statefulset.yaml 的 replicas 参数修改为1，内存是将将够，但是 elasticsearch 集群又是断腿的，运行不起来。
+* 如果把 es-statefulset.yaml 的 replicas 参数修改为1，内存够了，但是 elasticsearch 集群又是断腿的，运行不起来。
 
 ## 资源占用
 

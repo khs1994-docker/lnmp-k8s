@@ -11,19 +11,15 @@ $ kubectl get all -n kube-system
 ## Test
 
 ```bash
-$ kubectl create -f my-nginx.yaml
+$ kubectl run nginx --image=nginx:1.15.3-alpine
 
-$ kubectl expose deploy my-nginx
+$ kubectl expose pod nginx
 
-$ kubectl get services --all-namespaces |grep my-nginx
+$ kubectl run nginx2 --image=nginx:1.15.3-alpine
 
-default       my-nginx               ClusterIP   10.254.118.177   <none>        80/TCP          12s
-
-$ kubectl create -f pod-nginx.yaml
-
-$ kubectl exec nginx -i -t -- /bin/sh
+$ kubectl exec nginx2 -i -t -- /bin/sh
 
 root@nginx:/# cat /etc/resolv.conf
 
-root@nginx:/# ping my-nginx
+root@nginx:/# ping nginx
 ```

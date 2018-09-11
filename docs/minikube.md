@@ -6,11 +6,9 @@
 $ ./lnmp-k8s minikube-install
 
 # move minikube to your PATH
-
 $ ./lnmp-k8s minikube
 
 # create
-
 $ minikube service nginx --url
 
 http://192.168.64.98:32228

@@ -14,7 +14,7 @@ $ kubectl apply -f coreos/deployment/addons/ingress-nginx/ingress-nginx.yaml
 $ kubectl apply -f coreos/deployment/addons/ingress-nginx/cloud-generic.yaml
 ```
 
-### Linux
+### Linux (自己部署)
 
 ```bash
 $ kubectl apply -f coreos/deployment/addons/ingress-nginx/service-nodeport.yaml
