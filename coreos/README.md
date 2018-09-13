@@ -30,10 +30,14 @@
 
 VirtualBox 增加 hostonly 网络 （192.168.57.1）
 
-### 下载安装 CoreOS 所需的相关文件
+### 下载相关文件
 
 ```bash
+# download coreos iso files
 $ ./coreos init
+
+# download kubernetes server files
+$ ./coreos kubernetes-server
 ```
 
 ### 修改 .env 文件
@@ -62,7 +66,7 @@ $ ./coreos server
 
 ```bash
 # create VirtualBox node
-$ ./coreos create-node N
+$ ./coreos new-vm N
 
 # 在管理界面打开设置，按照实际进行微调，之后保存
 # then start node, exec this command in node console

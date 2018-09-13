@@ -4,29 +4,33 @@ KUBERNETES_VERSION=v1.11.3
 
 set -e
 
+if ! [ -f coreos.ps1 ];then echo "please exec this shell scipt in coreos folder"; exit ; fi
+
 print_help_info(){
     echo "
-CoreOS CLI 18.07
+CoreOS CLI $KUBERNETES_VERSION
 
 Usages:
 
-init             Download CoreOS ISO
-server           Up CoreOS install Local Server
-cert             Generate Self-Signed Certificates
+init              Download CoreOS ISO files
+kubernetes-server Download kubernetes server files
+server            Up CoreOS install local server
+cert              Generate Self-Signed Certificates
 
-add-node         Add node [ add-node N ]
-create-node      Create node [ create-node N ]
+add-node          Create node ignition yaml file [example: add-node N ]
 
-cleanup          Cleanup Cache
+new-vm            Create new VirtualBox vm [example: create-node N ]
+
+cleanup           Cleanup Cache
 
 Addons:
 
-coredns          Create coredns addons
-dashboard        Create dashboard addons [ token list ]
-efk              Create EFK addons [ list ]
-heapster         Create heapster addons [ list ]
-ingress-nginx    Create Ingress NGINX
-metrics-server   Create Metrics-server
+coredns           Create coredns addons
+dashboard         Create dashboard addons [ token list ]
+efk               Create EFK addons [ list ]
+heapster          Create heapster addons [ list ]
+ingress-nginx     Create Ingress NGINX
+metrics-server    Create Metrics-server
 "
 }
 
@@ -46,8 +50,9 @@ if ! [ -d $HOME/.kube ];then mkdir -p $HOME/.kube ; fi
 
 # cp cert/kubectl.kubeconfig ~/.kube/config
 
-_coreos_iso(){
+_init(){
 
+# Download coreos iso files
 cd current
 
 items="coreos_production_iso_image.iso \
@@ -67,7 +72,9 @@ cd ..
 
 }
 
-if [ "$1" = 'init' ];then _coreos_iso ; exit; fi
+if [ "$1" = 'init' ];then _init ; exit; fi
+
+_kubernetes_server(){
 
 if ! [ -d kubernetes-release/release/${KUBERNETES_VERSION} ];then
   command -v docker
@@ -91,6 +98,7 @@ if ! [ -d kubernetes-release/release/${KUBERNETES_VERSION} ];then
     mv srv.tar.gz kubernetes-server-linux-amd64-${KUBERNETES_VERSION}.tar.gz
   fi
 fi
+}
 
 _efk(){
   if [ "$1" = 'list' ];then
@@ -175,7 +183,7 @@ case "$1" in
   fi
 
   cd ..
-  docker-compose up coreos-server
+  docker-compose up server
 
   ;;
 
@@ -197,7 +205,7 @@ case "$1" in
     sed -i "s#{{n}}#$2#g" disk/ignition-$2.yaml
   ;;
 
-  create-node )
+  new-vm )
       if [ -z $2 ];then
 
         echo -e "===> Please input node num\n\n$ ./coreos create-node N" ; exit
@@ -256,6 +264,12 @@ case "$1" in
 
   coredns )
     kubectl create -f addons/coredns.yaml
+
+  ;;
+
+  kubernetes-server )
+
+  _kubernetes_server
 
   ;;
 

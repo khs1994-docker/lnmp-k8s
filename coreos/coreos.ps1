@@ -7,6 +7,7 @@ if (!(Test-Path .env)){
   cp .env.example .env
 }
 
+Function _init(){
 cd current
 
 $items="coreos_production_iso_image.iso","coreos_production_image.bin.bz2", `
@@ -24,31 +25,44 @@ Foreach ($item in $items)
 }
 
 cd ..
+}
 
 Function print_help_info(){
   write-host "
-CoreOS CLI 18.07
+CoreOS CLI
 
 Usages:
 
-up         Up CoreOS install Local Server
-add-node   Add node [ add-node 4 ]
+init       Download CoreOS ISO files
+server     Up CoreOS install local server
+add-node   create node ignition yaml file [example: add-node 4 ]
+
 cert       Generate Self-Signed Certificates
+
 build      Build Docker Image
 push       Push Docker Image
 pull       Pull Docker Image
-new-vm     New Hyper-V
+
+new-vm     New Hyper-V vm
 "
 }
 
 switch ($args[0])
 {
-  "up" {
+  "init" {
+    _init
+  }
+
+  "server" {
     # generate cret first
     if (!(Test-Path cert/server-cert.pem)){
+      cd ..
       docker-compose up cfssl
+      cd coreos
     }
-    docker-compose up coreos-server
+    cd ..
+    docker-compose up server
+    cd coreos
     break
   }
 
@@ -66,22 +80,30 @@ switch ($args[0])
   }
 
   "cert" {
+    cd ..
     docker-compose up cfssl
+    cd coreos
     break
   }
 
   "build" {
+    cd ..
     docker-compose -f docker-compose.build.yml build
+    cd coreos
     break
   }
 
   "push" {
+    cd ..
     docker-compose push
+    cd coreos
     break
   }
 
   "pull" {
+    cd ..
     docker-compose pull
+    cd coreos
   }
 
   "new-vm" {
