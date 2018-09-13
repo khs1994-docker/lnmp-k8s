@@ -65,7 +65,7 @@ $ ./coreos server
 * https://www.khs1994.com/categories/Docker/CoreOS/ `硬盘安装 CoreOS 三节点集群`
 
 ```bash
-# create VirtualBox node
+# create VirtualBox vm
 $ ./coreos new-vm N
 
 # 在管理界面打开设置，按照实际进行微调，之后保存

@@ -19,7 +19,7 @@ cert              Generate Self-Signed Certificates
 
 add-node          Create node ignition yaml file [example: add-node N ]
 
-new-vm            Create new VirtualBox vm [example: create-node N ]
+new-vm            Create new VirtualBox vm [example: new-vm N ]
 
 cleanup           Cleanup Cache
 

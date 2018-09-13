@@ -23,7 +23,7 @@
 * [Ingress-nginx](ingress.md)
 * [Dashboard](addons/dashboard.md)
 * [日志 EFK](addons/efk,md)
-* [监控 Heapster](addons/heapster.md)
+* [监控 Heapster 已废弃](addons/heapster.md)
 * [监控 Metrics Server](addons/metrics-server.md)
 * [监控 Prometheus Operator](addons/prometheus-operator.md)
 

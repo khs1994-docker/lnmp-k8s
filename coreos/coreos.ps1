@@ -43,7 +43,7 @@ build      Build Docker Image
 push       Push Docker Image
 pull       Pull Docker Image
 
-new-vm     New Hyper-V vm
+new-vm     New Hyper-V vm [example: new-vm 1 ]
 "
 }
 
