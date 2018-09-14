@@ -1,9 +1,7 @@
 # 部署 CoreDNS 插件
 
 ```bash
-$ cd deployment
-
-$ kubectl create -f addons/coredns.yaml
+$ kubectl create -f coreos/addons/coredns.yaml
 
 $ kubectl get all -n kube-system
 ```

@@ -1,9 +1,7 @@
 # 部署 dashboard 插件
 
 ```bash
-$ cd deployment
-
-$ kubectl apply -f addons/dashboard.yaml
+$ kubectl apply -f coreos/addons/dashboard.yaml
 
 $ kubectl get deployment kubernetes-dashboard  -n kube-system
 
