@@ -33,7 +33,9 @@ $ kubectl label nodes NODE_NAME beta.kubernetes.io/fluentd-ds-ready=true
 ### 部署
 
 ```bash
-$ kubectl create -f coreos/addons/efk
+$ cd deployment/addons/efk
+
+$ kubectl create -f .
 
 $ kubectl get pods -n kube-system -o wide|grep -E 'elasticsearch|fluentd|kibana'
 

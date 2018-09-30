@@ -3,7 +3,9 @@
 * https://github.com/kubernetes/heapster/tree/master/deploy/kube-config/influxdb
 
 ```bash
-$ kubectl create -f coreos/addons/heapster
+$ cd deployment/addons/heapster
+
+$ kubectl create -f .
 
 $ kubectl get pods -n kube-system | grep -E 'heapster|monitoring'
 
