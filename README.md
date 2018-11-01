@@ -2,6 +2,10 @@
 
 [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
+<p align="center">
+<img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">
+</p>
+
 * [问题反馈](https://github.com/khs1994-docker/lnmp/issues/122)
 
 * **Windows** 用户务必安装 `WSL`
@@ -36,7 +40,7 @@
 
 * Docker 桌面版不支持启动 NFS 服务端容器，若需 NFS 卷，请自行在 Linux 上部署 NFS 容器
 
-* 由于虚拟机模拟集群环境硬盘空间占用太大，又不能及时回收，所以本项目支持在 Linux 单机上部署 Kubernetes (通过 systemd 管理)`$ lnmp-k8s single-install`
+* 由于虚拟机模拟集群环境硬盘空间占用太大，又不能及时回收，为了方便大家学习，你也可以在 Linux 单机上部署 Kubernetes (通过 systemd 管理)`$ lnmp-k8s single-install`
 
 ## Demo
 
@@ -84,7 +88,7 @@ $ ./lnmp-k8s cleanup
 
 ## Tips
 
-* [数据持久化](docs/data.md)
+* [数据持久化](docs/volume/data.md)
 
 * [Windows 10](docs/windows.md)
 

@@ -1,5 +1,12 @@
 cd $PSScriptRoot
 
+################################################################################
+
+$MINIKUBE_VERSION="0.28.1"
+$KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
+
+################################################################################
+
 if (!(Test-Path .env.ps1 )){
   cp .env.example.ps1 .env.ps1
 }
@@ -55,12 +62,6 @@ Commands:
 "
 }
 
-################################################################################
-
-$MINIKUBE_VERSION="0.28.1"
-
-################################################################################
-
 if (!(Test-Path systemd/.env)){
   Copy-Item systemd/.env.example systemd/.env
 }
@@ -69,8 +70,6 @@ if ($args.length -eq 0){
   print_help_info
   exit
 }
-
-$KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
 
 Function get_kubectl_version(){
   return $KUBECTL_VERSION=$(wsl curl https://storage.googleapis.com/kubernetes-release/release/stable.txt)
@@ -100,7 +99,7 @@ Function _registry(){
       --from-file=tls.key=helm/registry/config/ssl/private.key `
   kubectl -n lnmp label secret lnmp-registry-tls-0.0.1 app=lnmp version=0.0.1
 
-  kubectl -n lnmp create -f coreos/addons/registry.yaml
+  kubectl -n lnmp create -f addons/registry.yaml
 }
 
 Function _helm($environment, $debug=0){
