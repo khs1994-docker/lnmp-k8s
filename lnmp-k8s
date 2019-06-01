@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
-KUBERNETES_VERSION=1.14.0
+KUBERNETES_VERSION=1.14.2
 MINIKUBE_VERSION=0.30.0
 ETCD_VERSION=3.3.13
 FLANNEL_VERSION=0.11.0
@@ -73,8 +73,6 @@ Commands:
 _kubernetes_server(){
 
 print1_info "install kubernetes ..."
-
-cd coreos
 
 if ! [ -d kubernetes-release/release/v${KUBERNETES_VERSION} ];then
   command -v docker
@@ -335,10 +333,10 @@ _k8s_install(){
   if ! [ -f /opt/bin/k8s/kubeadm ];then
     _kubernetes_server
     cd $source_path
-    sudo cp $PWD/coreos/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/* /opt/bin/k8s/ || \
-    rm -rf $PWD/coreos/kubernetes-release/release/v${KUBERNETES_VERSION}
+    sudo cp $PWD/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/* /opt/bin/k8s/ || \
+    rm -rf $PWD/kubernetes-release/release/v${KUBERNETES_VERSION}
     cd $source_path
-    sudo cp $PWD/coreos/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/* /opt/bin/k8s/
+    sudo cp $PWD/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/* /opt/bin/k8s/
   fi
 
   sudo chmod +x /opt/bin/k8s/*
@@ -357,17 +355,18 @@ _k8s_install(){
 
   for file in ${files[@]}; \
   do \
-    sudo sed -i "s!##NODE_IP##!${MASTER_IP}!g" ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ; \
-    sudo sed -i "s#/opt/bin/k8s/conf#${K8S_CONF_PATH:-/opt/bin/k8s/conf}#g" ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ; \
+    sudo sed -i "s!##NODE_IP##!${MASTER_IP}!g" \
+      ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ; \
+    sudo sed -i "s#/opt/bin/k8s/conf#${K8S_CONF_PATH:-/opt/bin/k8s/conf}#g" \
+      ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ; \
   done
 
   for file in `ls systemd` ; do \
     if [ -f ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ];then \
-      sudo sed -i "s/192.168.199.100/${MASTER_IP}/g" ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ;\
+      sudo sed -i "s/192.168.199.100/${MASTER_IP}/g" \
+        ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ;\
     fi \
   done
-
-  sudo sed -i "s#ENCRYPTION_KEY#${ENCRYPTION_KEY}#g" ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/encryption-config.yaml
 
   print1_info "update systemd docker unit file ..."
   sudo mkdir -p /etc/systemd/system/docker.service.d
@@ -377,7 +376,8 @@ _k8s_install(){
 
   for file in `ls *.service`; \
   do \
-  sudo sed -i "s#/opt/bin/k8s/conf#${K8S_CONF_PATH:-/opt/bin/k8s/conf}#g" /etc/systemd/system/$file ; \
+    sudo sed -i "s#/opt/bin/k8s/conf#${K8S_CONF_PATH:-/opt/bin/k8s/conf}#g" \
+      /etc/systemd/system/$file ; \
   done
 
   cd -

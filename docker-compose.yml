@@ -12,7 +12,7 @@ services:
       - ./coreos/current:/srv/www/coreos/current
       - ./coreos/disk:/srv/www/coreos/disk
       - ./coreos/pxe:/srv/www/coreos/pxe
-      - ./coreos/kubernetes-release:/srv/www/coreos/kubernetes-release
+      - ./kubernetes-release:/srv/www/coreos/kubernetes-release
     ports:
       - "8080:80"
 

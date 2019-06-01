@@ -9,7 +9,7 @@ Environment="K8S_CONF_PATH=/opt/bin/k8s/conf"
 
 ExecStart=/opt/bin/k8s/kube-scheduler \
 --config=${K8S_CONF_PATH}/kube-scheduler.yaml \
---bind-address=127.0.0.1 \
+--bind-address=192.168.199.100 \
 --secure-port=10259 \
 --port=0 \
 --tls-cert-file=${K8S_CONF_PATH}/certs/kube-scheduler.pem \
