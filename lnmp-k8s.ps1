@@ -28,7 +28,7 @@ if (Test-Path .env.ps1 ){
 $current_context=kubectl config current-context
 
 if (!($current_context -eq "docker-for-desktop")){
-   Write-Warning "This Script Support Docker for Desktop Only"
+   Write-Warning "This Script Support Docker Desktop Only"
    exit
 }
 
@@ -151,7 +151,6 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
 
     kubectl -n lnmp create configmap lnmp-php-conf-0.0.1 `
              --from-file=php.ini=helm/nginx-php/config/php/ini/php.development.ini `
-                     --from-file=helm/nginx-php/config/php/docker-xdebug.ini `
       --from-file=zz-docker.conf=helm/nginx-php/config/php/zz-docker.development.conf `
 --from-file=composer.config.json=helm/nginx-php/config/php/composer/config.development.json `
           --from-file=docker.ini=helm/nginx-php/config/php/conf.d/docker.development.ini

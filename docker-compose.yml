@@ -20,7 +20,7 @@ services:
     image: khs1994/coreos:cert
     volumes:
       - ./coreos/cert:/srv/cfssl
-      - ./coreos/cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
+      - ./cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
     env_file:
       - ./coreos/.env.example
       - ./coreos/.env
@@ -30,7 +30,7 @@ services:
     image: khs1994/coreos:cert
     volumes:
       - ./systemd/certs:/srv/cfssl
-      - ./coreos/cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
+      - ./cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
     env_file:
       - ./systemd/.env.example
       - ./systemd/.env
