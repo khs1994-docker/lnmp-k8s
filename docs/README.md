@@ -87,9 +87,7 @@ internet
 
 ```
 
-### Traefik
-
-* https://github.com/containous/traefik
+### [Traefik](https://github.com/containous/traefik)
 
 ![](https://raw.githubusercontent.com/containous/traefik/master/docs/content/assets/img/traefik-architecture.png)
 
