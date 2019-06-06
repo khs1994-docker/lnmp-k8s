@@ -7,7 +7,7 @@ dist: xenial
 
 cache:
   directories:
-    - kubernetes-release/release/v1.14.2/kubernetes/server/bin
+    - kubernetes-release/release/v${CI_KUBERNETES_VERSION}/kubernetes/server/bin
 
 before_install:
   # 升级最新 Docker Compose
@@ -65,6 +65,15 @@ before_script:
   - sudo systemctl start kubelet
 
   - sleep 10
+
+  # - sudo systemctl status etcd
+  # - sudo systemctl status flanneld
+  # - sudo systemctl status docker
+  # - sudo systemctl status kube-apiserver
+  # - sudo systemctl status kube-controller-manager
+  # - sudo systemctl status kube-scheduler
+  # - sudo systemctl status kube-proxy
+  # - sudo systemctl status kubelet
 
   - kubectl version
   - kubectl cluster-info

@@ -381,9 +381,6 @@ _k8s_install_docker(){
 }
 
 _k8s_install_kubectl_conf(){
-  sudo mkdir -p /home/k8s/.kube
-  sudo cp systemd/certs/kubectl.kubeconfig /home/k8s/.kube/config
-
   mkdir -p ~/.kube
 
   if ! [ -f ~/.kube/config ];then
