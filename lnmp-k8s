@@ -131,7 +131,6 @@ print_info "install kubernetes ..."
 
 if ! [ -d kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin ];then
   mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}
-  mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes
 
   # set +e
   # _get_kubernetes_server_by_url
@@ -143,7 +142,7 @@ if ! [ -d kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bi
 
   test $GOOS != 'linux' && exit
 
-  command -v docker
+  command -v docker > /dev/null
 
   if [ $? -eq 0 ];then
     docker container ls > /dev/null 2>&1
@@ -275,7 +274,7 @@ _create(){
 
 kubectl-install(){
   if [ "$OS" = 'Linux' ];then
-    command -v docker
+    command -v docker > /dev/null
     if [ $? -eq 0 ];then
       docker container rm -f khs1994-kubectl > /dev/null 2>&1 || true
       docker container create --name=khs1994-kubectl khs1994/coreos:cert
@@ -314,8 +313,8 @@ _etcd(){
       echo ""
       cd /opt/bin/k8s
       rm -rf etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
-      sudo wget https://github.com/etcd-io/etcd/releases/download/v${ETCD_VERSION}/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar.gz
-      sudo tar -zxvf etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar.gz > /dev/null
+      sudo curl -fsSLO https://github.com/etcd-io/etcd/releases/download/v${ETCD_VERSION}/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar.gz
+      sudo tar -zxf etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar.gz
       sudo mv etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}/etcd* ./
       sudo rm -rf *.tar.gz
       cd -
@@ -345,10 +344,10 @@ _k8s_install_dep(){
   # 安装依赖软件
   command -v dnf > /dev/null && (sudo dnf install -y conntrack ipvsadm ipset jq iptables curl \
     sysstat libseccomp > /dev/null && sudo /usr/sbin/modprobe ip_vs) || command -v yum && (sudo yum install -y conntrack ipvsadm ipset jq iptables curl \
-    sysstat libseccomp > /dev/null && sudo /usr/sbin/modprobe ip_vs) && return
+    sysstat libseccomp > /dev/null && sudo /usr/bin/env modprobe ip_vs) && return
 
   command -v apt > /dev/null && sudo apt update > /dev/null && sudo apt install -y conntrack ipvsadm ipset jq iptables curl \
-    sysstat libseccomp2 kmod > /dev/null && (sudo /usr/sbin/modprobe ip_vs || sudo /sbin/modprobe ip_vs )
+    sysstat libseccomp2 kmod > /dev/null && (sudo /usr/bin/env modprobe ip_vs)
 
 }
 

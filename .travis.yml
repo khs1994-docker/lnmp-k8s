@@ -61,10 +61,11 @@ before_script:
   - sudo systemctl cat kube-proxy
   - sudo systemctl start kube-proxy
 
+  - sleep 10
   - sudo systemctl cat kubelet
   - sudo systemctl start kubelet
 
-  - sleep 10
+  - sleep 20
 
   # - sudo systemctl status etcd
   # - sudo systemctl status flanneld
@@ -78,7 +79,7 @@ before_script:
   - kubectl version
   - kubectl cluster-info
 
-  - sleep 60
+  - sleep 30
 
   - sudo journalctl -u kubelet
   - kubectl get csr
