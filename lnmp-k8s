@@ -10,7 +10,7 @@ FLANNEL_VERSION=0.10.0
 
 ################################################################################
 
-if ! [ -f lnmp-k8s ];then if ! [ -z "$LNMP_PATH" ];then cd $LNMP_PATH/kubernetes; else exit; fi; fi
+if ! [ -f lnmp-k8s ];then if ! [ -z "$LNMP_PATH" ];then cd $LNMP_PATH/kubernetes > /dev/null; else exit; fi; fi
 
 if [ -n "${DEBUG}" ];then
   set -x
@@ -364,7 +364,7 @@ _k8s_install_common(){
 _k8s_install_cp_bin(){
   if ! [ -f /opt/bin/k8s/kubeadm ];then
     _kubernetes_server
-    cd $source_path
+    cd $source_path > /dev/null
     sudo cp $PWD/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/* /opt/bin/k8s/
   fi
 
