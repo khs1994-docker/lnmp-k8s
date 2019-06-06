@@ -87,7 +87,7 @@ script:
   - kubectl create namespace ingress-nginx
   - kubectl apply -k addons/ingress-nginx/deploy-bare/
 
-  - sleep 100
+  - sleep 120
 
   - kubectl get all --all-namespaces
   # test metrics server
@@ -109,5 +109,8 @@ success:
   # - ./lnmp-k8s create
 
 env:
+  matrix:
+    - CI_KUBERNETES_VERSION=1.14.2
+    - CI_KUBERNETES_VERSION=1.15.0-beta.2
   global:
     - k=v
