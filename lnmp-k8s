@@ -303,13 +303,10 @@ kubectl_install(){
 
   KUBECTL_VERSION=$(curl https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 
-  if [ "$OS" = 'Linux' ];then
-    curl -L ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/linux/amd64/kubectl > kubectl-Linux-x86_64
-    sudo mv kubectl-Linux-x86_64 /usr/local/bin/kubectl
-  elif [ "$OS" = 'Darwin' ];then
-    curl -L ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/darwin/amd64/kubectl > kubectl-Darwin-x86_64
-    sudo mv kubectl-Darwin-x86_64 /usr/local/bin/kubectl
-  fi
+  curl -fsSL ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/${GOOS}/${GOARCH}/kubectl \
+      -o /tmp/kubectl-${GOOS}-${GOARCH}
+
+  sudo mv /tmp/kubectl-${GOOS}-${GOARCH} /usr/local/bin/kubectl
 
   kubectl version
 }
@@ -349,7 +346,7 @@ _etcd(){
 
 _flanneld(){
   local url="https://github.com/coreos/flannel/releases/download"
-  local TAR_FILE="flannel-v${FLANNEL_VERSION}-linux-amd64.tar.gz"
+  local TAR_FILE="flannel-v${FLANNEL_VERSION}-${GOOS}-${GOARCH}.tar.gz"
   __download(){
     sudo curl -fsSL ${url}/v${FLANNEL_VERSION}/${TAR_FILE} -o /tmp/${TAR_FILE}
   }
@@ -362,11 +359,7 @@ _flanneld(){
   print_info "install flanneld ..."
 
   if [ -f /tmp/${TAR_FILE} ];then
-    local sha256=$(sha256sum /tmp/${TAR_FILE} | cut -d " " -f 1)
-    if ! [ $sha256 = '136e859d5e5239d12effe312d599c3978f94d1b6ecff6bd18695cf022030f93a' ];then
-      rm -rf /tmp/${TAR_FILE}
-      __download
-    fi
+    true
   else
     __download
   fi
