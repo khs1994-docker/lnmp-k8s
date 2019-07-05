@@ -325,7 +325,7 @@ _etcd(){
   local url="https://mirrors.huaweicloud.com/etcd"
   local TAR_FILE="etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
   __download(){
-    sudo curl -fsSL $url/v${ETCD_VERSION}/${TAR_FILE} -o /tmp/${TAR_FILE}
+    sudo curl -fsSL ${url}/v${ETCD_VERSION}/${TAR_FILE} -o /tmp/${TAR_FILE}
   }
 
   if [ -f /opt/bin/k8s/etcd ];then
@@ -351,7 +351,7 @@ _flanneld(){
   local url="https://github.com/coreos/flannel/releases/download"
   local TAR_FILE="flannel-v${FLANNEL_VERSION}-linux-amd64.tar.gz"
   __download(){
-    sudo curl -fsSL /v${FLANNEL_VERSION}/${TAR_FILE} -o /tmp/${TAR_FILE}
+    sudo curl -fsSL ${url}/v${FLANNEL_VERSION}/${TAR_FILE} -o /tmp/${TAR_FILE}
   }
 
   if [ -f /opt/bin/k8s/flanneld ];then
@@ -383,7 +383,7 @@ _helm_install(){
   local url="https://mirrors.huaweicloud.com/helm/v${HELM_VERSION}"
   local TAR_FILE="helm-v${HELM_VERSION}-${GOOS}-${GOARCH}.tar.gz"
   __download(){
-    sudo curl -fsSL $url/${TAR_FILE} -o /tmp/${TAR_FILE}
+    sudo curl -fsSL ${url}/${TAR_FILE} -o /tmp/${TAR_FILE}
   }
 
   print_info "install helm ..."
