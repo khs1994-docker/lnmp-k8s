@@ -22,10 +22,10 @@
 $ kubectl apply -f addons/ingress-nginx/mandatory.yaml
 
 # 裸机 通过 nodeport
-$ kubectl apply -f addons/ingress-nginx/provider/cloud-generic.yaml
+$ kubectl apply -f addons/ingress-nginx/provider/baremetal/service-nodeport.yaml
 
 # Docker 桌面版
-$ kubectl apply -f addons/ingress-nginx/provider/baremetal/service-nodeport.yaml
+$ kubectl apply -f addons/ingress-nginx/provider/cloud-generic.yaml
 ```
 
 ## 定义规则
