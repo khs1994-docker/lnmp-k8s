@@ -123,12 +123,12 @@ script:
 
 after_success:
   - echo "Set app"
-  # - mkdir -p ../app/public
-  # - echo "<?php" > ../app/public/index.php
-  # - echo "echo 1" | tee -a ../app/public/index.php
-  - mkdir -p ../app
-  - docker run -it --rm -v $PWD/helm/nginx-php/config/php/composer/config.testing.json:/tmp/config.json -v $PWD/../app:/app khs1994/php:7.3.7-composer-alpine composer global config --unset repos.packagist
-  - docker run -it --rm -v $PWD/helm/nginx-php/config/php/composer/config.testing.json:/tmp/config.json -v $PWD/../app:/app khs1994/php:7.3.7-composer-alpine composer create-project --prefer-dist laravel/laravel=5.8.* laravel
+  - mkdir -p ../app/public
+  - echo "<?php" > ../app/public/index.php
+  - echo "echo 1" | tee -a ../app/public/index.php
+  # - mkdir -p ../app
+  # - docker run -it --rm -v $PWD/helm/nginx-php/config/php/composer/config.testing.json:/tmp/config.json -v $PWD/../app:/app khs1994/php:7.3.7-composer-alpine composer global config --unset repos.packagist
+  # - docker run -it --rm -v $PWD/helm/nginx-php/config/php/composer/config.testing.json:/tmp/config.json -v $PWD/../app:/app khs1994/php:7.3.7-composer-alpine composer create-project --prefer-dist laravel/laravel=5.8.* laravel
   - echo "Up nfs server"
   - ./lnmp-k8s nfs
   - sleep 10
