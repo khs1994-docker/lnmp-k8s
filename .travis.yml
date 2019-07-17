@@ -122,13 +122,16 @@ script:
   - curl ${SERVER_IP}:${HTTP_PORT}
 
 after_success:
-  - echo "up nfs server"
+  - echo "Set app"
   - mkdir -p ../app
   - docker run -it --rm --entrypoint=laravel -v $PWD/../app:/app khs1994/php:7.3.6-composer-alpine new laravel
+  - echo "Up nfs server"
   - ./lnmp-k8s nfs
   - sudo sed -i "s#192.168.199.100#${SERVER_IP}#g" deployment/pv/lnmp-volume.linux.nfs.yaml
   - ./lnmp-k8s create
   - echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
+  - sleep 30
+  - kubectl get -n lnmp all
   - curl -k https://laravel2.t.khs1994.com
 
 env:
