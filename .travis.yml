@@ -122,5 +122,6 @@ env:
   matrix:
     - CI_KUBERNETES_VERSION=1.14.2
     - CI_KUBERNETES_VERSION=1.15.0
+    - CI_KUBERNETES_VERSION=1.16.0-alpha.1
   global:
     - k=v
