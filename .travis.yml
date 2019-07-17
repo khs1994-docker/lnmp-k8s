@@ -113,7 +113,7 @@ script:
   - kubectl run nginx --image nginx:1.17.1-alpine
   - sleep 20
   - POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
-  - kubectl exec ${POD_NAME} -- cat /etc/resolv.conf
+  - kubectl exec ${POD_NAME} -- cat /etc/resolv.conf || true
   - kubectl exec ${POD_NAME} -- ping -c 5 kubernetes || true
   - kubectl exec ${POD_NAME} -- ping -c 5 baidu.com || true
   - kubectl delete pod ${POD_NAME}
@@ -127,9 +127,21 @@ after_success:
   - docker run -it --rm --entrypoint=laravel -v $PWD/../app:/app khs1994/php:7.3.6-composer-alpine new laravel
   - echo "Up nfs server"
   - ./lnmp-k8s nfs
+  - sleep 10
+  - docker ps -a
+  - ./lnmp-k8s nfs logs
   - sudo sed -i "s#192.168.199.100#${SERVER_IP}#g" deployment/pv/lnmp-volume.linux.nfs.yaml
   - ./lnmp-k8s create
   - echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
+  - ping -c 1 laravel2.t.khs1994.com
+  - sleep 30
+  - kubectl get -n lnmp all
+  - curl -k https://laravel2.t.khs1994.com
+  - ./lnmp-k8s nfs down
+  - echo "Test noNFS volume"
+  - cp -r ../app ~/app
+  - ./lnmp-k8s cleanup
+  - ./lnmp-k8s create --no-nfs
   - sleep 30
   - kubectl get -n lnmp all
   - curl -k https://laravel2.t.khs1994.com
