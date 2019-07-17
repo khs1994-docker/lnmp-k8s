@@ -124,7 +124,7 @@ script:
 after_success:
   - echo "Set app"
   - mkdir -p ../app
-  - docker run -it --rm --entrypoint=laravel -v $PWD/../app:/app khs1994/php:7.3.6-composer-alpine new laravel
+  - docker run -it --rm --entrypoint=laravel -v $PWD/../app:/app khs1994/php:7.3.7-composer-alpine new laravel
   - echo "Up nfs server"
   - ./lnmp-k8s nfs
   - sleep 10
