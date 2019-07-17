@@ -71,6 +71,7 @@ Commands:
   registry               Up Registry
 
   create-pv              Create PV and PVC
+  nfs                    Up NFS server [ down | ]
 
   helm-development       Install Helm LNMP In Development
   helm-testing           Install Helm LNMP In Testing
@@ -235,7 +236,7 @@ _create_lnmp(){
   current_context=`kubectl config current-context`
 
   if [ $current_context != "docker-desktop" -a "$OS" = 'Darwin' ];then
-     echo "This Script Support Docker Desktop Only"
+     echo "This Script Support Docker Desktop Only On macOS"
      exit
   fi
 
@@ -738,6 +739,17 @@ case $_command in
     ;;
     helm-production )
     _helm production "$@"
+    ;;
+
+    nfs )
+    sudo modprobe {nfs,nfsd,rpcsec_gss_krb5}
+    sudo modprobe nfsd
+    cd volumes
+    if [ "$1" = 'down' ];then
+      exec docker-compose stop nfs
+    fi
+    exec docker-compose up -d nfs
+
     ;;
 
     * )
