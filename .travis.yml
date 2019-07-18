@@ -136,20 +136,21 @@ after_success:
   - sudo mkdir -p /tmp2
   - sudo apt install -y nfs-common
   - sudo mount -t nfs4 ${SERVER_IP}:/lnmp/log /tmp2
+  - sudo umount /tmp2
   - sed -i "s#192.168.199.100#${SERVER_IP}#g" deployment/pv/lnmp-volume.linux.nfs.yaml
   - ./lnmp-k8s create
   - echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
   - ping -c 1 laravel2.t.khs1994.com
-  - sleep 60
+  - sleep 70
   - kubectl get -n lnmp all
   - curl -k https://laravel2.t.khs1994.com
+  - ./lnmp-k8s delete
+  - ./lnmp-k8s cleanup
   - ./lnmp-k8s nfs down
   - echo "Test noNFS volume"
   - cp -rf ../app ~/app
-  - cat ~/app/laravel/public/index.php
-  - ./lnmp-k8s cleanup
   - ./lnmp-k8s create --no-nfs
-  - sleep 30
+  - sleep 50
   - kubectl get -n lnmp all
   - curl -k https://laravel2.t.khs1994.com
 
