@@ -2,7 +2,7 @@
 Description=Kubernetes API Server
 Documentation=https://github.com/kubernetes/kubernetes
 After=network.target
-Requires=etcd.service
+# Requires=etcd.service
 
 [Service]
 # Flag --experimental-encryption-provider-config has been deprecated, use --encryption-provider-config.

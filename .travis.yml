@@ -30,7 +30,7 @@ install:
   - docker-compose up cfssl-single
   # - source .env
   - ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64
-  - ./lnmp-k8s single-install
+  - ./lnmp-k8s single-install ${LNMP_K8S_SINGLE_INSTALL_OPTIONS:-}
   - export PATH=$PATH:/opt/bin/k8s
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.tar
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.docker_tag
@@ -46,8 +46,10 @@ before_script:
   - sudo systemctl cat flanneld
   - sudo systemctl start flanneld
 
+  - sudo systemctl restart containerd
+
   - sudo systemctl cat docker
-  - sudo systemctl start docker
+  - sudo systemctl restart docker
 
   - sudo systemctl cat kube-apiserver
   - sudo systemctl start kube-apiserver
@@ -159,5 +161,6 @@ env:
     - CI_KUBERNETES_VERSION=1.14.2
     - CI_KUBERNETES_VERSION=1.15.0
     - CI_KUBERNETES_VERSION=1.16.0-alpha.1
+    - CI_KUBERNETES_VERSION=1.16.0-alpha.1 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--containerd"
   global:
     - k=v
