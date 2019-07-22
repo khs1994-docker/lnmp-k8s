@@ -52,7 +52,6 @@ ExecStart=/opt/bin/k8s/kube-controller-manager \
 
 Restart=on-failure
 RestartSec=5
-User=k8s
 
 [Install]
 WantedBy=multi-user.target
