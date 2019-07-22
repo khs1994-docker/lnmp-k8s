@@ -18,6 +18,8 @@ before_install:
   # - sudo mv docker-compose /usr/local/bin
   - docker-compose --version
   - docker --version
+  - cat /etc/docker/daemon.json
+  - sudo rm -rf /etc/docker/daemon.json
   - ip addr
   - hostnamectl
   - SERVER_IP=`ifconfig ens4 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
