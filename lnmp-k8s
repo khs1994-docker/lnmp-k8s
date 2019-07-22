@@ -402,8 +402,8 @@ _helm_install(){
 }
 
 _cni_install(){
-  sudo mkdir -p /opt/cni/bin
-  if [ -f /opt/cni/bin/flannel ];then
+  sudo mkdir -p /opt/k8s/cni/bin
+  if [ -f /opt/k8s/cni/bin/flannel ];then
     print_info "cni already install"
     return
   fi
@@ -426,7 +426,7 @@ _cni_install(){
       __download
   fi
 
-  sudo tar -zxf /tmp/${TAR_FILE} -C /opt/cni/bin/
+  sudo tar -zxf /tmp/${TAR_FILE} -C /opt/k8s/cni/bin/
 }
 
 _k8s_install_dep(){
@@ -512,9 +512,8 @@ _containerd_config(){
   echo "net.bridge.bridge-nf-call-ip6tables = 1" | sudo tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
 
   # cni conf
-  sudo rm -rf /etc/cni/net.d
-  sudo mkdir -p /etc/cni/net.d
-  sudo cp systemd/cni/10-flannel.conflist /etc/cni/net.d
+  sudo mkdir -p /opt/k8s/cni/net.d
+  sudo cp systemd/cni/10-flannel.conflist /opt/k8s/cni/net.d
 
   sudo sed -i "s#--container-runtime=docker#--container-runtime=remote#g" /etc/systemd/system/kubelet.service
   sudo sed -i "s#--container-runtime-endpoint=unix:///var/run/dockershim.sock#--container-runtime-endpoint=unix:///run/containerd/containerd.sock#g" /etc/systemd/system/kubelet.service
