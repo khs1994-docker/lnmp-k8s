@@ -22,8 +22,6 @@ ExecStart=/opt/bin/k8s/kubelet \
 --cert-dir=${K8S_CONF_PATH}/certs \
 --container-runtime=docker \
 --container-runtime-endpoint=unix:///var/run/dockershim.sock \
-# --container-runtime=remote \
-# --container-runtime-endpoint=unix:///run/containerd/containerd.sock \
 --root-dir=/var/lib/kubelet \
 --kubeconfig=${K8S_CONF_PATH}/kubelet.kubeconfig \
 --config=${K8S_CONF_PATH}/kubelet-config.yaml \
@@ -33,6 +31,9 @@ ExecStart=/opt/bin/k8s/kubelet \
 --volume-plugin-dir=/var/lib/kubelet/kubelet-plugins/volume/exec/ \
 --logtostderr=true \
 --v=2
+
+# --container-runtime=remote \
+# --container-runtime-endpoint=unix:///run/containerd/containerd.sock \
 
 Restart=on-failure
 RestartSec=5

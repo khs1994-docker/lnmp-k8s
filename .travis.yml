@@ -47,7 +47,7 @@ before_script:
   - sudo systemctl cat flanneld
   - sudo systemctl start flanneld
 
-  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--containerd" && sudo systemctl restart containerd || (sudo systemctl cat docker ; sudo systemctl restart docker || sudo journal -u docker)
+  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--containerd" && (sudo cp systemd/containerd.service.back /etc/systemd/system/ ; sudo systemctl daemon-reload ; sudo systemctl start containerd) || (sudo systemctl cat docker ; sudo systemctl restart docker || sudo journalctl -u docker)
 
   - sudo systemctl cat kube-apiserver
   - sudo systemctl start kube-apiserver
