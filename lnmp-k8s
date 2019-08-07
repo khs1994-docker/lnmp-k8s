@@ -432,7 +432,7 @@ EOF
 }
 
 _gvisor_crio_conf(){
-  print "config crio with gvisor(runsc) ..."
+  print_info "config crio with gvisor(runsc) ..."
   cat <<EOF | sudo tee -a /etc/crio/crio.conf
 [crio.runtime.runtimes.runsc]
   runtime_path = "/usr/local/bin/runsc"
@@ -657,11 +657,13 @@ _crio_install(){
   # command -v apt > /dev/null && (sudo apt-add-repository -y ppa:projectatomic/ppa \
   #   && sudo apt-get update -qq \
   #   && sudo apt-get install cri-o-$CRIO_VERSION)
+  set +x
 }
 
 _crio_config(){
   _cni_install
   _crio_install
+  cd $source_path
   print_info "config cri-o ..."
   sudo mkdir -p /etc/crio/
   # crio --config="" config --default > crio.conf
