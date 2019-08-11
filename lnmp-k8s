@@ -456,11 +456,15 @@ _gvisor_install(){
 }
 
 _runc_install(){
-  if [ `command -v runc` ];then runc --version; fi
+  if [ `command -v runc` ];then print_info "runc already install";\
+    runc --version;return; fi
+  print_info "install runc ..."
 }
 
 _containerd_install(){
-  if [ `command -v containerd` ];then containerd --version; fi
+  if [ `command -v containerd` ];then print_info "containerd already install"; \
+    containerd --version;return; fi
+  print_info "install containerd ..."
 }
 
 _cni_install(){
