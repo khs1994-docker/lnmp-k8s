@@ -12,7 +12,7 @@ Environment="K8S_ROOT=/opt/k8s"
 Environment="KUBE_APISERVER_HOST=192.168.199.100"
 Environment="K8S_ETCD_HOST=192.168.199.100"
 
-ExecStart=${K8S_ROOT}/bin/kube-apiserver \
+ExecStart=/opt/k8s/bin/kube-apiserver \
 --advertise-address=${KUBE_APISERVER_HOST} \
 --default-not-ready-toleration-seconds=360 \
 --default-unreachable-toleration-seconds=360 \

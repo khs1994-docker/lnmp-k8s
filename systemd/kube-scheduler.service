@@ -8,7 +8,7 @@ Documentation=https://github.com/kubernetes/kubernetes
 Environment="K8S_ROOT=/opt/k8s"
 Environment="K8S_S_HOST=192.168.199.100"
 
-ExecStart=${K8S_ROOT}/bin/kube-scheduler \
+ExecStart=/opt/k8s/bin/kube-scheduler \
 --config=${K8S_ROOT}/conf/kube-scheduler.yaml \
 --bind-address=${K8S_S_HOST} \
 --secure-port=10259 \

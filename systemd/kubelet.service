@@ -14,10 +14,10 @@ Environment="K8S_ROOT=/opt/k8s"
 
 ExecStartPre=-/usr/sbin/swapoff -a
 ExecStartPre=-/sbin/swapoff -a
-ExecStartPre=-${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh
+ExecStartPre=-/opt/k8s/bin/generate-kubelet-bootstrap-kubeconfig.sh
 ExecStartPre=-/usr/bin/env mkdir -p /var/lib/kubelet
 
-ExecStart=${K8S_ROOT}/bin/kubelet \
+ExecStart=/opt/k8s/bin/kubelet \
 --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig \
 --cert-dir=${K8S_ROOT}/certs \
 --container-runtime=docker \

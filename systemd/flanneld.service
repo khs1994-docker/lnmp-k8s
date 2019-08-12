@@ -25,7 +25,7 @@ ExecStartPre=-/usr/bin/env ETCDCTL_API=2 ${K8S_ROOT}/bin/etcdctl \
   --key-file="${K8S_ROOT}/certs/flanneld-key.pem" \
   set /kubernetes/network/config '{"Network":"172.30.0.0/16","SubnetLen":24,"Backend":{"Type":"vxlan"}}'
 
-ExecStart=${K8S_ROOT}/bin/flanneld \
+ExecStart=/opt/k8s/bin/flanneld \
   --etcd-endpoints=${K8S_ETCD_ENTRYPOINTS} \
   --etcd-cafile="${K8S_ROOT}/certs/ca.pem" \
   --etcd-certfile="${K8S_ROOT}/certs/flanneld.pem" \
@@ -33,7 +33,7 @@ ExecStart=${K8S_ROOT}/bin/flanneld \
   --etcd-prefix="/kubernetes/network" \
   --ip-masq
 
-ExecStartPost=${K8S_ROOT}/bin/mk-docker-opts.sh -k DOCKER_NETWORK_OPTIONS -d /etc/docker/flannel_docker_opts.env
+ExecStartPost=/opt/k8s/bin/mk-docker-opts.sh -k DOCKER_NETWORK_OPTIONS -d /etc/docker/flannel_docker_opts.env
 
 [Install]
 WantedBy=multi-user.target

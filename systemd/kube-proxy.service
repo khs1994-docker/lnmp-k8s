@@ -13,7 +13,7 @@ ExecStartPre=-/sbin/modprobe ip_vs
 
 Environment="K8S_ROOT=/opt/k8s"
 
-ExecStart=${K8S_ROOT}/bin/kube-proxy \
+ExecStart=/opt/k8s/bin/kube-proxy \
 --config=${K8S_ROOT}/conf/kube-proxy.config.yaml \
 --logtostderr=true \
 --v=2

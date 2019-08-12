@@ -988,13 +988,12 @@ _local_cleanup(){
     kube-controller-manager kube-scheduler kube-proxy kubelet docker || true
 
   set +e
-  sudo rm -rf ${K8S_ROOT} \
+  sudo rm -rf ${K8S_ROOT:-/opt/k8s} \
               /var/lib/etcd \
               /var/log/ku* \
               /var/lib/kubelet \
               /var/lib/kube-proxy \
 
-  sudo rm -rf ${K8S_ROOT:-/opt/k8s}
   sudo rm -rf /etc/systemd/system/docker.service.d
 
   sudo ip addr flush cni0
@@ -1003,8 +1002,9 @@ _local_cleanup(){
 
   sudo rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
 
+  sudo cp systemd/etc/containerd/docker.toml /etc/containerd/config.toml
   sudo systemctl daemon-reload
-  sudo systemctl restart docker
+  sudo systemctl restart docker containerd
 }
 
 _command=$1
