@@ -40,7 +40,9 @@ before_install:
   - SERVER_IP=`ifconfig ens4 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
   - ./lnmp-k8s > /dev/null
   - echo $SERVER_IP
-
+  - cd cli
+  - sh generate.sh
+  - cd ..
 install:
   - sed -i "s!192.168.199.100!${SERVER_IP}!g" systemd/.env
   - sudo hostnamectl set-hostname node1
