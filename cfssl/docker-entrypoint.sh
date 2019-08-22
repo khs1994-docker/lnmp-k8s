@@ -68,6 +68,20 @@ main (){
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem  \
        -hostname="127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare $CN_NAME
 
+  # client
+  export CN_NAME=client
+
+    echo '{
+      "CN":"'$CN_NAME'",
+      "hosts":[""],
+      "key":{
+        "algo":"rsa",
+        "size":2048
+      }
+    }' \
+         | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
+         -hostname="" - | cfssljson -bare $CN_NAME
+
   # registry
   # export CN_NAME=registry
   #
@@ -96,20 +110,6 @@ main (){
 }' \
        | cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json \
       -hostname="127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare $CN_NAME
-
-  # client
-  export CN_NAME=client
-
-  echo '{
-    "CN":"'$CN_NAME'",
-    "hosts":[""],
-    "key":{
-      "algo":"rsa",
-      "size":2048
-    }
-  }' \
-       | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-       -hostname="" - | cfssljson -bare $CN_NAME
 
   # flanneld (client)
   export CN_NAME=flanneld
@@ -271,6 +271,7 @@ EOF
         | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
             -profile=kubernetes - | cfssljson -bare kube-proxy
 
+  # docker tls cert
   mv client-key.pem key.pem
   mv client.pem cert.pem
   mv server.pem server-cert.pem
