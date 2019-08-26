@@ -631,7 +631,7 @@ _k8s_install_dep(){
     sysstat libseccomp > /dev/null && sudo /usr/bin/env modprobe ip_vs) && return
 
   command -v apt > /dev/null && sudo apt update -qq && sudo apt install -y conntrack ipvsadm ipset jq iptables curl \
-    sysstat libseccomp2 kmod > /dev/null && (sudo /usr/bin/env modprobe ip_vs)
+    sysstat libseccomp2 kmod > /dev/null && (sudo /usr/bin/env modprobe ip_vs) || true
 
 }
 
