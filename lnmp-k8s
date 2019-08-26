@@ -79,6 +79,7 @@ Commands:
   registry               Up Registry [--no-nfs | ]
 
   create-pv              Create PV and PVC [--no-nfs | ]
+
   nfs                    Up NFS server [ down | logs ]
 
   helm-development       Install Helm LNMP In Development
