@@ -915,15 +915,11 @@ encryption-config.yaml} \
 
   sudo useradd -m -s /bin/bash -G root k8s > /dev/null 2>&1 || true
 
-  # sudo rm -rf /var/log/kubernetes /var/log/kube-apiserver-audit.log
-
   sudo mkdir --parents /var/log/kubernetes
 
   sudo mkdir --parents /var/lib/{kubelet,kube-proxy}
 
-  sudo chown k8s:root /var/log/{kubernetes,kube-apiserver-audit.log}
-
-  sudo touch /var/log/kube-apiserver-audit.log
+  sudo chown k8s:root /var/log/kubernetes
 
   _k8s_install_kubectl_conf
 }
