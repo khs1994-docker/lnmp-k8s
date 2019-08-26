@@ -16,6 +16,7 @@ cache:
     - /home/travis/.lnmp/caches
 
 before_install:
+  - sestatus
   - echo $PATH
   - sudo netstat -lnpt
   - docker-compose --version
