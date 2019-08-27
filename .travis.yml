@@ -172,8 +172,8 @@ script:
   # test ingress-nginx
   - HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
   - curl ${SERVER_IP}:${HTTP_PORT}
-
-after_success:
+  - sudo crictl version
+  - sudo crictl info
   - ip addr
   - git diff
   - ./tests/test.sh
