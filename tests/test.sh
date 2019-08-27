@@ -10,13 +10,13 @@ cp deployment/app/index.php ../app/laravel/public/
 # docker run -it --rm -v $PWD/helm/nginx-php/config/php/composer/config.testing.json:/tmp/config.json -v $PWD/../app:/app khs1994/php:7.3.8-composer-alpine composer create-project --prefer-dist laravel/laravel=5.8.* laravel
 echo "Up nfs server"
 ./lnmp-k8s nfs
-sleep 20
+sleep 30
 docker ps -a
 ./lnmp-k8s nfs logs
 sudo mkdir -p /tmp2
 # install nfs dep
 sudo apt install -y nfs-common
-sudo travis_retry mount -t nfs4 ${SERVER_IP}:/lnmp/log /tmp2
+sudo mount -t nfs4 ${SERVER_IP}:/lnmp/log /tmp2
 sudo umount /tmp2
 sed -i "s#192.168.199.100#${SERVER_IP}#g" deployment/pv/lnmp-volume.linux.nfs.yaml
 ./lnmp-k8s create

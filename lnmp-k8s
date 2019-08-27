@@ -125,6 +125,7 @@ _build_k8s_image(){
     KUBERNETES_TYPE=server
   fi
 
+  set -x
   docker buildx build \
     --build-arg KUBERNETES_VERSION=v${CI_KUBERNETES_VERSION} \
     --build-arg TYPE=${KUBERNETES_TYPE} \
@@ -133,7 +134,7 @@ _build_k8s_image(){
     -t khs1994/kubernetes-${KUBERNETES_TYPE}:v${CI_KUBERNETES_VERSION} \
     -t uswccr.ccs.tencentyun.com/khs1994/kubernetes-${KUBERNETES_TYPE}:v${CI_KUBERNETES_VERSION} \
     -f Dockerfile.buildx .
-
+  set +x
   cd .. > /dev/null
 }
 
