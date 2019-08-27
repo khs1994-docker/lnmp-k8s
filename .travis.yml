@@ -174,11 +174,15 @@ script:
   - curl ${SERVER_IP}:${HTTP_PORT}
   - sudo crictl version
   - sudo crictl info
+
+  - git config --global color.diff auto
   - ip addr
   - git diff
-  - ./tests/test.sh
   - cd cli ; (sh generate.sh || true); cd ..
   - git diff
+
+after_success:
+  - ./tests/test.sh
 
 env:
   matrix:
