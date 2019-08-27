@@ -130,7 +130,8 @@ _build_k8s_image(){
     --build-arg TYPE=${KUBERNETES_TYPE} \
     --platform linux/amd64,linux/arm64,linux/arm/v7 \
     --push \
-    -t khs1994/kubernetes-${KUBERNETES_TYPE} \
+    -t khs1994/kubernetes-${KUBERNETES_TYPE}:v${CI_KUBERNETES_VERSION} \
+    -t uswccr.ccs.tencentyun.com/khs1994/kubernetes-${KUBERNETES_TYPE}:v${CI_KUBERNETES_VERSION}
     -f Dockerfile.buildx .
 
   cd .. > /dev/null
