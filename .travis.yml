@@ -17,6 +17,7 @@ cache:
 
 before_install:
   - sestatus || true
+  - ls /home/travis/.lnmp/caches
   - echo $PATH
   - sudo netstat -lnpt
   - docker-compose --version
@@ -43,7 +44,7 @@ before_install:
   - docker buildx inspect --bootstrap
   - ip addr
   - hostnamectl
-  - SERVER_IP=`ifconfig ens4 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
+  - export SERVER_IP=`ifconfig ens4 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
   - ./lnmp-k8s > /dev/null
   - echo $SERVER_IP
 install:
@@ -180,11 +181,11 @@ env:
     - CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--containerd"  K8S_IMAGE=khs1994/kubernetes-server
     - CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_GET="--url"                            K8S_IMAGE=khs1994/kubernetes-server
     - CI_KUBERNETES_VERSION=1.14.2
-    - CI_KUBERNETES_VERSION=1.15.1
+    - CI_KUBERNETES_VERSION=1.15.2
   global:
     - DOCKER_CLI_EXPERIMENTAL=enabled
 
 matrix:
   fast_finish: true
   # allow_failures:
-  # - env: CI_KUBERNETES_VERSION=1.15.1 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--crio"
+  # - env: CI_KUBERNETES_VERSION=1.15.2 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--crio"

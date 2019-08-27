@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -ex
 
 echo "Set app"
 mkdir -p ../app/laravel/public
