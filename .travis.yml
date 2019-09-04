@@ -26,7 +26,7 @@ before_install:
   - sudo systemctl stop systemd-resolved || true
   - sudo netstat -lnpt
   - cat /etc/resolv.conf
-  - echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+  # - echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
   - cat /etc/resolv.conf
 
   - docker-compose --version
