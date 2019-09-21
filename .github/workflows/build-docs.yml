@@ -4,6 +4,9 @@ on:
     - master
     paths:
     - '/docs/*'
+    - '/docs/*/*'
+    - '/docs/*/*/*'
+    - '/docs/*/*/*/*'
 
 name: Build Docs
 
