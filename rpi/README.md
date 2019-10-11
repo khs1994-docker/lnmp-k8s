@@ -98,7 +98,7 @@ $ ./rpi/kube-scheduler
 ```
 
 ## 传输文件到树莓派
-
+ 
 ```powershell
 $ $items="kubelet-config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","flanneld.pem","flanneld-key.pem"
 
@@ -135,6 +135,8 @@ $ sudo systemctl start kube-containerd
 
 $ sudo systemctl start kubelet
 ```
+
+## kubectl
 
 ```bash
 $ kubectl --kubeconfig ./rpi/certs/kubectl.kubeconfig get csr
