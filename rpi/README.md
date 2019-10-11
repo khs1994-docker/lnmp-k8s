@@ -6,6 +6,19 @@
 * 树莓派 固定 IP `192.168.199.101`
 * `apiServer` 通过 `kube-nginx` 代理到 `https://192.168.199.100:16443`（避免与桌面版 Docker 的 Kubernetes 冲突（6443 端口））
 * 由于树莓派只有 `1G` 内存,故 k8s 组件能不放到树莓派就不放到树莓派,组件运行环境查看下方列表
+* WSL2 `Ubuntu-18.04` 并设为默认 WSL
+
+## 将 `Ubuntu-18.04` 设为版本 2 ,并设置为默认 wsl
+
+```bash
+# wsl -h
+
+# 设为默认
+$ wsl --set-default Ubuntu-18.04
+
+# 设为版本 2
+$ wsl --set-version Ubuntu-18.04 2
+```
 
 ## 编辑 `.env` `.env.ps1` 文件
 
@@ -98,7 +111,7 @@ $ ./rpi/kube-scheduler
 ```
 
 ## 传输文件到树莓派
- 
+
 ```powershell
 $ $items="kubelet-config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","flanneld.pem","flanneld-key.pem"
 
