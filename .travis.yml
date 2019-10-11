@@ -82,7 +82,8 @@ install:
   - sudo sed -i "s#^ENABLE_CN_MIRROR=.*#ENABLE_CN_MIRROR=0#g" ./.env
 
   - travis_retry ./lnmp-k8s kubernetes-server ${LNMP_K8S_GET}
-  - debug=1 ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
+  - ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
+  # - debug=1 ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
 
   - export PATH=$PATH:/opt/k8s/bin
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.tar
@@ -94,7 +95,6 @@ install:
 
 before_script:
   - ls -la /etc/systemd/system/
-  - cat /etc/systemd/system/kubelet.service
 
   - sudo systemctl cat etcd
   - sudo systemctl start etcd
