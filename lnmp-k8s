@@ -968,7 +968,7 @@ _docker_default_conf(){
 }
 
 _kubectl_completion(){
-   ${K8S_ROOT}/bin/kubectl completion bash |$(_sudo) tee /etc/bash_completion.d/kubectl || true
+   ${K8S_ROOT}/bin/kubectl completion bash | $(_sudo) tee /etc/bash_completion.d/kubectl > /dev/null || true
 }
 
 _k8s_install(){
