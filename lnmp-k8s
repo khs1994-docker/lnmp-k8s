@@ -55,11 +55,11 @@ Commands:
   kubectl-install        Install kubectl
   kubectl-info           Get kubectl latest stable version info
 
-  local-install          Install local Kubernetes（Manager by systemd）[--containerd | --crio | ]
+  local-install          Install local Kubernetes（Manager by systemd）[ CRI: --containerd (default)| --crio | --docker ]
   local-up               Print how to start local Kubernetes (Manager by systemd)
   local-cleanup          Cleanup local Kubernetes.
 
-  join                   New worker [NODE_IP] [--containerd | --crio | ]
+  join                   New worker [NODE_IP] [ CRI: --containerd (default) | --crio | --docker ]
 
   create                 Deploy lnmp on k8s [--ingress | --no-nfs ]
   delete                 Stop lnmp on k8s, keep data resource(pv and pvc)
@@ -1049,6 +1049,10 @@ encryption-config.yaml} \
   _containerd_install
   _runc_install
 
+  if [ -z "$1" ];then
+    $1="--containerd"
+  fi
+
   if [ "${1}" = "--containerd" ];then
     print_info "Kubelet Runtime is Containerd"
     _containerd_cri_config
@@ -1061,12 +1065,15 @@ encryption-config.yaml} \
     _docker_default_conf
     if [ "$GOOS" = 'linux' ];then _gvisor_crio_conf;fi
     _crictl_crio_conf
-  else
+  elif [ "${1}" = "--docker" ];then
     print_info "Kubelet Runtime is Docker"
     sleep 15
     if [ "$GOOS" = 'linux' ];then _gvisor_docker_conf;fi
     _k8s_install_systemd_docker
     _crictl_docker_conf
+  else
+    print_info "CRI only support containerd crio docker"
+    exit
   fi
 
   $(_sudo) systemctl daemon-reload || true
@@ -1152,6 +1159,10 @@ kube-proxy.kubeconfig} \
   _containerd_install
   _runc_install
 
+  if [ -z "$2" ];then
+    $2="--containerd"
+  fi
+
   if [ "${2}" = "--containerd" ];then
     $(_sudo) cp systemd/kube-containerd.service /etc/systemd/system/
     print_info "Kubelet Runtime is Containerd"
@@ -1165,12 +1176,15 @@ kube-proxy.kubeconfig} \
     _docker_default_conf
     if [ "$GOOS" = 'linux' ];then _gvisor_crio_conf;fi
     _crictl_crio_conf
-  else
+  elif [ "${2}" = "--docker" ];then
     print_info "Kubelet Runtime is Docker"
     sleep 15
     if [ "$GOOS" = 'linux' ];then _gvisor_docker_conf;fi
     _k8s_install_systemd_docker
     _crictl_docker_conf
+  else
+    print_info "CRI support containerd crio docker"
+    exit
   fi
 
   _k8s_install_systemd ${HOSTNAME}
