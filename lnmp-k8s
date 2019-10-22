@@ -88,7 +88,7 @@ _lnmp_k8s_custom_conf_generator(){
     touch deployment/configMap/nginx-conf-d/custom.conf
 
     local ROOT="deployment/nginx/overlays/$item/config"
-    _cp $ROOT/conf.d/t.khs1994.com.$item.conf $ROOT/conf.d/wwww.custom.conf
+    _cp $ROOT/conf.d/t.khs1994.com.$item.conf $ROOT/conf.d/www.custom.conf
     _cp $ROOT/nginx.$item.conf $ROOT/nginx.custom.conf
   done
   # mysql conf
@@ -151,6 +151,18 @@ esac
 GOOS=`uname -s | tr A-Z  a-z`
 
 command -v curl > /dev/null || print_info "curl not install"
+
+if [ $GOOS = 'darwin' -a ! -f /usr/local/opt/gnu-sed/libexec/gnubin/sed ];then
+  print_info "please install gnu-sed by EXEC:
+
+\$ brew install gnu-sed"
+
+  exit 1
+fi
+
+if [ $GOOS = 'darwin' ];then
+  alias sed=gsed
+fi
 
 _build_k8s_image(){
   cd kubernetes-release
@@ -300,11 +312,7 @@ _cleanup_lnmp(){
   _delete_lnmp $ENVIRONMENT
   kubectl delete pvc -l app=lnmp -n $NAMESPACE
 
-  if [ $ENVIRONMENT = 'development' ];then
-    kubectl delete pv -l app=lnmp
-  else
-    echo "==> SKIP delete PV"
-  fi
+  kubectl delete pv -l app=lnmp
 
   kubectl delete ingress -l app=lnmp -n $NAMESPACE
 }
