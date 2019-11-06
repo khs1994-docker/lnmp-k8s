@@ -8,8 +8,11 @@ if ($args[0] -eq 'stop'){
   exit
 }
 
+& $PSScriptRoot/wsl2host --write
+& $PSScriptRoot/wsl2host-check
+
 "==> check kube-server $KUBE_APISERVER"
-curl.exe -k --cacert /opt/k8s2/certs/ca.pem $KUBE_APISERVER
+curl.exe -k --cacert /opt/k8s2/certs/ca.pem $KUBE_APISERVER | out-null
 
 if(!$?){
   Write-Warning "kube-server $KUBE_APISERVER can't connent, maybe not running"
@@ -18,7 +21,7 @@ if(!$?){
   exit
 }
 
-wsl -- bash -c "ls /lib/modules/`$(uname -r)/modules.builtin"
+wsl -- bash -c "if ! [ -f /lib/modules/`$(uname -r)/modules.builtin ];then exit 1;fi"
 
 if(!$?){
   Write-Warning "
@@ -36,8 +39,6 @@ if(!$?){
 
   exit 1
 }
-
-& $PSScriptRoot/wsl2host --write
 
 & $PSScriptRoot/supervisorctl g
 & $PSScriptRoot/supervisorctl update
