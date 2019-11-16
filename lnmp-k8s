@@ -1140,7 +1140,7 @@ _crio_config(){
 
   cat <<EOF | $(_sudo) tee /etc/systemd/system/kubelet.service.d/20-cri.conf
 [Service]
-Environment="KUBELET_CRI=--container-runtime=remote --container-runtime-endpoint=unix:///var/run/crio/crio.sock"
+Environment="KUBELET_EXTRA_ARGS=--container-runtime=remote --container-runtime-endpoint=unix:///var/run/crio/crio.sock"
 EOF
 }
 
@@ -1161,7 +1161,7 @@ _containerd_cri_config(){
 
   cat <<EOF | $(_sudo) tee /etc/systemd/system/kubelet.service.d/20-cri.conf
 [Service]
-Environment="KUBELET_CRI=--container-runtime=remote --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock"
+Environment="KUBELET_EXTRA_ARGS=--container-runtime=remote --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock"
 EOF
 }
 

@@ -1,6 +1,7 @@
 # kubeadm 部署 kubernetes(基于 1.16.x)
 
 * https://github.com/kubernetes/kubeadm
+
 * https://docs.khs1994.com/feiskyer-kubernetes-handbook/deploy/kubeadm.html
 * https://kubernetes.io/zh/docs/reference/setup-tools/kubeadm/kubeadm-init/
 

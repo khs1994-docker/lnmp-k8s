@@ -22,7 +22,7 @@
 
 * [Linux 单机部署(systemd)](systemd)
 
-* [Docker Desktop](docs/guide/docker-desktop.md)
+* [Docker Desktop](docs/setup/docker-desktop.md)
 
 * [Windows(etcd,kube-nginx) + WSL2(master) + 树莓派(node)](rpi)
 
@@ -136,8 +136,6 @@ $ ./lnmp-k8s cleanup development
 ## Tips
 
 * [数据持久化](docs/storage/data.md)
-
-* [Windows 10](docs/guide/windows.md)
 
 * [滚动升级 不停机更新](docs/guide/rollout.md)
 

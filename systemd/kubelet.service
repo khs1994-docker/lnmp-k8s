@@ -28,8 +28,7 @@ ExecStart=/opt/k8s/bin/kubelet \
 --image-pull-progress-deadline=15m \
 --volume-plugin-dir=/opt/k8s/var/lib/kubelet/kubelet-plugins/volume/exec/ \
 --logtostderr=true \
---v=2 \
-${KUBELET_CRI}
+--v=2
 
 # --container-runtime=docker \
 # --container-runtime-endpoint=unix:///var/run/dockershim.sock \
