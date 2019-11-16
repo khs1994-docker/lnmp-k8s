@@ -30,9 +30,11 @@
 
 ### 其他方案
 
-* [MiniKube](docs/guide/minikube.md)
+* [MiniKube](docs/setup/minikube.md)
 
-* [k3s](https://github.com/rancher/k3s)
+* [kubeadm](docs/setup/kubeadm.md)
+
+* [k3s](docs/setup/k3s.md)
 
 * [kind](https://github.com/kubernetes-sigs/kind)
 
