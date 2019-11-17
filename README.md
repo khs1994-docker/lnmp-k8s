@@ -14,7 +14,7 @@
 
 ### 云服务
 
-* [腾讯云 实验室免费体验 8 小时（可循环） ](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+* [腾讯云 Kubernetes](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 ### 本项目维护方案
 
@@ -140,6 +140,14 @@ $ ./lnmp-k8s cleanup development
 * [滚动升级 不停机更新](docs/guide/rollout.md)
 
 * [pod 网络出错](docs/guide/network.md)
+
+## 学习
+
+* 存储 `pv` `pvc` `flexvolume` `csi`
+* 网络 `cni` `flannel` `calico`
+* 容器运行时 `cri` `docker` `cri-containerd` `cri-o`
+* 监控
+* 服务 `ingress`
 
 ## More Information
 
