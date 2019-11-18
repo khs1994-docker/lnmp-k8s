@@ -69,5 +69,6 @@ systemReservedCgroup: ""
 kubeReservedCgroup: ""
 enforceNodeAllocatable: ["pods"]
 featureGates:
-  AllAlpha: true
-  BoundServiceAccountTokenVolume: false
+  # AllAlpha: true
+  # BoundServiceAccountTokenVolume: false
+  DynamicAuditing: true
