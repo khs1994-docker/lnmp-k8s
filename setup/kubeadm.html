@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>kubeadm 部署 kubernetes(基于 1.16.x) | K8s LNMP</title>
+    <meta name="description" content="Run LNMP On K8s">
+    <undefined></undefined>
+    
+    <link rel="preload" href="/assets/css/0.styles.7661f395.css" as="style"><link rel="preload" href="/assets/js/app.e4ab10aa.js" as="script"><link rel="preload" href="/assets/js/53.6c937917.js" as="script"><link rel="prefetch" href="/assets/js/10.ad131b99.js"><link rel="prefetch" href="/assets/js/11.ddd73f24.js"><link rel="prefetch" href="/assets/js/12.446c60c2.js"><link rel="prefetch" href="/assets/js/13.a03c9a58.js"><link rel="prefetch" href="/assets/js/14.ca08981b.js"><link rel="prefetch" href="/assets/js/15.782e8f98.js"><link rel="prefetch" href="/assets/js/16.e6dee02d.js"><link rel="prefetch" href="/assets/js/17.d7fe0a5b.js"><link rel="prefetch" href="/assets/js/18.a774cf30.js"><link rel="prefetch" href="/assets/js/19.ddf049e6.js"><link rel="prefetch" href="/assets/js/2.bf64c2f6.js"><link rel="prefetch" href="/assets/js/20.53626db6.js"><link rel="prefetch" href="/assets/js/21.511bac1c.js"><link rel="prefetch" href="/assets/js/22.353e47d6.js"><link rel="prefetch" href="/assets/js/23.b2bec086.js"><link rel="prefetch" href="/assets/js/24.3058f784.js"><link rel="prefetch" href="/assets/js/25.0d9d1f73.js"><link rel="prefetch" href="/assets/js/26.e93ff5ff.js"><link rel="prefetch" href="/assets/js/27.2880aaed.js"><link rel="prefetch" href="/assets/js/28.7cb4ba21.js"><link rel="prefetch" href="/assets/js/29.7a54b112.js"><link rel="prefetch" href="/assets/js/3.df079316.js"><link rel="prefetch" href="/assets/js/30.8e9b2f29.js"><link rel="prefetch" href="/assets/js/31.455da751.js"><link rel="prefetch" href="/assets/js/32.af8c7c10.js"><link rel="prefetch" href="/assets/js/33.fdaf50a5.js"><link rel="prefetch" href="/assets/js/34.7e43958c.js"><link rel="prefetch" href="/assets/js/35.ca8c5796.js"><link rel="prefetch" href="/assets/js/36.35fbf997.js"><link rel="prefetch" href="/assets/js/37.f5bb83bc.js"><link rel="prefetch" href="/assets/js/38.14a72533.js"><link rel="prefetch" href="/assets/js/39.a889561f.js"><link rel="prefetch" href="/assets/js/4.e43a4d75.js"><link rel="prefetch" href="/assets/js/40.0395c212.js"><link rel="prefetch" href="/assets/js/41.664b8da6.js"><link rel="prefetch" href="/assets/js/42.dec58203.js"><link rel="prefetch" href="/assets/js/43.b567624a.js"><link rel="prefetch" href="/assets/js/44.952116c2.js"><link rel="prefetch" href="/assets/js/45.2534eee5.js"><link rel="prefetch" href="/assets/js/46.9ea0ca02.js"><link rel="prefetch" href="/assets/js/47.4bcc4e46.js"><link rel="prefetch" href="/assets/js/48.7f4dc50c.js"><link rel="prefetch" href="/assets/js/49.3f509835.js"><link rel="prefetch" href="/assets/js/5.79b4c071.js"><link rel="prefetch" href="/assets/js/50.d640fab9.js"><link rel="prefetch" href="/assets/js/51.c234d4b3.js"><link rel="prefetch" href="/assets/js/52.1e4bb926.js"><link rel="prefetch" href="/assets/js/54.3f76f118.js"><link rel="prefetch" href="/assets/js/55.afc8f935.js"><link rel="prefetch" href="/assets/js/56.70fb3c41.js"><link rel="prefetch" href="/assets/js/57.ce9be8ff.js"><link rel="prefetch" href="/assets/js/58.41e8e0a5.js"><link rel="prefetch" href="/assets/js/59.ee68922d.js"><link rel="prefetch" href="/assets/js/6.1147eca8.js"><link rel="prefetch" href="/assets/js/60.09981d17.js"><link rel="prefetch" href="/assets/js/61.d93616bc.js"><link rel="prefetch" href="/assets/js/62.277f5f43.js"><link rel="prefetch" href="/assets/js/63.17ca0f4f.js"><link rel="prefetch" href="/assets/js/64.e309aab8.js"><link rel="prefetch" href="/assets/js/65.bcb47b56.js"><link rel="prefetch" href="/assets/js/7.540ade0c.js"><link rel="prefetch" href="/assets/js/8.157788c6.js"><link rel="prefetch" href="/assets/js/9.5b283ac4.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.7661f395.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">K8s LNMP</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/setup/" class="nav-link router-link-active">部署</a></div><div class="nav-item"><a href="/guide/" class="nav-link">教程</a></div><div class="nav-item"><a href="/example/" class="nav-link">示例</a></div><div class="nav-item"><a href="/addons/" class="nav-link">插件</a></div><div class="nav-item"><a href="/log/" class="nav-link">日志</a></div><div class="nav-item"><a href="/storage/" class="nav-link">存储</a></div><div class="nav-item"><a href="/node/" class="nav-link">节点</a></div><div class="nav-item"><a href="https://github.com/khs1994-docker/lnmp-k8s" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><a href="https://khs1994.com" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  khs1994.com
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><a href="https://cloud.tencent.com/redirect.php?redirect=10058&amp;cps_key=3a5255852d5db99dcd5da4c72f05df61" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Kubernetes 免费实验室
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/setup/" class="nav-link router-link-active">部署</a></div><div class="nav-item"><a href="/guide/" class="nav-link">教程</a></div><div class="nav-item"><a href="/example/" class="nav-link">示例</a></div><div class="nav-item"><a href="/addons/" class="nav-link">插件</a></div><div class="nav-item"><a href="/log/" class="nav-link">日志</a></div><div class="nav-item"><a href="/storage/" class="nav-link">存储</a></div><div class="nav-item"><a href="/node/" class="nav-link">节点</a></div><div class="nav-item"><a href="https://github.com/khs1994-docker/lnmp-k8s" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><a href="https://khs1994.com" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  khs1994.com
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><a href="https://cloud.tencent.com/redirect.php?redirect=10058&amp;cps_key=3a5255852d5db99dcd5da4c72f05df61" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Kubernetes 免费实验室
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav>  <ul class="sidebar-links"><li><a href="/setup/systemd.html" class="sidebar-link">systemd 单机部署 Kubernetes</a></li><li><a href="/setup/coreos.html" class="sidebar-link">CoreOS 部署 Kubernetes</a></li><li><a href="/setup/minikube.html" class="sidebar-link">Minikube 部署 kubernetes</a></li><li><a href="/setup/windows.html" class="sidebar-link">Minikube on Windows Hyperv</a></li><li><a href="/setup/kubeadm.html" class="active sidebar-link">kubeadm 部署 kubernetes(基于 1.16.x)</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/setup/kubeadm.html#安装-kubelet-kubeadm-kubectl" class="sidebar-link">安装 kubelet kubeadm kubectl</a></li><li class="sidebar-sub-header"><a href="/setup/kubeadm.html#修改内核的运行参数" class="sidebar-link">修改内核的运行参数</a></li><li class="sidebar-sub-header"><a href="/setup/kubeadm.html#配置-kubelet" class="sidebar-link">配置 kubelet</a></li><li class="sidebar-sub-header"><a href="/setup/kubeadm.html#部署" class="sidebar-link">部署</a></li><li class="sidebar-sub-header"><a href="/setup/kubeadm.html#使用" class="sidebar-link">使用</a></li><li class="sidebar-sub-header"><a href="/setup/kubeadm.html#部署-cni-以下任选其一" class="sidebar-link">部署 CNI (以下任选其一)</a></li><li class="sidebar-sub-header"><a href="/setup/kubeadm.html#kube-proxy" class="sidebar-link">kube-proxy</a></li><li class="sidebar-sub-header"><a href="/setup/kubeadm.html#master-节点默认不能运行-pod" class="sidebar-link">master 节点默认不能运行 pod</a></li><li class="sidebar-sub-header"><a href="/setup/kubeadm.html#高可用" class="sidebar-link">高可用</a></li><li class="sidebar-sub-header"><a href="/setup/kubeadm.html#附录" class="sidebar-link">附录</a></li><li class="sidebar-sub-header"><a href="/setup/kubeadm.html#kubeadm-配置文件" class="sidebar-link">kubeadm 配置文件</a></li><li class="sidebar-sub-header"><a href="/setup/kubeadm.html#所需镜像" class="sidebar-link">所需镜像</a></li><li class="sidebar-sub-header"><a href="/setup/kubeadm.html#使用其他运行时" class="sidebar-link">使用其他运行时</a></li><li class="sidebar-sub-header"><a href="/setup/kubeadm.html#笔者总结" class="sidebar-link">笔者总结</a></li></ul></li><li><a href="/setup/k3s.html" class="sidebar-link">k3s 部署 kubernetes</a></li><li><a href="/setup/rpi.html" class="sidebar-link">Windows + WSL2 + 树莓派 部署 Kubernetes</a></li><li><a href="/setup/docker-desktop.html" class="sidebar-link">Docker 桌面版支持 k8s</a></li><li><a href="/setup/ha.html" class="sidebar-link">Master 节点高可用</a></li></ul> </div> <div class="page"> <div class="content"><h1 id="kubeadm-部署-kubernetes-基于-1-16-x"><a href="#kubeadm-部署-kubernetes-基于-1-16-x" aria-hidden="true" class="header-anchor">#</a> kubeadm 部署 kubernetes(基于 1.16.x)</h1> <ul><li><p>https://github.com/kubernetes/kubeadm</p></li> <li><p>https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/</p></li> <li><p>https://kubernetes.io/zh/docs/reference/setup-tools/kubeadm/kubeadm-init/</p></li> <li><p>https://docs.khs1994.com/feiskyer-kubernetes-handbook/deploy/kubeadm.html</p></li> <li><p>https://blog.csdn.net/tiger435/article/details/85002337</p></li></ul> <h2 id="安装-kubelet-kubeadm-kubectl"><a href="#安装-kubelet-kubeadm-kubectl" aria-hidden="true" class="header-anchor">#</a> 安装 <strong>kubelet</strong> <strong>kubeadm</strong> <strong>kubectl</strong></h2> <blockquote><p>手动下载二进制文件放入 PATH，或者使用包管理工具安装。下面介绍如何使用包管理工具安装</p></blockquote> <h3 id="ubuntu-debian"><a href="#ubuntu-debian" aria-hidden="true" class="header-anchor">#</a> Ubuntu/Debian</h3> <div class="language-bash extra-class"><pre class="language-bash"><code>$ <span class="token function">apt-get</span> update <span class="token operator">&amp;&amp;</span> <span class="token function">apt-get</span> <span class="token function">install</span> -y apt-transport-https
+$ <span class="token function">curl</span> https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg <span class="token operator">|</span> apt-key <span class="token function">add</span> -
+
+$ <span class="token function">cat</span> <span class="token operator">&lt;&lt;</span>EOF <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> /etc/apt/sources.list.d/kubernetes.list
+deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
+EOF
+
+$ <span class="token function">apt-get</span> update
+$ <span class="token function">apt-get</span> <span class="token function">install</span> -y kubelet kubeadm kubectl
+</code></pre></div><h3 id="centos-fedora"><a href="#centos-fedora" aria-hidden="true" class="header-anchor">#</a> CentOS/Fedora</h3> <div class="language-bash extra-class"><pre class="language-bash"><code>$ <span class="token function">cat</span> <span class="token operator">&lt;&lt;</span>EOF <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> /etc/yum.repos.d/kubernetes.repo
+<span class="token punctuation">[</span>kubernetes<span class="token punctuation">]</span>
+name<span class="token operator">=</span>Kubernetes
+baseurl<span class="token operator">=</span>https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+enabled<span class="token operator">=</span>1
+gpgcheck<span class="token operator">=</span>1
+repo_gpgcheck<span class="token operator">=</span>1
+gpgkey<span class="token operator">=</span>https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+
+$ setenforce 0
+$ <span class="token function">sudo</span> yum <span class="token function">install</span> -y kubelet kubeadm kubectl
+</code></pre></div><h2 id="修改内核的运行参数"><a href="#修改内核的运行参数" aria-hidden="true" class="header-anchor">#</a> 修改内核的运行参数</h2> <ul><li>https://kubernetes.io/docs/setup/production-environment/container-runtimes/</li></ul> <div class="language-bash extra-class"><pre class="language-bash"><code>$ sysctl -a <span class="token operator">|</span> <span class="token function">grep</span> net.*iptables
+
+net.bridge.bridge-nf-call-iptables <span class="token operator">=</span> 1
+<span class="token comment"># 若未输出以上结果，请执行以下命令，若正常输出，请跳过以下命令</span>
+
+$ <span class="token function">cat</span> <span class="token operator">&lt;&lt;</span>EOF <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> /etc/sysctl.d/99-kubernetes-cri.conf
+net.bridge.bridge-nf-call-iptables  <span class="token operator">=</span> 1
+net.ipv4.ip_forward                 <span class="token operator">=</span> 1
+net.bridge.bridge-nf-call-ip6tables <span class="token operator">=</span> 1
+EOF
+
+<span class="token comment"># 应用配置</span>
+$ sysctl --system
+</code></pre></div><h2 id="配置-kubelet"><a href="#配置-kubelet" aria-hidden="true" class="header-anchor">#</a> 配置 kubelet</h2> <h3 id="修改-kubelet-service-使用包管理工具安装-kubeadm-请跳过此步，查看下一步骤"><a href="#修改-kubelet-service-使用包管理工具安装-kubeadm-请跳过此步，查看下一步骤" aria-hidden="true" class="header-anchor">#</a> 修改 <code>kubelet.service</code> (使用包管理工具安装 kubeadm 请跳过此步，查看下一步骤)</h3> <div class="language-bash extra-class"><pre class="language-bash"><code>$ <span class="token function">sudo</span> <span class="token function">mkdir</span> -p /etc/systemd/system/kubelet.service.d
+</code></pre></div><p><code>/etc/systemd/system/kubelet.service.d/10-kubeadm.conf</code> 写入以下内容(内容来自包管理工具安装的 kubeadm)</p> <div class="language-bash extra-class"><pre class="language-bash"><code><span class="token comment"># Note: This dropin only works with kubeadm and kubelet v1.11+</span>
+<span class="token punctuation">[</span>Service<span class="token punctuation">]</span>
+Environment<span class="token operator">=</span><span class="token string">&quot;KUBELET_KUBECONFIG_ARGS=--bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf&quot;</span>
+Environment<span class="token operator">=</span><span class="token string">&quot;KUBELET_CONFIG_ARGS=--config=/var/lib/kubelet/config.yaml&quot;</span>
+<span class="token comment"># This is a file that &quot;kubeadm init&quot; and &quot;kubeadm join&quot; generates at runtime, populating the KUBELET_KUBEADM_ARGS variable dynamically</span>
+EnvironmentFile<span class="token operator">=</span>-/var/lib/kubelet/kubeadm-flags.env
+<span class="token comment"># This is a file that the user can use for overrides of the kubelet args as a last resort. Preferably, the user should use</span>
+<span class="token comment"># the .NodeRegistration.KubeletExtraArgs object in the configuration files instead. KUBELET_EXTRA_ARGS should be sourced from this file.</span>
+EnvironmentFile<span class="token operator">=</span>-/etc/sysconfig/kubelet
+ExecStart<span class="token operator">=</span>
+ExecStart<span class="token operator">=</span>/usr/bin/kubelet <span class="token variable">$KUBELET_KUBECONFIG_ARGS</span> <span class="token variable">$KUBELET_CONFIG_ARGS</span> <span class="token variable">$KUBELET_KUBEADM_ARGS</span> <span class="token variable">$KUBELET_EXTRA_ARGS</span>
+</code></pre></div><p><code>/etc/systemd/system/kubelet.service.d/10-proxy-ipvs.conf</code> 写入以下内容</p> <div class="language-bash extra-class"><pre class="language-bash"><code><span class="token comment"># 启用 ipvs 相关内核模块，用于 kube-proxy</span>
+<span class="token punctuation">[</span>Service<span class="token punctuation">]</span>
+ExecStartPre<span class="token operator">=</span>-modprobe ip_vs
+ExecStartPre<span class="token operator">=</span>-modprobe ip_vs_rr
+ExecStartPre<span class="token operator">=</span>-modprobe ip_vs_wrr
+ExecStartPre<span class="token operator">=</span>-modprobe ip_vs_sh
+</code></pre></div><p><code>/etc/systemd/system/kubelet.service</code> 写入以下内容</p> <div class="language-bash extra-class"><pre class="language-bash"><code><span class="token punctuation">[</span>Unit<span class="token punctuation">]</span>
+Description<span class="token operator">=</span>kubelet: The Kubernetes Node Agent
+Documentation<span class="token operator">=</span>https://kubernetes.io/docs/
+
+<span class="token punctuation">[</span>Service<span class="token punctuation">]</span>
+ExecStart<span class="token operator">=</span>/usr/bin/kubelet
+Restart<span class="token operator">=</span>always
+StartLimitInterval<span class="token operator">=</span>0
+RestartSec<span class="token operator">=</span>10
+
+<span class="token punctuation">[</span>Install<span class="token punctuation">]</span>
+WantedBy<span class="token operator">=</span>multi-user.target
+</code></pre></div><p>应用配置</p> <div class="language-bash extra-class"><pre class="language-bash"><code>$ <span class="token function">sudo</span> systemctl daemon-reload
+</code></pre></div><h3 id="修改-kubelet-service-使用包管理工具安装-kubeadm"><a href="#修改-kubelet-service-使用包管理工具安装-kubeadm" aria-hidden="true" class="header-anchor">#</a> 修改 <code>kubelet.service</code> (使用包管理工具安装 kubeadm)</h3> <p><code>/etc/systemd/system/kubelet.service.d/10-proxy-ipvs.conf</code> 写入以下内容</p> <div class="language-bash extra-class"><pre class="language-bash"><code><span class="token comment"># 启用 ipvs 相关内核模块，用于 kube-proxy</span>
+<span class="token punctuation">[</span>Service<span class="token punctuation">]</span>
+ExecStartPre<span class="token operator">=</span>-modprobe ip_vs
+ExecStartPre<span class="token operator">=</span>-modprobe ip_vs_rr
+ExecStartPre<span class="token operator">=</span>-modprobe ip_vs_wrr
+ExecStartPre<span class="token operator">=</span>-modprobe ip_vs_sh
+</code></pre></div><p>应用配置</p> <div class="language-bash extra-class"><pre class="language-bash"><code>$ <span class="token function">sudo</span> systemctl daemon-reload
+</code></pre></div><h2 id="部署"><a href="#部署" aria-hidden="true" class="header-anchor">#</a> 部署</h2> <h3 id="master"><a href="#master" aria-hidden="true" class="header-anchor">#</a> master</h3> <div class="language-bash extra-class"><pre class="language-bash"><code>$ <span class="token function">sudo</span> kubeadm init --image-repository gcr.azk8s.cn/google-containers \
+      --pod-network-cidr 10.244.0.0/16 \
+      --v 5 \
+      --ignore-preflight-errors<span class="token operator">=</span>all
+</code></pre></div><ul><li><code>--pod-network-cidr 10.244.0.0/16</code> 参数与后续 CNI 插件有关，这里以 <code>flannel</code> 为例，若后续部署其他类型的网络插件请更改此参数。</li> <li>使用 <strong>配置文件</strong> 的方式这里不再赘述</li></ul> <blockquote><p>执行可能出现错误，例如缺少依赖包，根据提示安装即可。</p></blockquote> <p>执行成功会输出</p> <div class="language-bash extra-class"><pre class="language-bash"><code><span class="token punctuation">..</span>.
+<span class="token punctuation">[</span>addons<span class="token punctuation">]</span> Applied essential addon: CoreDNS
+I1116 12:35:13.270407   86677 request.go:538<span class="token punctuation">]</span> Throttling request took 181.409184ms, request: POST:https://192.168.199.100:6443/api/v1/namespaces/kube-system/serviceaccounts
+I1116 12:35:13.470292   86677 request.go:538<span class="token punctuation">]</span> Throttling request took 186.088112ms, request: POST:https://192.168.199.100:6443/api/v1/namespaces/kube-system/configmaps
+<span class="token punctuation">[</span>addons<span class="token punctuation">]</span> Applied essential addon: kube-proxy
+
+Your Kubernetes control-plane has initialized successfully<span class="token operator">!</span>
+
+To start using your cluster, you need to run the following as a regular user:
+
+  <span class="token function">mkdir</span> -p <span class="token variable">$HOME</span>/.kube
+  <span class="token function">sudo</span> <span class="token function">cp</span> -i /etc/kubernetes/admin.conf <span class="token variable">$HOME</span>/.kube/config
+  <span class="token function">sudo</span> <span class="token function">chown</span> <span class="token variable"><span class="token variable">$(</span><span class="token function">id</span> -u<span class="token variable">)</span></span><span class="token keyword">:</span><span class="token variable"><span class="token variable">$(</span><span class="token function">id</span> -g<span class="token variable">)</span></span> <span class="token variable">$HOME</span>/.kube/config
+
+You should now deploy a pod network to the cluster.
+Run <span class="token string">&quot;kubectl apply -f [podnetwork].yaml&quot;</span> with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can <span class="token function">join</span> any number of worker nodes by running the following on each as root:
+
+kubeadm <span class="token function">join</span> 192.168.199.100:6443 --token cz81zt.orsy9gm9v649e5lf \
+    --discovery-token-ca-cert-hash sha256:5edb316fd0d8ea2792cba15cdf1c899a366f147aa03cba52d4e5c5884ad836fe
+</code></pre></div><h3 id="node-工作节点"><a href="#node-工作节点" aria-hidden="true" class="header-anchor">#</a> node 工作节点</h3> <p>根据提示在 <strong>另一主机</strong> 部署工作节点（重复部署小节以上的步骤，安装配置好 kubelet）</p> <div class="language-bash extra-class"><pre class="language-bash"><code>$ kubeadm <span class="token function">join</span> 192.168.199.100:6443 --token cz81zt.orsy9gm9v649e5lf \
+    --discovery-token-ca-cert-hash sha256:5edb316fd0d8ea2792cba15cdf1c899a366f147aa03cba52d4e5c5884ad836fe
+</code></pre></div><h2 id="使用"><a href="#使用" aria-hidden="true" class="header-anchor">#</a> 使用</h2> <p>将 <code>/etc/kubernetes/admin.conf</code> 复制到 <code>~/.kube/config</code></p> <p>执行 <code>$ kubectl get all -A</code></p> <p>由于未部署 CNI 插件，CoreDNS 未正常启动。</p> <h2 id="部署-cni-以下任选其一"><a href="#部署-cni-以下任选其一" aria-hidden="true" class="header-anchor">#</a> 部署 CNI (以下任选其一)</h2> <h3 id="flanneld-0-11-0"><a href="#flanneld-0-11-0" aria-hidden="true" class="header-anchor">#</a> flanneld (0.11.0)</h3> <p>检查 podCIDR 设置</p> <div class="language-bash extra-class"><pre class="language-bash"><code>$ kubectl get node -o yaml <span class="token operator">|</span> <span class="token function">grep</span> CIDR
+
+<span class="token comment"># 输出</span>
+    podCIDR: 10.244.0.0/24
+    podCIDRs:
+</code></pre></div><div class="language-bash extra-class"><pre class="language-bash"><code>$ kubectl apply -k addons/cni/flannel
+</code></pre></div><h3 id="calico-3-10"><a href="#calico-3-10" aria-hidden="true" class="header-anchor">#</a> calico (3.10)</h3> <ul><li>https://docs.projectcalico.org/v3.10/getting-started/kubernetes/installation/calico</li></ul> <p>修改 <code>addons/cni/calico/configMap.yaml</code> 中的值(官方原值 <code>192.168.0.0/16</code> 已更改为同 <code>flannel</code> 一致 <code>10.244.0.0/16</code>)</p> <p>有 <a href="https://docs.projectcalico.org/v3.10/getting-started/kubernetes/installation/calico" target="_blank" rel="noopener noreferrer">三种方式<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> 存储 calico 数据,这里采用第一种 <code>Installing with the Kubernetes API datastore—50 nodes or less</code></p> <h4 id="删除-flannel"><a href="#删除-flannel" aria-hidden="true" class="header-anchor">#</a> 删除 <code>flannel</code></h4> <div class="language-bash extra-class"><pre class="language-bash"><code>$ kubectl delete -k addons/cni/flannel
+
+$ <span class="token function">sudo</span> <span class="token function">ip</span> <span class="token function">link</span> del flannel.1
+</code></pre></div><h4 id="修改内核参数"><a href="#修改内核参数" aria-hidden="true" class="header-anchor">#</a> 修改内核参数</h4> <p><code>/etc/sysctl.d/99-kubernetes-calico.conf</code> 写入以下内容</p> <div class="language-bash extra-class"><pre class="language-bash"><code>net.ipv4.conf.all.rp_filter <span class="token operator">=</span> 1
+</code></pre></div><blockquote><p>Fedora 31 默认值为 2 ,其他系统通过 <code>sysctl -a | grep net.ipv4.conf.all.rp_filter</code> 查看</p></blockquote> <p>应用配置</p> <div class="language-bash extra-class"><pre class="language-bash"><code>$ sysctl --system
+</code></pre></div><p>不进行以上步骤的话,会报如下错误</p> <div class="language-bash extra-class"><pre class="language-bash"><code>2019-11-17 03:23:02.084 <span class="token punctuation">[</span>FATAL<span class="token punctuation">]</span><span class="token punctuation">[</span>5336<span class="token punctuation">]</span> int_dataplane.go 1032: Kernel<span class="token string">'s RPF check is set to '</span>loose<span class="token string">'.  This would allow endpoints to spoof their IP address.  Calico requires net.ipv4.conf.all.rp_filter to be set to 0 or 1. If you require loose RPF and you are not concerned about spoofing, this check can be disabled by setting the IgnoreLooseRPF configuration parameter to '</span>true'.
+</code></pre></div><h4 id="部署-2"><a href="#部署-2" aria-hidden="true" class="header-anchor">#</a> 部署</h4> <div class="language-bash extra-class"><pre class="language-bash"><code>$ kubectl apply -k addons/cni/calico
+</code></pre></div><h2 id="kube-proxy"><a href="#kube-proxy" aria-hidden="true" class="header-anchor">#</a> kube-proxy</h2> <ul><li>https://github.com/kubernetes/kubernetes/blob/master/pkg/proxy/ipvs/README.md</li></ul> <p>启用 <code>ipvs</code> 模式</p> <div class="language-bash extra-class"><pre class="language-bash"><code>$ kubectl edit cm kube-proxy -n kube-system
+</code></pre></div><div class="language-diff extra-class"><pre class="language-diff"><code><span class="token deleted">- mode: &quot;&quot;</span>
+<span class="token inserted">+ mode: &quot;ipvs&quot;</span>
+</code></pre></div><p>加载内核模块(手动加载，实际上已通过 systemd 的配置执行了加载命令，这里介绍一下原理)</p> <div class="language-bash extra-class"><pre class="language-bash"><code><span class="token comment"># 根据 kube-proxy 日志，查看未加载模块</span>
+$ E1116 12:53:34.421604       1 server_others.go:339<span class="token punctuation">]</span> can't determine whether to use ipvs proxy, error: IPVS proxier will not be used because the following required kernel modules are not loaded: <span class="token punctuation">[</span>ip_vs_rr ip_vs_wrr ip_vs_sh<span class="token punctuation">]</span>
+
+$ modprobe -- ip_vs
+$ modprobe -- ip_vs_rr
+$ modprobe -- ip_vs_wrr
+$ modprobe -- ip_vs_sh
+
+$ modprobe -- nf_conntrack_ipv4
+<span class="token comment"># linux 内核 4.19+</span>
+$ modprobe -- nf_conntrack
+</code></pre></div><p>开机自动加载内核模块(Ubuntu)</p> <div class="language-bash extra-class"><pre class="language-bash"><code>$ <span class="token function">cat</span> <span class="token operator">&lt;&lt;</span>EOF <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> /etc/modules
+ip_vs
+ip_vs_rr
+ip_vs_wrr
+ip_vs_sh
+EOF
+</code></pre></div><p>CentOS 系列请参考 https://blog.csdn.net/s1234567_89/article/details/51836344</p> <p>重启 <code>kube-proxy</code> (注意将 XXX 替换为自己的名称)</p> <div class="language-bash extra-class"><pre class="language-bash"><code>$ kubectl get pod -n kube-system
+
+$ kubectl get pod/kube-proxy-XXX -n kube-system -o yaml <span class="token operator">|</span> kubectl replace --force -f -
+</code></pre></div><h2 id="master-节点默认不能运行-pod"><a href="#master-节点默认不能运行-pod" aria-hidden="true" class="header-anchor">#</a> master 节点默认不能运行 pod</h2> <ul><li>https://blog.csdn.net/BigData_Mining/article/details/88683459</li></ul> <p>也就是说如果用 <code>kubeadm</code> 部署一个单节点集群不能使用,请执行以下命令</p> <div class="language-bash extra-class"><pre class="language-bash"><code>$ kubectl taint nodes --all node-role.kubernetes.io/master-
+
+<span class="token comment"># 恢复默认值</span>
+<span class="token comment"># $ kubectl taint nodes NODE_NAME node-role.kubernetes.io/master=true:NoSchedule</span>
+</code></pre></div><h2 id="高可用"><a href="#高可用" aria-hidden="true" class="header-anchor">#</a> 高可用</h2> <div class="language-bash extra-class"><pre class="language-bash"><code>$ <span class="token function">sudo</span> kubeadm init --apiserver-cert-extra-sans<span class="token operator">=</span>xxx.com --control-plane-endpoint<span class="token operator">=</span>xxx.com:6443 其他参数
+
+$ <span class="token function">sudo</span> kubeadm <span class="token function">join</span> --control-plane 其他参数
+</code></pre></div><ul><li>高可用，入口地址不能为 IP(127.0.0.1 NGINX 轮询除外，这里不做介绍) 必须为一个域名,<code>init</code> 时必须指定 <code>--apiserver-cert-extra-sans=xxx.com</code> <code>--control-plane-endpoint=xxx.com:6443</code>。后续通过 DNS 轮询 xxx.com 实现高可用(搭建 DNS 服务器，这里不做介绍)</li></ul> <h2 id="附录"><a href="#附录" aria-hidden="true" class="header-anchor">#</a> 附录</h2> <p>使用包管理工具安装的 <code>kubeadm</code> 增加了哪些文件</p> <div class="language-bash extra-class"><pre class="language-bash"><code>$ yum <span class="token function">install</span> yum-utils -y
+$ yumdownloader kubeadm
+$ rpm2cpio xxx.rpm <span class="token operator">|</span> cpio -div
+</code></pre></div><p>新增了 <code>/usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf</code> 文件</p> <div class="language-bash extra-class"><pre class="language-bash"><code><span class="token comment"># /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf</span>
+<span class="token comment"># Note: This dropin only works with kubeadm and kubelet v1.11+</span>
+<span class="token punctuation">[</span>Service<span class="token punctuation">]</span>
+Environment<span class="token operator">=</span><span class="token string">&quot;KUBELET_KUBECONFIG_ARGS=--bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf&quot;</span>
+Environment<span class="token operator">=</span><span class="token string">&quot;KUBELET_CONFIG_ARGS=--config=/var/lib/kubelet/config.yaml&quot;</span>
+<span class="token comment"># This is a file that &quot;kubeadm init&quot; and &quot;kubeadm join&quot; generates at runtime, populating the KUBELET_KUBEADM_ARGS variable dynamically</span>
+EnvironmentFile<span class="token operator">=</span>-/var/lib/kubelet/kubeadm-flags.env
+<span class="token comment"># This is a file that the user can use for overrides of the kubelet args as a last resort. Preferably, the user should use</span>
+<span class="token comment"># the .NodeRegistration.KubeletExtraArgs object in the configuration files instead. KUBELET_EXTRA_ARGS should be sourced from this file.</span>
+EnvironmentFile<span class="token operator">=</span>-/etc/sysconfig/kubelet
+ExecStart<span class="token operator">=</span>
+ExecStart<span class="token operator">=</span>/usr/bin/kubelet <span class="token variable">$KUBELET_KUBECONFIG_ARGS</span> <span class="token variable">$KUBELET_CONFIG_ARGS</span> <span class="token variable">$KUBELET_KUBEADM_ARGS</span> <span class="token variable">$KUBELET_EXTRA_ARGS</span>
+</code></pre></div><h2 id="kubeadm-配置文件"><a href="#kubeadm-配置文件" aria-hidden="true" class="header-anchor">#</a> kubeadm 配置文件</h2> <ul><li>https://godoc.org/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta2</li></ul> <p>生成默认的配置文件</p> <div class="language-bash extra-class"><pre class="language-bash"><code>$ kubeadm config print init-defaults
+</code></pre></div><p>使用</p> <div class="language-bash extra-class"><pre class="language-bash"><code>$ kubeadm --config 配置文件名 其他参数
+</code></pre></div><h2 id="所需镜像"><a href="#所需镜像" aria-hidden="true" class="header-anchor">#</a> 所需镜像</h2> <div class="language-bash extra-class"><pre class="language-bash"><code>$ kubeadm config images list
+</code></pre></div><h2 id="使用其他运行时"><a href="#使用其他运行时" aria-hidden="true" class="header-anchor">#</a> 使用其他运行时</h2> <p><code>~/lnmp/kubernetes/kubeadm</code></p> <h2 id="笔者总结"><a href="#笔者总结" aria-hidden="true" class="header-anchor">#</a> 笔者总结</h2> <ul><li>关键在于配置好 <code>kubelet</code></li> <li>k8s 组件除了 <code>kubelet</code> 其他组件都能够以 <code>pod</code> 方式运行，秘诀在于使用了 <code>hostnetwork</code></li> <li>国内网络问题（拉取不到 <code>k8s.gcr.io</code> 镜像）：加上参数 <code>--image-repository gcr.azk8s.cn/google-containers</code> 解决</li> <li><code>kubelet</code> 的参数 <code>--cgroup-driver=systemd</code> 一定要与 Docker 的一致</li></ul></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/setup/windows.html" class="prev">
+          Minikube on Windows Hyperv
+        </a></span> <span class="next"><a href="/setup/k3s.html">
+          k3s 部署 kubernetes
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/assets/js/app.e4ab10aa.js" defer></script><script src="/assets/js/53.6c937917.js" defer></script>
+  </body>
+</html>
