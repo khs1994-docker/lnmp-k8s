@@ -31,6 +31,8 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
 --volume-plugin-dir=${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ `
 --logtostderr=true `
 --dynamic-config-dir=${K8S_ROOT}/var/lib/kubelet/dynamic-config `
+--experimental-mounter-path=${K8S_ROOT}/bin/mounter `
+--experimental-check-node-capabilities-before-mount=true `
 --v=2
 
 Function _reset(){
