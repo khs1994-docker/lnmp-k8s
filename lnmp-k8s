@@ -233,7 +233,7 @@ _get_kubernetes_server_by_docker_image(){
 
   local ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
-  dist=$($ScriptRoot/../windows/sdk/dockerhub/rootfs \
+  dist=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
   ${K8S_IMAGE} \
   v${KUBERNETES_VERSION} \
   ${GOARCH} \
