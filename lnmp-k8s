@@ -240,7 +240,7 @@ _get_kubernetes_server_by_docker_image(){
   v${KUBERNETES_VERSION} \
   ${GOARCH} \
   ${GOOS} \
-  "" 0 ${K8S_IMAGE_REGISTRY}
+  "" 0 ${K8S_IMAGE_REGISTRY:-registry.hub.docker.com}
   )
 
   tar -zxvf $dist -C $ScriptRoot/kubernetes-release/release/
