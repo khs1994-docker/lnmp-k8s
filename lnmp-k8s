@@ -231,6 +231,8 @@ _get_kubernetes_server_by_docker_image(){
   # docker container cp khs1994-kubernetes-${TYPE}:/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
   # docker container rm khs1994-kubernetes-${TYPE}
 
+  set -x
+
   local ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
   dist=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
@@ -241,7 +243,9 @@ _get_kubernetes_server_by_docker_image(){
   "" 0 ${K8S_IMAGE_REGISTRY}
   )
 
-  tar -zxvf $dist -C ScriptRoot/kubernetes-release/release/
+  tar -zxvf $dist -C $ScriptRoot/kubernetes-release/release/
+
+  set +x
 }
 
 _get_kubernetes_server_by_url(){
