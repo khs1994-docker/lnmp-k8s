@@ -18,8 +18,8 @@ cache:
     - kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin
     - /home/travis/.khs1994-docker-lnmp/caches
 
-git:
-  clone: false
+# git:
+#   clone: false
 
 before_install:
   # /home/travis/build/khs1994-docker/lnmp-k8s
