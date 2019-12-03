@@ -23,9 +23,10 @@ cache:
 
 before_install:
   # /home/travis/build/khs1994-docker/lnmp-k8s
+  - pwd
   - git clone --depth=1 -b 19.03 https://github.com/khs1994-docker/lnmp ~/lnmp
-  - cp -r ~/lnmp/* ~/build/khs1994-docker
-  - ls -la ~/build/khs1994-docker
+  - cp -r ~/lnmp/* ~/gopath/src/github.com/khs1994-docker
+  - ls -la ~/gopath/src/github.com/khs1994-docker
   # remove some apt source
   - cat /etc/apt/sources.list
   - ls /etc/apt/sources.list.d || true
