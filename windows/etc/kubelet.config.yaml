@@ -1,6 +1,7 @@
+# https://github.com/kubernetes/kubernetes/blob/master/pkg/kubelet/apis/config/types.go
 kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
-address: "##NODE_IP##"
+address: 192.168.199.100
 staticPodPath: ""
 syncFrequency: 1m
 fileCheckFrequency: 20s
@@ -16,7 +17,7 @@ authentication:
   webhook:
     enabled: true
   x509:
-    clientCAFile: "##K8S_ROOT##/certs/ca.pem"
+    clientCAFile: "C:\\Users\\90621\\lnmp\\kubernetes\\wsl2\\certs\\ca.pem"
 authorization:
   mode: Webhook
 registryPullQPS: 0
@@ -26,7 +27,7 @@ eventBurst: 20
 enableDebuggingHandlers: true
 enableContentionProfiling: true
 healthzPort: 10248
-healthzBindAddress: "##NODE_IP##"
+healthzBindAddress: 192.168.199.100
 clusterDomain: "cluster.local."
 clusterDNS:
   - "10.254.0.2"
@@ -36,18 +37,18 @@ imageMinimumGCAge: 2m
 imageGCHighThresholdPercent: 85
 imageGCLowThresholdPercent: 80
 volumeStatsAggPeriod: 1m
-kubeletCgroups: ""
-systemCgroups: ""
-cgroupRoot: ""
-cgroupsPerQOS: true
-cgroupDriver: cgroupfs
+# kubeletCgroups: ""
+# systemCgroups: ""
+# cgroupRoot: ""
+cgroupsPerQOS: false
+# cgroupDriver: cgroupfs
 # cgroupDriver: systemd
 runtimeRequestTimeout: 10m
 hairpinMode: promiscuous-bridge
 maxPods: 220
 podCIDR: "10.244.0.0/16"
 podPidsLimit: -1
-resolvConf: /etc/resolv.conf
+resolvConf: ""
 maxOpenFiles: 1000000
 kubeAPIQPS: 1000
 kubeAPIBurst: 2000
@@ -61,15 +62,14 @@ evictionMinimumReclaim:
   imagefs.available: "15%"
 evictionSoft: {}
 enableControllerAttachDetach: true
-# failSwapOn: true
-failSwapOn: false
+failSwapOn: true
 containerLogMaxSize: 20Mi
 containerLogMaxFiles: 10
 systemReserved: {}
 kubeReserved: {}
-systemReservedCgroup: ""
-kubeReservedCgroup: ""
-enforceNodeAllocatable: ["pods"]
+# systemReservedCgroup: ""
+# kubeReservedCgroup: ""
+enforceNodeAllocatable: []
 featureGates:
   # AllAlpha: true
   # BoundServiceAccountTokenVolume: false
