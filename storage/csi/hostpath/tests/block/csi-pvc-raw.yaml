@@ -1,11 +1,12 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: local-storage-test-pvc
+  name: pvc-raw
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: local-storage
+  storageClassName: csi-hostpath-sc
+  volumeMode: Block
   resources:
     requests:
       storage: 1Gi

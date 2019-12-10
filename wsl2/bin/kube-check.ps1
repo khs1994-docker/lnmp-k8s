@@ -38,6 +38,14 @@ if(!$?){
   exit 1
 }
 
+try{
+  ls \\wsl$\Ubuntu-18.04\wsl\k8s-data\k8s\bin | out-null
+}catch{
+  Write-Warning "==> dist [ k8s-data ] mount error, please exec $ wsl --shutdown"
+
+  # exit 1
+}
+
 # docker desktop check
 foreach ($item in $(wsl -l --running)){
   if($item -eq 'docker-desktop'){
