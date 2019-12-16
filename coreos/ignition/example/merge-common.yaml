@@ -20,8 +20,8 @@ systemd:
       contents: |
         [Unit]
         Description=nm settings
-        After=NetworkManager
-        Wants=NetworkManager
+        After=NetworkManager.service
+        Wants=NetworkManager.service
 
         [Service]
         Restart=on-failure
