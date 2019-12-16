@@ -250,14 +250,6 @@ fi
 
 mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}
 
-  # set +e
-  # _get_kubernetes_server_by_url
-  #
-  # if [ $?=0 ];then
-  #   __untar && return || true
-  # fi
-  # set -e
-
   if [ -n "$get_by_url" ];then
     _get_kubernetes_server_by_url $@
     cd kubernetes-release/release
@@ -921,17 +913,13 @@ _k8s_install_dep(){
     sysstat libseccomp > /dev/null) || command -v yum > /dev/null && ($(_sudo) yum install -y conntrack ipvsadm ipset jq iptables curl socat unzip \
     sysstat libseccomp > /dev/null) && return
 
-  set +e
   command -v apt > /dev/null && $(_sudo) apt update -qq ; $(_sudo) apt install -y conntrack ipvsadm ipset jq iptables curl socat unzip \
-    sysstat libseccomp2 kmod > /dev/null
-  set -e
+    sysstat libseccomp2 kmod > /dev/null || true
 }
 
-_k8s_install_common(){
+_k8s_install_disable_firewalld(){
   # 关闭防火墙
   $(_sudo) systemctl stop firewalld && $(_sudo) systemctl disable firewalld || true
-  $(_sudo) mkdir -p /etc/{docker,systemd/system}
-  $(_sudo) chmod -R 755 /opt
 }
 
 _k8s_install_cp_bin(){
@@ -969,8 +957,8 @@ _cni_config(){
   $(_sudo) cp systemd/etc/cni/10-flannel.conflist ${K8S_ROOT}/etc/cni/net.d
 }
 
-_cri_config(){
-  print_info "config cri ..."
+_cri_sysctl(){
+  print_info "exec sysctl to meet cri..."
   $(_sudo) rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
   $(_sudo) touch /etc/sysctl.d/99-kubernetes-cri.conf
   echo "net.bridge.bridge-nf-call-iptables  = 1" | $(_sudo) tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
@@ -1037,9 +1025,8 @@ _crio_install(){
   # $(_sudo) sed -i "s#archive.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
   # $(_sudo) sed -i "s#security.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 
-  set +e
   command -v apt > /dev/null \
-  && $(_sudo) apt update -qq \
+  && $(_sudo) apt update -qq || true \
   ; $(_sudo) apt install -y software-properties-common \
   && $(_sudo) apt-add-repository -y ppa:projectatomic/ppa \
   && $(_sudo) apt-get update -qq ; $(_sudo) apt-get install -y \
@@ -1060,8 +1047,6 @@ _crio_install(){
   $(command -v runc > /dev/null || echo "cri-o-runc") \
   libudev-dev \
   gcc
-
-  set -e
 
   go_path=`go env GOPATH | cut -d ":" -f 1`
 
@@ -1101,14 +1086,13 @@ _crio_install(){
 }
 
 _crio_config(){
-  _crio_install
   cd $source_path
   print_info "config cri-o ..."
   $(_sudo) mkdir -p /etc/crio/
   # crio --config="" config --default > crio.conf
   sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/crio/crio.conf | $(_sudo) tee /etc/crio/crio.conf
 
-  _cri_config
+  _cri_sysctl
 
   local CONTAINER_RUNTIME_ENDPOINT="unix:///var/run/crio/crio.sock"
 
@@ -1128,7 +1112,7 @@ _containerd_cri_config(){
   sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/kube-containerd/1.3/config.toml \
     | $(_sudo) tee ${K8S_ROOT}/etc/kube-containerd/1.3/config.toml
 
-  _cri_config
+  _cri_sysctl
 
   local CONTAINER_RUNTIME_ENDPOINT="unix:///run/kube-containerd/containerd.sock"
 
@@ -1176,6 +1160,7 @@ _cri_handler(){
     _crictl_containerd_conf
   elif [ "$CONTAINER_RUNTIME" = "--crio" ];then
     print_info "Kubelet Runtime is CRI-O"
+    _crio_install
     _crio_config
     _docker_default_conf
     if [ "$GOOS" = 'linux' ];then _gvisor_crio_conf;fi
@@ -1268,7 +1253,10 @@ _k8s_install(){
 
   _k8s_install_dep
 
-  _k8s_install_common
+  $(_sudo) mkdir -p /etc/{docker,systemd/system}
+  $(_sudo) chmod -R 755 /opt
+
+  _k8s_install_disable_firewalld
 
   _etcd_install
 
@@ -1344,9 +1332,9 @@ _k8s_join_hostname_handler(){
   done
 
   echo $KUBE_HOSTNAME | grep -q '-' \
-    &&  print_info "hostname $KUBE_HOSTNAME include -, \
+    &&  print_info "hostname $KUBE_HOSTNAME include -,
 not allowed, please input new hostname by --hostname=XXX" \
-    && exit 1
+    && exit 1 || true
 
   # if [ $HOSTNAME = "wsl2" ];then
   #   print_info "hostname not allowed set wsl2, please input new hostname by --hostname=XXX"
@@ -1377,7 +1365,11 @@ _k8s_join(){
 
   # dep
   _k8s_install_dep
-  _k8s_install_common
+
+  $(_sudo) mkdir -p /etc/{docker,systemd/system}
+  $(_sudo) chmod -R 755 /opt
+
+  _k8s_install_disable_firewalld
 
   # cni
   _cni_install
@@ -1466,6 +1458,7 @@ _local_cleanup(){
   $(_sudo) ip addr flush cni0
   $(_sudo) ip addr flush docker0
   $(_sudo) ip addr flush flannel.4096
+  $(_sudo) ip addr flush flannel.1
 
   $(_sudo) rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
 
