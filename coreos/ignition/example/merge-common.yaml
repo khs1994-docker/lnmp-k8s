@@ -27,9 +27,9 @@ systemd:
         Restart=on-failure
         RestartSec=5
         ExecStartPre=ls /etc/NetworkManager/system-connections/eth0.nmconnection
-        # ExecStartPre=ls /etc/NetworkManager/system-connections/eth1.nmconnection
+        ExecStartPre=ls /etc/NetworkManager/system-connections/eth1.nmconnection
         ExecStartPre=nmcli con up eth0
-        # ExecStartPre=nmcli con up eth1
+        ExecStartPre=nmcli con up eth1
         ExecStart=sh -c "echo setup network"
 
         [Install]
@@ -92,25 +92,25 @@ storage:
           #     minimum - Modification of targeted policy. Only selected processes are protected.
           #     mls - Multi Level Security protection.
           SELINUXTYPE=targeted
-    # - path: /etc/NetworkManager/system-connections/eth0.nmconnection
-    #   mode: 0600
-    #   contents:
-    #     inline: |
-    #       [connection]
-    #       id=eth0
-    #       type=ethernet
-    #       interface-name=eth0
-    #       permissions=
-    #       autoconnect=true
+    - path: /etc/NetworkManager/system-connections/eth1.nmconnection
+      mode: 0600
+      contents:
+        inline: |
+          [connection]
+          id=eth1
+          type=ethernet
+          interface-name=eth1
+          permissions=
+          autoconnect=true
 
-    #       [ipv4]
-    #       dns-search=
-    #       method=auto
+          [ipv4]
+          dns-search=
+          method=auto
 
-    #       [ipv6]
-    #       addr-gen-mode=stable-privacy
-    #       dns-search=
-    #       method=auto
+          [ipv6]
+          addr-gen-mode=stable-privacy
+          dns-search=
+          method=auto
     - path: /opt/.khs1994-docker-lnmp/caches/crictl-v${CRICTL_VERSION}-linux-amd64.tar.gz
       mode: 0644
       contents:

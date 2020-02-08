@@ -64,6 +64,7 @@ items="fedora-coreos-${FCOS_VERSION}-metal.x86_64.raw.xz \
 for item in $items;do
 
 if ! [ -f $item ];then
+  echo "download $item"
   curl -O \
     https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/${FCOS_VERSION}/x86_64/$item
 fi
