@@ -30,6 +30,7 @@ systemd:
         ExecStartPre=ls /etc/NetworkManager/system-connections/eth1.nmconnection
         ExecStartPre=nmcli con up eth0
         ExecStartPre=nmcli con up eth1
+        ExecStartPre=route add default gw ${DEFAULT_GATEWAY}
         ExecStart=sh -c "echo setup network"
 
         [Install]
@@ -126,18 +127,6 @@ storage:
         source: http://{{SERVER_HOST}}:8080/etc/sysctl.d/kubernetes.conf
   directories:
     - path: /home/core/.kube
-      mode: 0755
-      user:
-        name: core
-      group:
-        name: core
-    - path: /home/core/.kube/cache
-      mode: 0755
-      user:
-        name: core
-      group:
-        name: core
-    - path: /home/core/.kube/http-cache
       mode: 0755
       user:
         name: core

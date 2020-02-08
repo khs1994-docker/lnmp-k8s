@@ -14,15 +14,15 @@
 ## 注意事项
 
 * 若使用虚拟机安装，建议电脑内存 **16G** 硬盘 **100G** 可用空间
-* **bug:** 硬盘空间充足，但报硬盘空间不足错误，解决办法: ignition `storage.files.path` 不要列出大文件
 * `SELinux` 已关闭
 * `kubelet` 容器运行时为 `containerd`，可以改为 `docker`
 * `Etcd` `kube-nginx` 等部分服务运行方式为 `podman`
+* **bug:** 硬盘空间充足，但报硬盘空间不足错误，解决办法: ignition `storage.files.path` 不要列出大文件
 * **bug:** 异常关机（强制关机）可能导致 `podman` 运行出错，请删除镜像 `(例如：$ sudo podman rmi IMAGE_NAME)` 之后重启服务 `(例如：$ sudo systemctl restart etcd)`
 
 ### 虚拟机网络配置
 
-> VirtualBox 增加 hostonly 网络 **192.168.57.1** 网段,并启用 DHCP:
+> VirtualBox 增加 **hostonly** 网络 **192.168.57.1** 网段,并启用 DHCP:
 
 ```bash
 # 首次使用执行两次，保证存在 vboxnet1 网卡，到 VirtualBox -> 管理 -> 主机网络管理器 查看
@@ -96,6 +96,9 @@ $ poweroff
 
 # 在虚拟机设置页面移除 ISO
 # 存储 -> 存储介质 -> 选住 ISO -> 属性 -> 移除虚拟盘 点击确定
+# 或者执行
+$ ./coreos remove-iso N
+$ ./coreos mount-iso N
 
 # 重新启动(可能会遇到异常，只要不是 ignition 错误，强制重启即可)
 ```
