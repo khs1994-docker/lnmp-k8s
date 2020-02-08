@@ -11,7 +11,7 @@ RUN set -ex \
       && apk add --no-cache tzdata curl \
       && curl -L ${FCCT_URL}${FCCT_VERSION}/fcct-${ARCH}-unknown-linux-gnu > /usr/local/bin/fcct \
       && chmod +x /usr/local/bin/fcct \
-      && /usr/local/bin/fcct --version \
+      # && /usr/local/bin/fcct --version \
       && apk del curl \
       && apk add --no-cache --virtual .gettext gettext \
       && mv /usr/bin/envsubst /tmp/ \
