@@ -5,12 +5,15 @@ LABEL maintainer="khs1994@khs1994.com" \
 
 ARG FCCT_URL=https://github.com/coreos/fcct/releases/download/
 ARG FCCT_VERSION=v0.4.0
+
+COPY --from=quay.io/coreos/fcct:${FCCT_VERSION} /usr/local/bin/fcct /usr/local/bin/fcct
+
 RUN set -ex \
       && ARCH=`uname -m` \
       && mkdir -p /srv/www/coreos \
       && apk add --no-cache tzdata curl \
-      && curl -L ${FCCT_URL}${FCCT_VERSION}/fcct-${ARCH}-unknown-linux-gnu > /usr/local/bin/fcct \
-      && chmod +x /usr/local/bin/fcct \
+      # && curl -L ${FCCT_URL}${FCCT_VERSION}/fcct-${ARCH}-unknown-linux-gnu > /usr/local/bin/fcct \
+      # && chmod +x /usr/local/bin/fcct \
       # && /usr/local/bin/fcct --version \
       && apk del curl \
       && apk add --no-cache --virtual .gettext gettext \
