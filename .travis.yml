@@ -200,7 +200,8 @@ script:
   - kubectl exec ${POD_NAME} -- cat /etc/resolv.conf
   - kubectl exec ${POD_NAME} -- ping -c 5 kubernetes
   - kubectl exec ${POD_NAME} -- ping -c 5 github.com
-  - kubectl delete pod nginx
+  - kubectl delete deployment nginx || true
+  - kubectl delete pod nginx || true
   - kubectl get all
   # test ingress-nginx
   - HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
