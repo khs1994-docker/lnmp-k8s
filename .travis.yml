@@ -168,7 +168,7 @@ before_script:
   - kubectl certificate approve $CSR_NAME
   - kubectl get csr
 
-  - sed -i "s!/opt/k8s!${K8S_ROOT}!g" addons/cni/calico-custom/calico.yaml
+  - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/calico.yaml
   - git diff
   - kubectl apply -k addons/cni/calico-custom
 
@@ -183,17 +183,7 @@ script:
   - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
   - ip addr
 
-  - sleep 120
-  - kubectl get all -A
-  - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
-  - ip addr
-
-  - sleep 120
-  - kubectl get all -A
-  - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
-  - ip addr
-
-  - sleep 120
+  - sleep 60
   - kubectl get all -A
   - sudo journalctl -u kubelet
 
