@@ -169,6 +169,7 @@ before_script:
   - kubectl get csr
 
   - sed -i "s!/opt/k8s!${K8S_ROOT}!g" addons/cni/calico-custom/calico.yaml
+  - git diff
   - kubectl apply -k addons/cni/calico-custom
 
   - kubectl get node
@@ -177,32 +178,36 @@ before_script:
   - kubectl api-resources
 
 script:
+  - sleep 120
+  - kubectl get all -A
+  - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
+  - ip addr
+
+  - sleep 120
+  - kubectl get all -A
+  - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
+  - ip addr
+
+  - sleep 120
+  - kubectl get all -A
+  - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
+  - ip addr
+
+  - sleep 120
+  - kubectl get all -A
+  - sudo journalctl -u kubelet
+
+  - ip addr
+  - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
+  - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
+  - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
+
   - kubectl apply -k addons/coredns
   - kubectl apply -k addons/dashboard
   - kubectl apply -k addons/metrics-server
   - kubectl apply -k addons/ingress-nginx/nodeport
 
   - sleep 120
-  - kubectl get all -A
-  - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
-
-  - sleep 120
-  - kubectl get all -A
-  - sudo journalctl -u kubelet
-  - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
-
-  - sleep 120
-  - kubectl get all -A
-  - sudo journalctl -u kubelet
-  - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
-
-  - sleep 120
-  - kubectl get all -A
-  - sudo journalctl -u kubelet
-
-  - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
-  - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
-  - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
 
   - kubectl get all --all-namespaces
   # test metrics server
