@@ -184,12 +184,25 @@ script:
 
   - sleep 120
   - kubectl get all -A
+  - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
 
   - sleep 120
   - kubectl get all -A
+  - sudo journalctl -u kubelet
+  - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
+
+  - sleep 120
+  - kubectl get all -A
+  - sudo journalctl -u kubelet
+  - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
+
+  - sleep 120
+  - kubectl get all -A
+  - sudo journalctl -u kubelet
 
   - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
-  - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q)
+  - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
+  - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
 
   - kubectl get all --all-namespaces
   # test metrics server

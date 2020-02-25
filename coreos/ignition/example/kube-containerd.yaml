@@ -35,7 +35,7 @@ systemd:
         Documentation=https://containerd.io
         After=network-online.target network.target local-fs.target
         Wants=network-online.target
-        Conflicts=kube-containerd.service
+        # Conflicts=xxx.service
 
         [Service]
         ExecStartPre=-modprobe overlay
