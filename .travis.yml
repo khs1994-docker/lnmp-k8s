@@ -89,6 +89,7 @@ install:
   - echo "${SERVER_IP} node1" | sudo tee -a /etc/hosts
 
   - docker-compose up cfssl-local
+  - docker-compose down cfssl-local
   # - source .env
   - ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64
 
@@ -177,7 +178,6 @@ before_script:
   - kubectl api-versions
   - kubectl api-resources
 
-script:
   - sleep 60
   - kubectl get all -A
   - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
@@ -192,6 +192,8 @@ script:
   - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
   - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
   - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
+
+script:
 
   - kubectl apply -k addons/coredns
   - kubectl apply -k addons/dashboard
