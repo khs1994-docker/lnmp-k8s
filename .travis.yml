@@ -183,17 +183,15 @@ before_script:
   - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
   - ip addr
 
-  - sleep 120
+  - sleep 60
   - kubectl get all -A
   - ip addr
 
   - sudo journalctl -u crio || true
 
   - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
-  - sudo crictl images
-  - sudo crictl ps -a
-  - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
-  - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
+  # - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
+  # - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
 
 script:
 
