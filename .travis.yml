@@ -89,7 +89,7 @@ install:
   - echo "${SERVER_IP} node1" | sudo tee -a /etc/hosts
 
   - docker-compose up cfssl-local
-  - docker-compose down cfssl-local
+  - docker-compose down
   # - source .env
   - ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64
 
