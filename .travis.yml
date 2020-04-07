@@ -132,13 +132,14 @@ before_script:
   - sudo systemctl cat crio || true
   - sudo cat /etc/sysconfig/crio || true
   - sudo mkdir -p /etc/sysconfig
-  - echo "CRIO_CONFIG_OPTIONS='--config=/etc/crio/crio.conf'" | sudo tee -a /etc/sysconfig/crio
+  - echo "CRIO_CONFIG_OPTIONS=' --config=/etc/crio/crio.conf '" | sudo tee -a /etc/sysconfig/crio
   - sudo cat /etc/sysconfig/crio || true
   - sudo cat /etc/crio/crio.conf || true
   - /usr/local/bin/crio --config=/etc/crio/crio.conf config > crio.conf || true
   - /usr/local/bin/crio config --default > crio.default.conf || true
   - cat crio.conf || true
-  - diff crio.conf crio.default.conf
+  - diff crio.conf crio.default.conf || true
+  - ls -R /etc/crio/crio.conf.d || true
 
   - test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (sudo systemctl daemon-reload ; sudo systemctl start kube-containerd) || true
   - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker"  && (sudo systemctl restart docker || sudo journalctl -u docker) || true
