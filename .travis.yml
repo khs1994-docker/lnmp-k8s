@@ -131,6 +131,7 @@ before_script:
 
   - sudo systemctl cat crio || true
   - sudo cat /etc/sysconfig/crio || true
+  - sudo mkdir -p /etc/sysconfig
   - echo "CRIO_CONFIG_OPTIONS='--config /etc/crio/crio.conf'" | sudo tee -a /etc/sysconfig/crio
   - sudo cat /etc/sysconfig/crio || true
   - sudo cat /etc/crio/crio.conf || true
