@@ -30,7 +30,6 @@ $command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
 --tls-cert-file=${K8S_ROOT}/certs/apiserver.pem `
 --tls-private-key-file=${K8S_ROOT}/certs/apiserver-key.pem `
 --insecure-port=0 `
---audit-dynamic-configuration `
 --audit-log-maxage=15 `
 --audit-log-maxbackup=3 `
 --audit-log-maxsize=100 `
