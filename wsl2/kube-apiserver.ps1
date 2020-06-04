@@ -16,7 +16,6 @@ $command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
 --advertise-address=${KUBE_APISERVER_HOST} `
 --default-not-ready-toleration-seconds=360 `
 --default-unreachable-toleration-seconds=360 `
---feature-gates=DynamicAuditing=true `
 --max-mutating-requests-inflight=2000 `
 --max-requests-inflight=4000 `
 --default-watch-cache-size=200 `
