@@ -175,13 +175,13 @@ jobs:
          ls -la /etc/systemd/system/
 
          sudo systemctl cat etcd
-         sudo systemctl start etcd
+         sudo systemctl start etcd || sudo journalctl cat -u etcd
          # master
          sudo systemctl cat kube-apiserver
-         sudo systemctl start kube-apiserver
+         sudo systemctl start kube-apiserver || sudo journalctl cat -u kube-apiserver
 
          sudo systemctl cat kube-controller-manager
-         sudo systemctl start kube-controller-manager
+         sudo systemctl start kube-controller-manager || sudo journalctl cat -u kube-controller-manager
 
          sudo systemctl cat kube-scheduler
          if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 19 ];then \
@@ -189,10 +189,10 @@ jobs:
            && echo "remove it when version ge 1.19" \
            && sudo sed -i "s#kubescheduler.config.k8s.io/v1alpha1#kubescheduler.config.k8s.io/v1alpha2#g" ${K8S_ROOT:-/opt/k8s}/conf/kube-scheduler.config.yaml ; \
          fi
-         sudo systemctl start kube-scheduler
+         sudo systemctl start kube-scheduler || sudo journalctl cat -u kube-scheduler
          # worker
          sudo systemctl cat kube-proxy
-         sudo systemctl start kube-proxy
+         sudo systemctl start kube-proxy || sudo journalctl cat -u kube-proxy
 
          sudo systemctl cat docker
 
