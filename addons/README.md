@@ -8,9 +8,9 @@
 
 * metrics-server `0.3.6`
 
-* CoreDNS `1.6.9`
+* CoreDNS `1.7.0`
 
-* Dashboard `2.0.2`
+* Dashboard `2.0.3`
 
 * Istio `1.6.1`
 
