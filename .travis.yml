@@ -271,6 +271,9 @@ after_success:
       git clone -b master --depth=5 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
       cd lnmp-k8s
 
+      stty size
+      stty cols 80
+
       sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=true#g" ./.env
       cd cli ; (sh generate.sh || true); cd ..
 
