@@ -266,7 +266,7 @@ after_success:
   - kubectl get node -o yaml
 
   - |
-    if [ $CI_KUBERNETES_VERSION = '1.19.0-rc.0' ];then
+    if [ $CI_KUBERNETES_VERSION = '1.18.0' ];then
       cd /tmp
       git clone -b master --depth=5 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
       cd lnmp-k8s
