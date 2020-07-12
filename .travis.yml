@@ -275,7 +275,7 @@ after_success:
 
       git add .
       git commit -m "Update v$CI_KUBERNETES_VERSION config"
-      git remote set-url origin https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s"
+      git remote set-url origin https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
       git push origin master:config -f
     fi
 env:
