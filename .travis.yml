@@ -272,10 +272,10 @@ after_success:
       cd lnmp-k8s
 
       stty size
-      stty cols 120
+      stty cols 200
 
       sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=true#g" ./.env
-      cd cli ; (COLUMNS=120 sh generate.sh || true); cd ..
+      cd cli ; (COLUMNS=200 sh generate.sh || true); cd ..
 
       git add .
       git commit -m "Update v$CI_KUBERNETES_VERSION config"
