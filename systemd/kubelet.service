@@ -13,6 +13,7 @@ Environment="NODE_NAME=##NODE_NAME##"
 Environment="KUBE_APISERVER=##KUBE_APISERVER##"
 
 Environment="K8S_ROOT=/opt/k8s"
+Environment="ENABLE_METADATA_CONCEALMENT=false"
 
 ExecStartPre=/opt/k8s/bin/kubeadm version
 ExecStartPre=-/usr/bin/env swapoff -a

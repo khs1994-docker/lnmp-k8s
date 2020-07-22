@@ -21,6 +21,7 @@ cache:
 #   clone: false
 
 before_install:
+  - env
   # /home/travis/build/khs1994-docker/lnmp-k8s
   # /home/travis/gopath/src/github.com/[secure]-docker/lnmp-k8s
   - pwd
