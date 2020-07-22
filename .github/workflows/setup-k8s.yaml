@@ -403,7 +403,7 @@ jobs:
          ./lnmp-k8s create development --no-nfs
          sleep 50
          kubectl get -n lnmp all
-         curl -k https://laravel2.t.khs1994.com
+         curl -k https://laravel2.t.khs1994.com || true
          echo ::endgroup::
 
          test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (kubectl apply -f demo/runtimeClass/runtimeClass.yaml && kubectl apply -f demo/runtimeClass/pod.yaml) || true
@@ -425,3 +425,5 @@ jobs:
          echo ::group::kubectl get node
          kubectl get node -o yaml
          echo ::endgroup::
+     - name: Setup tmate session
+       uses: mxschmitt/action-tmate@v2
