@@ -185,6 +185,8 @@ before_script:
   - sudo journalctl -u kube-containerd || true
   - sudo journalctl -u crio || true
 
+  - cat ${K8S_ROOT:-/opt/k8s}/conf/kubelet.config.yaml
+
   - kubectl get csr
   - CSR_NAME=`kubectl get csr | grep system:node:node1 | awk '{print $1}' | head -1`
   - echo ${CSR_NAME}
@@ -307,7 +309,7 @@ jobs:
       env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
     # current stable version
     - os: linux
-      dist: focal
+      dist: bionic
       env: CI_KUBERNETES_VERSION=1.18.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=lwpm/kubernetes-server
     - os: linux
       dist: focal
