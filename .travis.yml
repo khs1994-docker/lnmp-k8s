@@ -51,8 +51,9 @@ before_install:
   # - sudo systemctl stop systemd-resolved || true
   # - sudo netstat -lnpt
   # - cat /etc/resolv.conf
-  # - echo "nameserver 169.254.169.254" | sudo tee /etc/resolv.conf
-  # - echo "search google.internal" | sudo tee -a /etc/resolv.conf
+  - echo "nameserver 169.254.169.254" | sudo tee /run/systemd/resolve/resolv.conf
+  - echo "search google.internal" | sudo tee -a /run/systemd/resolve/resolv.conf
+  - cat /run/systemd/resolve/resolv.conf
   # - cat /etc/resolv.conf
   # - nslookup gcr.io
 
