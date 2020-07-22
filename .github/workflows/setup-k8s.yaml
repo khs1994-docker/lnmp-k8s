@@ -99,6 +99,8 @@ jobs:
          docker system prune -a -f
          docker system df
 
+         sudo apt install -y tree
+
          df -h
        name: os-metadata
     #  - uses: actions/setup-go@v1
