@@ -154,6 +154,7 @@ before_script:
 
   - sleep 10
   - sudo systemctl cat kubelet
+  - sudo systemctl start kubelet || sudo journalctl -u kubelet
   - sudo systemctl start kubelet
 
   - sleep 10
