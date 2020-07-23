@@ -988,7 +988,7 @@ _crio_install(){
   make
 
   # containers-common
-  cp systemd/etc/containers/. /etc/containers
+  cp -r systemd/etc/containers/. /etc/containers
 
   go_path=`go env GOPATH | cut -d ":" -f 1`
 
