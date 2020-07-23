@@ -371,7 +371,6 @@ jobs:
          mkdir -p ../app/laravel/public
          cp deployment/app/index.php ../app/laravel/public/
 
-         echo ::group::Up nfs server"
          ./lnmp-k8s nfs
          sleep 30
          docker ps -a
@@ -382,12 +381,10 @@ jobs:
          sudo mount -t nfs4 -v ${SERVER_IP}:/lnmp/log /tmp2
          sudo mount -t nfs4
          sudo umount /tmp2
-         echo ::endgroup::
 
          echo "set LNMP_NFS_SERVER_HOST .env"
          sed -i "s#192.168.199.100#${SERVER_IP}#g" .env
 
-         echo ::group::Test k8s with nfs pv
          debug=1 ./lnmp-k8s create
          # echo ${SERVER_IP} laravel2.t.khs1994.com | sudo tee -a /etc/hosts
          ping -c 1 laravel2.t.khs1994.com || nslookup laravel2.t.khs1994.com
@@ -399,15 +396,12 @@ jobs:
          ./lnmp-k8s delete
          ./lnmp-k8s cleanup
          ./lnmp-k8s nfs down
-         echo ::endgroup::
 
-         echo ::group:: Test k8s with hostpath pv"
          cp -rf ../app ~/app-development
          ./lnmp-k8s create development --no-nfs
          sleep 50
          kubectl get -n lnmp all
          curl -k --connect-timeout 20 https://laravel2.t.khs1994.com
-         echo ::endgroup::
 
          test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (kubectl apply -f demo/runtimeClass/runtimeClass.yaml && kubectl apply -f demo/runtimeClass/pod.yaml) || true
          test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (kubectl apply -f demo/runtimeClass/runtimeClass.yaml && kubectl apply -f demo/runtimeClass/pod.yaml) || true
@@ -420,7 +414,11 @@ jobs:
          kubectl exec ${POD_NAME} -- uname -a || true
 
          sudo crictl version
+
+         echo ::group::crictl info
          sudo crictl info
+         echo ::endgroup::
+
          sudo ls -la /opt || true
          sudo ls -la /opt/k8s || true
          sudo ls -la ${K8S_ROOT:-/opt/k8s} || true

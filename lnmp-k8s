@@ -1480,12 +1480,16 @@ case $_command in
       $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
       $(_sudo) modprobe nfsd || true
       cd nfs-server
+
       if [ "$1" = 'down' ];then
-        exec docker-compose stop nfs
+        docker-compose stop nfs
+        exit
       elif [ "$1" = 'logs' ]; then
-        exec docker-compose logs nfs
+        docker-compose logs nfs
+        exit
       fi
-      exec docker-compose up -d nfs
+
+      docker-compose up -d nfs
       ;;
     * )
       command -v $_command > /dev/null && $_command $@ || echo "command not found"
