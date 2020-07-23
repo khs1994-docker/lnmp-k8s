@@ -943,7 +943,6 @@ _crio_install(){
   command -v yum > /dev/null && isRPM=1
 
   test -n "$isRPM" && $(_sudo) yum install -y \
-  containers-common \
   git \
   glib2-devel \
   glibc-devel \
@@ -967,11 +966,11 @@ _crio_install(){
   command -v apt > /dev/null \
   && $(_sudo) apt update -qq || true \
   ; $(_sudo) apt install -y software-properties-common \
-  && . /etc/os-release \
-  && sudo sh -c "echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/x${NAME}_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list" \
-  && wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/x${NAME}_${VERSION_ID}/Release.key -O- | sudo apt-key add - \
-  && $(_sudo) apt-get update -qq ; $(_sudo) apt-get install -y \
-  containers-common \
+  # && . /etc/os-release \
+  # && sudo sh -c "echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/x${NAME}_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list" \
+  # && wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/x${NAME}_${VERSION_ID}/Release.key -O- | sudo apt-key add - \
+  # && $(_sudo) apt-get update -qq \
+  ; $(_sudo) apt-get install -y \
   git \
   $(command -v go > /dev/null || echo "golang-go") \
   libassuan-dev \
@@ -983,10 +982,13 @@ _crio_install(){
   libsystemd-dev \
   libselinux1-dev \
   pkg-config \
-  $(command -v runc > /dev/null || echo "cri-o-runc") \
+  runc \
   libudev-dev \
   gcc \
   make
+
+  # containers-common
+  cp systemd/etc/containers/. /etc/containers
 
   go_path=`go env GOPATH | cut -d ":" -f 1`
 
