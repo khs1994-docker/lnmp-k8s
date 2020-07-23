@@ -367,7 +367,7 @@ jobs:
          sudo netstat -lnpt
 
          echo ::group::Test k8s
-         ./tests/test.sh
+         # ./tests/test.sh
          echo ::endgroup::
 
          sudo crictl version
