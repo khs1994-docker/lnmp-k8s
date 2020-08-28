@@ -8,4 +8,4 @@ $ wsl --unregister wsl-k8s-data
 $ wsl --unregister wsl-k8s
 ```
 
-*删除 `~/.khs1994-docker-lnmp/wsl-k8s`*
+**删除 `~/.khs1994-docker-lnmp/wsl-k8s`**
