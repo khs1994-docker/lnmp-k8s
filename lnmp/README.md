@@ -52,7 +52,7 @@ $ kubectl apply -k php/overlays/development -n lnmp
 ```bash
 $ kubectl apply -k nginx/overlays/development -n lnmp
 
-$ kubectl apply -f nginx/overlays/nodePort -n lnmp
+$ kubectl apply -k nginx/overlays/nodePort -n lnmp
 ```
 
 ## 计划任务

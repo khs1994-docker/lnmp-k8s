@@ -29,7 +29,7 @@ kubectl apply -k redis/overlays/development -n lnmp
 kubectl apply -k mysql/overlays/development -n lnmp
 kubectl apply -k php/overlays/development -n lnmp
 kubectl apply -k nginx/overlays/development -n lnmp
-kubectl apply -f nginx/overlays/nodePort-80-443 -n lnmp
+kubectl apply -k nginx/overlays/nodePort-80-443 -n lnmp
 cd ..
 echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
 ping -c 1 laravel2.t.khs1994.com || nslookup laravel2.t.khs1994.com
@@ -50,7 +50,7 @@ kubectl apply -k redis/overlays/development -n lnmp
 kubectl apply -k mysql/overlays/development -n lnmp
 kubectl apply -k php/overlays/development -n lnmp
 kubectl apply -k nginx/overlays/development -n lnmp
-kubectl apply -f nginx/overlays/nodePort-80-443 -n lnmp
+kubectl apply -k nginx/overlays/nodePort-80-443 -n lnmp
 cd ..
 sleep 50
 kubectl get -n lnmp all

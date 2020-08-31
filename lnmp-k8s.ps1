@@ -3,11 +3,8 @@
   lnmp k8s CLI
 .DESCRIPTION
   lnmp k8s CLI
-.EXAMPLE
-  PS C:\> lnmp-k8s create development
 
-.EXAMPLE
-  PS C:\> lnmp-k8s create development --dry-run
+  $ ./lnmp-k8s
 
 .INPUTS
 
