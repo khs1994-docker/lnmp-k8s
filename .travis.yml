@@ -213,6 +213,9 @@ before_script:
   - git diff
   - |
     if [ "$CNI_CALICO_EBPF" = 'true' ];then
+      cat addons/cni/calico-eBPF/kubernetes.yaml \
+          | sed -e "s/192.168.199.100/${SERVER_IP}/g" -e "s/16443/6443/g" \
+          | kubectl apply -f -
       kubectl apply -k addons/cni/calico-eBPF
     else
       kubectl apply -k addons/cni/calico-custom
@@ -241,8 +244,8 @@ before_script:
 
   - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
   - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
-  # - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
-
+  - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
+  - for id in $(sudo crictl ps -a -q);do sudo crictl logs $id;done || true
 script:
   - df -h
   - kubectl apply -k addons/coredns

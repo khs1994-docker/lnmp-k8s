@@ -291,6 +291,10 @@ jobs:
          sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/patch.json
          git diff
          if [ "$CNI_CALICO_EBPF" = 'true' ];then
+           export SERVER_IP=`cat .server_ip`
+           cat addons/cni/calico-eBPF/kubernetes.yaml \
+              | sed -e "s/192.168.199.100/${SERVER_IP}/g" -e "s/16443/6443/g" \
+              | kubectl apply -f -
            kubectl apply -k addons/cni/calico-eBPF
          else
            kubectl apply -k addons/cni/calico-custom
@@ -320,7 +324,7 @@ jobs:
          kubectl describe deployment.apps/calico-kube-controllers -n kube-system
          kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
          sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
-         # sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
+         for id in $(sudo crictl ps -a -q);do sudo crictl logs $id;done || true
      - name: Setup addons
        run: |
          set -x
