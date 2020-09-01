@@ -23,8 +23,8 @@ cache:
 
 before_install:
   - uname -a
-  - mount bpffs /sys/fs/bpf -t bpf || true
-  - mount -t bpf || true
+  - sudo mount bpffs /sys/fs/bpf -t bpf || true
+  - sudo mount -t bpf || true
   - env
   # /home/travis/build/khs1994-docker/lnmp-k8s
   # /home/travis/gopath/src/github.com/[secure]-docker/lnmp-k8s
@@ -143,7 +143,10 @@ before_script:
   - test -n "$CMD_FAILED" && false || true
   # worker
   - sudo systemctl cat kube-proxy
-  - sudo systemctl start kube-proxy || CMD_FAILED=1
+  - |
+    if ! [ "$CNI_CALICO_EBPF" = 'true' ];then
+      sudo systemctl start kube-proxy || CMD_FAILED=1
+    fi
   - test -n "$CMD_FAILED" && sudo journalctl -u kube-proxy || true
   - test -n "$CMD_FAILED" && false || true
 
@@ -208,7 +211,12 @@ before_script:
   - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/patch.json
   - sed -i "s#eth0#ens4#g" addons/cni/calico-custom/patch.json
   - git diff
-  - kubectl apply -k addons/cni/calico-custom
+  - |
+    if [ "$CNI_CALICO_EBPF" = 'true' ];then
+      kubectl apply -k addons/cni/calico-eBPF
+    else
+      kubectl apply -k addons/cni/calico-custom
+    fi
 
   - kubectl get node
   - kubectl get all -A
@@ -345,15 +353,23 @@ jobs:
       dist: focal
       env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url"
     # current stable version
+    # cri-o
     - os: linux
       dist: focal
       env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio" k8S_IMAGE_NS=khs1994 k8S_IMAGE_REGISTRY=useccr.ccs.tencentyun.com
+    # containerd
     - os: linux
       dist: focal
       env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_GET="--url"                            GENERATE_CLI_HELP=true
+    # containerd + cni calico ebpf
+    - os: linux
+      dist: focal
+      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_GET="--url"                            CNI_CALICO_EBPF=true
+    # docker
     - os: linux
       dist: focal
       env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--docker"
+    # custom k8s root
     - os: linux
       dist: focal
       env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_GET="--url"                            K8S_ROOT=/opt/k8s-custom

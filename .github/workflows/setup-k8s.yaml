@@ -22,6 +22,7 @@ jobs:
      DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
      DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
      LNMP_DOCKER_MIRROR: registry-1.docker.io
+     CNI_CALICO_EBPF: ${{matrix.CNI_CALICO_EBPF}}
    strategy:
      max-parallel: 1
      matrix:
@@ -51,6 +52,11 @@ jobs:
          dist: 20.04
          CI_KUBERNETES_VERSION: 1.19.0
          LNMP_K8S_GET: --url
+       - os: ubuntu
+         dist: 20.04
+         CI_KUBERNETES_VERSION: 1.19.0
+         LNMP_K8S_GET: --url
+         CNI_CALICO_EBPF: 'true'
        - os: ubuntu
          dist: 20.04
          CI_KUBERNETES_VERSION: 1.19.0
@@ -91,8 +97,8 @@ jobs:
 
          uname -a
 
-         mount bpffs /sys/fs/bpf -t bpf || true
-         mount -t bpf || true
+         sudo mount bpffs /sys/fs/bpf -t bpf || true
+         sudo mount -t bpf || true
 
          df -h
 
@@ -213,7 +219,9 @@ jobs:
 
          # worker
          sudo systemctl cat kube-proxy
-         sudo systemctl start kube-proxy || CMD_FAILED=1
+         if ! [ "$CNI_CALICO_EBPF" = 'true' ];then
+           sudo systemctl start kube-proxy || CMD_FAILED=1
+         fi
          test -n "$CMD_FAILED" && sudo journalctl -u kube-proxy || true
          test -n "$CMD_FAILED" && false || true
 
@@ -282,8 +290,11 @@ jobs:
 
          sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/patch.json
          git diff
-         kubectl apply -k addons/cni/calico-custom
-
+         if [ "$CNI_CALICO_EBPF" = 'true' ];then
+           kubectl apply -k addons/cni/calico-eBPF
+         else
+           kubectl apply -k addons/cni/calico-custom
+         fi
          kubectl get node
          kubectl get all -A
          kubectl api-versions
