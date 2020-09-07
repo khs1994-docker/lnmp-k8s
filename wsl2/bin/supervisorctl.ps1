@@ -1,3 +1,8 @@
+. $PSScriptRoot/../.env.example.ps1
+. $PSScriptRoot/../.env.ps1
+
+& $PSScriptRoot/kube-check
+
 Function printInfo() {
   write-host "
 ==> $args
@@ -27,6 +32,27 @@ Function _generate_conf() {
   & $PSScriptRoot/../kubelet.ps1
   printInfo "handle kube-containerd supervisor conf ..."
   & $PSScriptRoot/../kube-containerd.ps1
+
+  printInfo "handle cri-o supervisor conf ..."
+  & $PSScriptRoot/../cri-o.ps1
+
+  $NODE_CONF = "programs="
+
+  if ("$CRI" -eq "cri-o") {
+    $NODE_CONF += "cri-o"
+  }
+  else {
+    $NODE_CONF += "kube-containerd"
+  }
+
+  if ("$CNI_CALICO_EBPF" -ne "true") {
+    $NODE_CONF += ",kube-proxy"
+  }
+
+  $NODE_CONF += ",kubelet"
+
+  Write-Output "[group:kube-node]
+$NODE_CONF" | out-file $PSScriptRoot/../supervisor.d/kube-node.ini -NoNewline
 }
 
 if ($args[0] -eq 'cp') {
