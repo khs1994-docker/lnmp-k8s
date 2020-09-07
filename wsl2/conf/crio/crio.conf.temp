@@ -1,9 +1,10 @@
 [crio]
-  version_file_persist = "/opt/k8s/var/lib/crio/version"
-  log_dir = "/opt/k8s/var/log/crio/pods"
+  version_file_persist = "##K8S_ROOT##/var/lib/crio/version"
+  log_dir = "##K8S_ROOT##/var/log/crio/pods"
   [crio.runtime]
     cgroup_manager = "cgroupfs"
-    log_level = "debug"
+    # trace, debug, info, warn, error, fatal or panic (default: "info")
+    log_level = "info"
       [crio.runtime.runtimes.runc]
         runtime_path = ""
         runtime_type = "oci"
