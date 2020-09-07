@@ -6,8 +6,9 @@ $wsl_ip = wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' 
 $NODE_NAME = "wsl2"
 # $KUBE_APISERVER='https://x.x.x.x:16443'
 # $K8S_ROOT="/opt/k8s"
-$K8S_WSL2_ROOT = wsl -d wsl-k8s -- wslpath "'$PSScriptRoot'"
-$WINDOWS_HOME_ON_WSL2 = wsl -d wsl-k8s -- wslpath "'$HOME'"
+$WINDOWS_ROOT_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$PSScriptRoot'"
+$WINDOWS_HOME_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$HOME'"
+$SUPERVISOR_LOG_ROOT="${WINDOWS_HOME_IN_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log"
 
 (Get-Content $PSScriptRoot/conf/kubelet.config.yaml.temp) `
   -replace "##NODE_NAME##", $NODE_NAME `
@@ -32,7 +33,7 @@ $command = wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kubelet `
   --container-runtime-endpoint=$CONTAINER_RUNTIME_ENDPOINT `
   --root-dir=/var/lib/kubelet `
   --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig `
-  --config=${K8S_WSL2_ROOT}/conf/kubelet.config.yaml `
+  --config=${WINDOWS_ROOT_IN_WSL2}/conf/kubelet.config.yaml `
   --hostname-override=${NODE_NAME} `
   --volume-plugin-dir=${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ `
   --logtostderr=true `
@@ -80,8 +81,8 @@ mkdir -Force $PSScriptRoot/supervisor.d | out-null
 echo "[program:kubelet]
 
 command=$command
-stdout_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log/kubelet-stdout.log
-stderr_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log/kubelet-error.log
+stdout_logfile=${SUPERVISOR_LOG_ROOT}/kubelet-stdout.log
+stderr_logfile=${SUPERVISOR_LOG_ROOT}/kubelet-error.log
 directory=/
 autostart=false
 autorestart=false

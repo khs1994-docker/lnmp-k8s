@@ -867,8 +867,14 @@ _crio_config(){
   sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/crio/crio.conf \
     | $(_sudo) tee ${K8S_ROOT}/etc/crio/crio.conf
 
-  sed -i "s!/opt/k8s!${K8S_ROOT}!g" ${K8S_ROOT}/etc/containers/storage.conf
-  sed -i "s!/opt/k8s!${K8S_ROOT}!g" ${K8S_ROOT}/etc/containers/registries.d/default.yaml
+  $(_sudo) sed -i "s!/opt/k8s!${K8S_ROOT}!g" \
+    ${K8S_ROOT}/etc/containers/containers.conf
+  $(_sudo) sed -i "s!/opt/k8s!${K8S_ROOT}!g" \
+    ${K8S_ROOT}/etc/containers/storage.conf
+  $(_sudo) sed -i "s!/opt/k8s!${K8S_ROOT}!g" \
+    ${K8S_ROOT}/etc/containers/policy.json
+  $(_sudo) sed -i "s!/opt/k8s!${K8S_ROOT}!g" \
+    ${K8S_ROOT}/etc/containers/registries.d/default.yaml
 
   _cri_sysctl
 
