@@ -1220,8 +1220,7 @@ $ $(_sudo) systemctl start kubelet
 
 $ $(_sudo) systemctl start docker (Docker runtime only)
 $ $(_sudo) systemctl start kube-containerd (Containerd runtime only)
-$ $(_sudo) systemctl start kube-containerd-130 (Containerd runtime only)
-$ $(_sudo) systemctl start kube-crio (CRI-O runtime only)
+$ $(_sudo) systemctl start crio (CRI-O runtime only)
 "
 }
 
