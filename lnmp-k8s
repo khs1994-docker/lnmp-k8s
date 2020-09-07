@@ -422,7 +422,7 @@ EOF
 
 _gvisor_crio_conf(){
   print_info "config crio with gvisor(runsc) ..."
-  cat <<EOF | $(_sudo) tee -a /etc/crio/crio.conf
+  cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/crio/crio.conf
 [crio.runtime.runtimes.runsc]
   runtime_path = "/usr/local/bin/runsc"
 EOF
