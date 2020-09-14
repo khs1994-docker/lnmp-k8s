@@ -39,7 +39,10 @@ before_install:
         jq
   - jq --version || true
   - docker-compose --version || true
-  - sudo rm -rf $(command -v docker-compose) || true
+  - |
+    if [ $(go env GOARCH) = "arm64" ];then
+      sudo rm -rf $(command -v docker-compose) || true
+    fi
   # /home/travis/build/khs1994-docker/lnmp-k8s
   # /home/travis/gopath/src/github.com/[secure]-docker/lnmp-k8s
   - pwd
