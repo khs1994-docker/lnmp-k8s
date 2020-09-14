@@ -241,7 +241,7 @@ before_script:
   - kubectl get csr
 
   - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/patch.json
-  - sed -i "s#eth0#ens4#g" addons/cni/calico-custom/patch.json
+  - sed -i "s#eth0#${net_interface}#g" addons/cni/calico-custom/patch.json
   - git diff
   - |
     if [ "$CNI_CALICO_EBPF" = 'true' ];then
@@ -275,6 +275,7 @@ before_script:
   - kubectl get all -A
 
   - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
+  - kubectl describe pod -n kube-system -l k8s-app=calico-node
   - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
   - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
   - for id in $(sudo crictl ps -a -q);do sudo crictl logs $id;done || true
