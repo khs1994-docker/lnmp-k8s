@@ -47,7 +47,10 @@ before_install:
   - git clone --depth=1 -b 19.03 https://github.com/khs1994-docker/lnmp ~/lnmp
   - cp -r ~/lnmp/. ~/gopath/src/github.com/khs1994-docker
   - ls -la ~/gopath/src/github.com/khs1994-docker
-  - $HOME/gopath/src/github.com/khs1994-docker/lnmp-docker compose -f
+  - |
+    if [ $(go env GOARCH) = "arm64" ];then
+      $HOME/gopath/src/github.com/khs1994-docker/lnmp-docker compose -f
+    fi
   # remove some apt source
   - cat /etc/apt/sources.list
   - ls /etc/apt/sources.list.d || true

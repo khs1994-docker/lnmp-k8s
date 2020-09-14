@@ -1038,7 +1038,7 @@ _k8s_install_systemd(){
   cd - > /dev/null
 
   # https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/supported-platform.md
-  if [ "${GOARCH}" -eq 'arm64' ];then
+  if [ "${GOARCH}" = 'arm64' ];then
     sed -i -e "s/_ETCD_UNSUPPORTED_ARCH/ETCD_UNSUPPORTED_ARCH/g" \
         -e "s/__GOARCH__/${GOARCH}/g" \
         /etc/systemd/system/etcd.service
