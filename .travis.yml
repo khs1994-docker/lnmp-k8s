@@ -27,6 +27,9 @@ before_install:
   - sudo mount -t bpf || true
   - env
 
+  - sudo update-alternatives --display iptables || true
+  - sudo update-alternatives --list    iptables || true
+
   - jq --version || true
   - docker-compose --version || true
 
@@ -97,7 +100,7 @@ before_install:
   # 升级最新 Docker Compose
   # - docker-compose --version
   # - sudo rm /usr/local/bin/docker-compose
-  # - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION:-1.26.0}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  # - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION:-1.27.0}/docker-compose-`uname -s`-`uname -m` > docker-compose
   # - sudo install -m755 docker-compose /usr/local/bin
   # - docker-compose --version
   - sudo cat /etc/docker/daemon.json
@@ -168,7 +171,7 @@ before_script:
     if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 19 ];then \
       echo "replace kube-scheduler config version" \
       && echo "remove it when k8s version ge 1.19" \
-      && sudo sed -i "s#kubescheduler.config.k8s.io/v1alpha1#kubescheduler.config.k8s.io/v1beta1#g" ${K8S_ROOT:-/opt/k8s}/conf/kube-scheduler.config.yaml ; \
+      && sudo sed -i "s#kubescheduler.config.k8s.io/v1alpha1#kubescheduler.config.k8s.io/v1beta1#g" ${K8S_ROOT:-/opt/k8s}/etc/kubernetes/kube-scheduler.config.yaml ; \
     fi
   - sudo systemctl start kube-scheduler || CMD_FAILED=1
   - test -n "$CMD_FAILED" && sudo journalctl -u kube-scheduler || true

@@ -34,14 +34,14 @@ Start-Process -FilePath etcd `
     --initial-cluster-state="new" `
     --initial-cluster-token="mytoken" `
     --advertise-client-urls="http://${K8S_ETCD_HOST}:${K8S_ETCD_LISTEN_CLIENT_PORT}" `
-    --cert-file="${K8S_ROOT}/certs/etcd.pem" `
-    --key-file="${K8S_ROOT}/certs/etcd-key.pem" `
+    --cert-file="${K8S_ROOT}/etc/kubernetes/pki/etcd.pem" `
+    --key-file="${K8S_ROOT}/etc/kubernetes/pki/etcd-key.pem" `
     --client-cert-auth=true `
-    --trusted-ca-file="${K8S_ROOT}/certs/etcd-ca.pem" `
-    --peer-cert-file="${K8S_ROOT}/certs/etcd-peer.pem" `
-    --peer-key-file="${K8S_ROOT}/certs/etcd-peer-key.pem" `
+    --trusted-ca-file="${K8S_ROOT}/etc/kubernetes/pki/etcd-ca.pem" `
+    --peer-cert-file="${K8S_ROOT}/etc/kubernetes/pki/etcd-peer.pem" `
+    --peer-key-file="${K8S_ROOT}/etc/kubernetes/pki/etcd-peer-key.pem" `
     --peer-client-cert-auth=true `
-    --peer-trusted-ca-file="${K8S_ROOT}/certs/etcd-ca.pem").split(' ')
+    --peer-trusted-ca-file="${K8S_ROOT}/etc/kubernetes/pki/etcd-ca.pem").split(' ')
 
 Start-Sleep 1
 

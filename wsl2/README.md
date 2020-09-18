@@ -224,7 +224,7 @@ $ ./wsl2/bin/supervisorctl start kube-node:
 certificate_manager.go:464] Current certificate is missing requested IP addresses [172.21.21.166]
 ```
 
-* 每次 IP 变化时删除 `${K8S_ROOT}/certs/kubelet-server-*.pem` 证书.
+* 每次 IP 变化时删除 `${K8S_ROOT}/etc/kubernetes/pki/kubelet-server-*.pem` 证书.
 
 ## 最终脚本(日常使用)
 

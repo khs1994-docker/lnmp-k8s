@@ -29,12 +29,12 @@ if ("$CRI" -eq 'cri-o') {
 }
 
 $command = Invoke-WSL echo ${K8S_ROOT}/bin/kubelet `
-  --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig `
-  --cert-dir=${K8S_ROOT}/certs `
+  --bootstrap-kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet-bootstrap.kubeconfig `
+  --cert-dir=${K8S_ROOT}/etc/kubernetes/pki `
   --container-runtime=remote `
   --container-runtime-endpoint=$CONTAINER_RUNTIME_ENDPOINT `
   --root-dir=/var/lib/kubelet `
-  --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig `
+  --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet.kubeconfig `
   --config=${WINDOWS_ROOT_IN_WSL2}/conf/kubelet.config.yaml `
   --hostname-override=${NODE_NAME} `
   --volume-plugin-dir=${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ `
@@ -43,9 +43,9 @@ $command = Invoke-WSL echo ${K8S_ROOT}/bin/kubelet `
   --v=2
 
 Function _reset() {
-  Invoke-WSL rm -rf ${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
-  Invoke-WSL rm -rf ${K8S_ROOT}/conf/kubelet.kubeconfig
-  Invoke-WSL rm -rf ${K8S_ROOT}/certs/kubelet-*
+  Invoke-WSL rm -rf ${K8S_ROOT}/etc/kubernetes/kubelet-bootstrap.kubeconfig
+  Invoke-WSL rm -rf ${K8S_ROOT}/etc/kubernetes/kubelet.kubeconfig
+  Invoke-WSL rm -rf ${K8S_ROOT}/etc/kubernetes/pki/kubelet-*
 }
 
 if ($args[0] -eq "reset") {
@@ -112,14 +112,14 @@ if (Test-Path $PSScriptRoot/conf/.wsl_ip) {
   else {
     Write-Warning "wsl ip changed, reset ..."
     echo $wsl_ip > $PSScriptRoot/conf/.wsl_ip
-    wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-server-*.pem
+    wsl -u root -- rm -rf ${K8S_ROOT}/etc/kubernetes/pki/kubelet-server-*.pem
     # _reset
   }
 }
 else {
   Write-Warning "wsl ip changed, reset ..."
   echo $wsl_ip > $PSScriptRoot/conf/.wsl_ip
-  Invoke-WSL rm -rf ${K8S_ROOT}/certs/kubelet-server-*.pem
+  Invoke-WSL rm -rf ${K8S_ROOT}/etc/kubernetes/pki/kubelet-server-*.pem
   # _reset
 }
 
