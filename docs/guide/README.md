@@ -27,9 +27,9 @@ $ journalctl -u etcd-member
 
 $ ETCDCTL_API=3 etcdctl \
     --endpoints=https://${node_ip:-192.168.57.110}:2379 \
-    --cacert=/etc/kubernetes/pki/etcd/ca.pem \
-    --cert=/etc/kubernetes/pki/etcd/client.pem \
-    --key=/etc/kubernetes/pki/etcd/client-key.pem endpoint health
+    --cacert=/etc/kubernetes/pki/etcd-ca.pem \
+    --cert=/etc/kubernetes/pki/etcd-client.pem \
+    --key=/etc/kubernetes/pki/etcd-client-key.pem endpoint health
 ```
 
 - **2379** 提供 HTTP(S) API 服务，供客户端交互

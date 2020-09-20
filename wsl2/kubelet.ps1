@@ -70,14 +70,6 @@ if ($args[0] -eq "reset") {
 # $ kubectl --kubeconfig .\rpi\certs\kubectl.kubeconfig get csr --sort-by='{.metadata.creationTimestamp}'
 #
 
-wsl -d wsl-k8s -- sh -c "command -v runc > /dev/null 2>&1"
-
-if (!$?) {
-  Write-Warning "==> runc not found, please install docker-ce first"
-
-  exit 1
-}
-
 mkdir -Force $PSScriptRoot/supervisor.d | out-null
 
 echo "[program:kubelet]
@@ -135,6 +127,14 @@ if ($args[0] -eq 'init') {
   exit
 }
 
+wsl -d wsl-k8s -- sh -c "command -v runc > /dev/null 2>&1"
+
+if (!$?) {
+  Write-Warning "==> runc not found, please install docker-ce first"
+
+  exit 1
+}
+
 sleep 5
 
 Function _mountKubelet($source, $dest) {
@@ -150,12 +150,19 @@ Function _mountKubelet($source, $dest) {
 }
 
 function _mountKubelet_all() {
-  _mountKubelet ${K8S_ROOT}/var/lib/kubelet /var/lib/kubelet
+  _mountKubelet ${K8S_ROOT}/var/lib/ci         /var/lib/ci
   _mountKubelet ${K8S_ROOT}/var/lib/khs1994-docker-lnmp /var/lib/khs1994-docker-lnmp
+
+  _mountKubelet ${K8S_ROOT}/var/lib/docker         /var/lib/docker
+
   _mountKubelet ${K8S_ROOT}/opt/cni/bin /opt/k8s/opt/cni/bin
   _mountKubelet ${K8S_ROOT}/etc/cni/net.d /opt/k8s/etc/cni/net.d
+
+  _mountKubelet ${K8S_ROOT}/var/lib/kubelet /var/lib/kubelet
   _mountKubelet ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins /opt/k8s/usr/libexec/kubernetes/kubelet-plugins
+
   _mountKubelet ${K8S_ROOT}/etc/containers /etc/containers
+
   _mountKubelet ${K8S_ROOT}/var/log/containers /var/log/containers
   _mountKubelet ${K8S_ROOT}/var/log/pods       /var/log/pods
 }

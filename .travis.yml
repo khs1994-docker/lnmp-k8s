@@ -245,6 +245,15 @@ before_script:
 
   - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/patch.json
   - sed -i "s#eth0#${net_interface}#g" addons/cni/calico-custom/patch.json
+  - |
+    if [ "${IPV6}" = 'true' ];then
+      sed -i -e "s#_IP6#IP6#g" \
+             -e "s#_FELIX_IPV6SUPPORT#FELIX_IPV6SUPPORT#g" \
+          addons/cni/calico-custom/patch.json
+
+      sed -i 's#assign_ipv6": "false#assign_ipv6": "true#g' \
+          addons/cni/calico/calico.yaml
+    fi
   - git diff
   - |
     if [ "$CNI_CALICO_EBPF" = 'true' ];then
@@ -307,6 +316,16 @@ script:
   - kubectl exec ${POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${POD_NAME} -- nslookup kubernetes || true
   - kubectl exec ${POD_NAME} -- ping -c 5 github.com || kubectl exec ${POD_NAME} -- nslookup github.com
   - kubectl exec ${POD_NAME} -- curl -k https://kubernetes/api || true
+  - kubectl expose pod/nginx --port=80
+
+  - kubectl get svc/nginx -o yaml
+  - kubectl get deployment/nginx -o yaml
+  - kubectl get pod/nginx -o yaml
+
+  - kubectl delete svc/nginx
+  # - kubectl apply -f demo/ipv6
+
+  - kubectl delete svc nginx || true
   - kubectl delete deployment nginx || true
   - kubectl delete pod nginx || true
   - kubectl get all
@@ -417,6 +436,10 @@ jobs:
     - os: linux
       dist: focal
       env: CI_KUBERNETES_VERSION=1.19.1 LNMP_K8S_GET="--url"                            CNI_CALICO_EBPF=true
+    # containerd + ipv6
+    - os: linux
+      dist: focal
+      env: CI_KUBERNETES_VERSION=1.19.1 LNMP_K8S_GET="--url"                            IPV6=true
     # docker
     - os: linux
       dist: focal
