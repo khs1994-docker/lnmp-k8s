@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>RBAC | K8s LNMP</title>
+    <meta name="generator" content="VuePress 1.4.1">
+    <undefined></undefined>
+    <meta name="description" content="Run LNMP On K8s">
+    <link rel="preload" href="/assets/css/0.styles.3101f2cb.css" as="style"><link rel="preload" href="/assets/js/app.a0e5fb67.js" as="script"><link rel="preload" href="/assets/js/2.d834efb6.js" as="script"><link rel="preload" href="/assets/js/30.7f69c7ff.js" as="script"><link rel="prefetch" href="/assets/js/10.20fa3164.js"><link rel="prefetch" href="/assets/js/11.132a5271.js"><link rel="prefetch" href="/assets/js/12.677dcfc9.js"><link rel="prefetch" href="/assets/js/13.5537bbff.js"><link rel="prefetch" href="/assets/js/14.6af0267f.js"><link rel="prefetch" href="/assets/js/15.26ead067.js"><link rel="prefetch" href="/assets/js/16.288fd269.js"><link rel="prefetch" href="/assets/js/17.a9e3a141.js"><link rel="prefetch" href="/assets/js/18.7a1271d9.js"><link rel="prefetch" href="/assets/js/19.77a8c9fb.js"><link rel="prefetch" href="/assets/js/20.f24d0bd7.js"><link rel="prefetch" href="/assets/js/21.b36a3ba4.js"><link rel="prefetch" href="/assets/js/22.1ee401ef.js"><link rel="prefetch" href="/assets/js/23.3fbd3214.js"><link rel="prefetch" href="/assets/js/24.32c8da18.js"><link rel="prefetch" href="/assets/js/25.516faab9.js"><link rel="prefetch" href="/assets/js/26.13caaafc.js"><link rel="prefetch" href="/assets/js/27.b00c102b.js"><link rel="prefetch" href="/assets/js/28.3006ea87.js"><link rel="prefetch" href="/assets/js/29.1f7dc6bb.js"><link rel="prefetch" href="/assets/js/3.05389591.js"><link rel="prefetch" href="/assets/js/31.a3625979.js"><link rel="prefetch" href="/assets/js/32.0a83963b.js"><link rel="prefetch" href="/assets/js/33.e903f47b.js"><link rel="prefetch" href="/assets/js/34.63e9f3f1.js"><link rel="prefetch" href="/assets/js/35.33ade96a.js"><link rel="prefetch" href="/assets/js/36.a4f90883.js"><link rel="prefetch" href="/assets/js/37.962a75d0.js"><link rel="prefetch" href="/assets/js/38.e4d95310.js"><link rel="prefetch" href="/assets/js/39.aa9d88ef.js"><link rel="prefetch" href="/assets/js/4.a7a1fbc5.js"><link rel="prefetch" href="/assets/js/40.33e04d3c.js"><link rel="prefetch" href="/assets/js/41.f5c6cd92.js"><link rel="prefetch" href="/assets/js/42.fcab2553.js"><link rel="prefetch" href="/assets/js/43.8e477e36.js"><link rel="prefetch" href="/assets/js/44.5bccee01.js"><link rel="prefetch" href="/assets/js/45.caa3f887.js"><link rel="prefetch" href="/assets/js/46.60d45368.js"><link rel="prefetch" href="/assets/js/47.f3683d8d.js"><link rel="prefetch" href="/assets/js/48.86a7b059.js"><link rel="prefetch" href="/assets/js/49.cc7ee4c8.js"><link rel="prefetch" href="/assets/js/5.4b3c0a87.js"><link rel="prefetch" href="/assets/js/50.ba6ba473.js"><link rel="prefetch" href="/assets/js/51.8ed7c7e3.js"><link rel="prefetch" href="/assets/js/52.6f7200da.js"><link rel="prefetch" href="/assets/js/53.4392a0b3.js"><link rel="prefetch" href="/assets/js/54.7b512f71.js"><link rel="prefetch" href="/assets/js/55.c0a0594c.js"><link rel="prefetch" href="/assets/js/56.28ad9f74.js"><link rel="prefetch" href="/assets/js/57.bec8e462.js"><link rel="prefetch" href="/assets/js/58.af13b3ca.js"><link rel="prefetch" href="/assets/js/59.78926ba4.js"><link rel="prefetch" href="/assets/js/6.e0c4fd9f.js"><link rel="prefetch" href="/assets/js/60.32ebb86d.js"><link rel="prefetch" href="/assets/js/61.ba45db56.js"><link rel="prefetch" href="/assets/js/62.dec4df64.js"><link rel="prefetch" href="/assets/js/63.3c9596aa.js"><link rel="prefetch" href="/assets/js/64.4bf8cd38.js"><link rel="prefetch" href="/assets/js/65.67ab2b3a.js"><link rel="prefetch" href="/assets/js/66.cf842600.js"><link rel="prefetch" href="/assets/js/67.4affd448.js"><link rel="prefetch" href="/assets/js/68.69358365.js"><link rel="prefetch" href="/assets/js/69.27dc1577.js"><link rel="prefetch" href="/assets/js/7.2bd9ac31.js"><link rel="prefetch" href="/assets/js/70.d30be88e.js"><link rel="prefetch" href="/assets/js/71.edc9aaa6.js"><link rel="prefetch" href="/assets/js/8.0b95718a.js"><link rel="prefetch" href="/assets/js/9.aba76824.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.3101f2cb.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">K8s LNMP</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/setup/" class="nav-link">
+  部署
+</a></div><div class="nav-item"><a href="/guide/" class="nav-link router-link-active">
+  教程
+</a></div><div class="nav-item"><a href="/example/" class="nav-link">
+  示例
+</a></div><div class="nav-item"><a href="/addons/" class="nav-link">
+  插件
+</a></div><div class="nav-item"><a href="/log/" class="nav-link">
+  日志
+</a></div><div class="nav-item"><a href="/storage/" class="nav-link">
+  存储
+</a></div><div class="nav-item"><a href="/node/" class="nav-link">
+  节点
+</a></div><div class="nav-item"><a href="https://github.com/khs1994-docker/lnmp-k8s" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><a href="https://khs1994.com" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  khs1994.com
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><a href="https://cloud.tencent.com/act/cps/redirect?redirect=10058&amp;cps_key=3a5255852d5db99dcd5da4c72f05df61" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  腾讯云容器服务
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/setup/" class="nav-link">
+  部署
+</a></div><div class="nav-item"><a href="/guide/" class="nav-link router-link-active">
+  教程
+</a></div><div class="nav-item"><a href="/example/" class="nav-link">
+  示例
+</a></div><div class="nav-item"><a href="/addons/" class="nav-link">
+  插件
+</a></div><div class="nav-item"><a href="/log/" class="nav-link">
+  日志
+</a></div><div class="nav-item"><a href="/storage/" class="nav-link">
+  存储
+</a></div><div class="nav-item"><a href="/node/" class="nav-link">
+  节点
+</a></div><div class="nav-item"><a href="https://github.com/khs1994-docker/lnmp-k8s" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><a href="https://khs1994.com" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  khs1994.com
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><a href="https://cloud.tencent.com/act/cps/redirect?redirect=10058&amp;cps_key=3a5255852d5db99dcd5da4c72f05df61" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  腾讯云容器服务
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav>  <ul class="sidebar-links"><li><a href="/guide/etcd.html" class="sidebar-link">Etcd</a></li><li><a href="/guide/network.html" class="sidebar-link">网络出错</a></li><li><a href="/guide/port.html" class="sidebar-link">端口</a></li><li><a href="/guide/ingress-nginx.html" class="sidebar-link">Ingress NGINX</a></li><li><a href="/guide/rollout.html" class="sidebar-link">滚动更新</a></li><li><a href="/guide/secret.html" class="sidebar-link">Secret</a></li><li><a href="/guide/helm.html" class="sidebar-link">Helm 3</a></li><li><a href="/guide/kustomize.html" class="sidebar-link">Kustomize</a></li><li><a href="/guide/arm64.html" class="sidebar-link">arm64</a></li><li><a href="/guide/virtualbox.html" class="sidebar-link">VirtualBox</a></li><li><a href="/guide/podman.html" class="sidebar-link">podman</a></li><li><a href="/guide/kubectl.html" class="sidebar-link">kubectl</a></li><li><a href="/resources/configMap.html" class="sidebar-link">configMap</a></li><li><a href="/guide/mod.html" class="sidebar-link">内核模块相关命令</a></li><li><a href="/guide/ssh.html" class="sidebar-link">SSH 隧道</a></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="rbac"><a href="#rbac" class="header-anchor">#</a> RBAC</h1> <h2 id="新建用户"><a href="#新建用户" class="header-anchor">#</a> 新建用户</h2> <div class="language-bash extra-class"><pre class="language-bash"><code><span class="token comment"># 用户</span>
+<span class="token assign-left variable">CN_NAME</span><span class="token operator">=</span><span class="token string">'username'</span>
+<span class="token comment"># 用户组</span>
+<span class="token assign-left variable">O</span><span class="token operator">=</span><span class="token string">'scope:groupname'</span>
+
+<span class="token builtin class-name">echo</span> <span class="token string">'{
+    &quot;CN&quot;:&quot;'</span><span class="token variable">$CN_NAME</span><span class="token string">'&quot;,
+    &quot;hosts&quot;:[&quot;&quot;],
+    &quot;key&quot;:{
+      &quot;algo&quot;:&quot;ecdsa&quot;,
+      &quot;size&quot;: 384
+    },
+    &quot;names&quot;:[{
+      &quot;C&quot;:&quot;CN&quot;,
+      &quot;ST&quot;:&quot;Beijing&quot;,
+      &quot;L&quot;:&quot;Beijing&quot;,
+      &quot;O&quot;:&quot;'</span><span class="token variable">$O</span><span class="token string">'&quot;,
+      &quot;OU&quot;:&quot;khs1994.com&quot;
+    }]
+    }'</span> <span class="token punctuation">\</span>
+       <span class="token operator">|</span> cfssl gencert -config<span class="token operator">=</span>ca-config.json -ca<span class="token operator">=</span>ca.pem -ca-key<span class="token operator">=</span>ca-key.pem  <span class="token punctuation">\</span>
+       -profile<span class="token operator">=</span>kubernetes - <span class="token operator">|</span> cfssljson -bare <span class="token variable">$CN_NAME</span>
+
+$ kubectl config set-cluster myCluster <span class="token punctuation">\</span>
+  --certificate-authority<span class="token operator">=</span>ca.pem <span class="token punctuation">\</span>
+  --embed-certs<span class="token operator">=</span>true <span class="token punctuation">\</span>
+  --server<span class="token operator">=</span><span class="token variable">${KUBE_APISERVER}</span> <span class="token punctuation">\</span>
+  --kubeconfig<span class="token operator">=</span>kubectl.kubeconfig
+
+$ kubectl config set-credentials <span class="token variable">$CN_NAME</span> <span class="token punctuation">\</span>
+  --client-certificate<span class="token operator">=</span><span class="token variable">$CN_NAME</span>.pem <span class="token punctuation">\</span>
+  --client-key<span class="token operator">=</span><span class="token variable">$CN_NAME</span>-key.pem <span class="token punctuation">\</span>
+  --embed-certs<span class="token operator">=</span>true <span class="token punctuation">\</span>
+  --kubeconfig<span class="token operator">=</span>kubectl.kubeconfig
+
+$ kubectl config set-context myContext <span class="token punctuation">\</span>
+  --cluster<span class="token operator">=</span>myCluster <span class="token punctuation">\</span>
+  --user<span class="token operator">=</span><span class="token variable">$CN_NAME</span> <span class="token punctuation">\</span>
+  --kubeconfig<span class="token operator">=</span>kubectl.kubeconfig
+
+$ kubectl config use-context myContext --kubeconfig<span class="token operator">=</span>kubectl.kubeconfig
+</code></pre></div><p>下面设置 <code>scope:groupname</code> 组的用户只能列出和获取到 <code>default</code> 命名空间的 <code>pod</code>，其他资源无法获取。</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token comment"># 角色拥有的权限</span>
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Role
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> rbac.authorization.k8s.io/v1
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> default<span class="token punctuation">:</span>pod_get
+  <span class="token key atrule">namespace</span><span class="token punctuation">:</span> default
+<span class="token key atrule">rules</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">apiGroups</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;&quot;</span><span class="token punctuation">]</span>
+    <span class="token key atrule">verbs</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;get&quot;</span><span class="token punctuation">,</span><span class="token string">&quot;list&quot;</span><span class="token punctuation">]</span>
+    <span class="token key atrule">resources</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;pods&quot;</span><span class="token punctuation">]</span>
+<span class="token punctuation">---</span>
+<span class="token comment"># 将用户组与角色绑定</span>
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> RoleBinding
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> rbac.authorization.k8s.io/v1
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> default<span class="token punctuation">:</span>pod_get
+  <span class="token key atrule">namespace</span><span class="token punctuation">:</span> default
+<span class="token key atrule">subjects</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">kind</span><span class="token punctuation">:</span> Group
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> scope<span class="token punctuation">:</span>groupname
+    <span class="token key atrule">apiGroup</span><span class="token punctuation">:</span> rbac.authorization.k8s.io
+<span class="token key atrule">roleRef</span><span class="token punctuation">:</span>
+  <span class="token key atrule">kind</span><span class="token punctuation">:</span> Role
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> default<span class="token punctuation">:</span>pod_get
+  <span class="token key atrule">apiGroup</span><span class="token punctuation">:</span> rbac.authorization.k8s.io
+</code></pre></div></div> <footer class="page-edit"><!----> <!----></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.a0e5fb67.js" defer></script><script src="/assets/js/2.d834efb6.js" defer></script><script src="/assets/js/30.7f69c7ff.js" defer></script>
+  </body>
+</html>
