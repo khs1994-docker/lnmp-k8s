@@ -14,8 +14,8 @@ echo "==> Up nfs server"
 #   sudo sed -i "s/erichough/klutchell/g" nfs-server/docker-compose.yml
 # fi
 # ./lnmp-k8s nfs
-sudo modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
-sudo modprobe nfsd || true
+# sudo modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
+# sudo modprobe nfsd || true
 kubectl apply -k deploy/nfs-server
 sleep 60
 kubectl logs $(kubectl get pod -l app=nfs-server --no-headers | cut -d ' ' -f 1) || true

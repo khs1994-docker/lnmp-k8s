@@ -60,6 +60,10 @@ spec:
               name: nfs
           securityContext:
             privileged: true
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - SYS_MODULE
           env:
             - name: NFS_DISABLE_VERSION_3
               value: "true"
@@ -73,6 +77,8 @@ spec:
             - name: exports
               mountPath: /etc/exports
               subPath: exports
+            - name: lib_modules
+              mountPath: /lib/modules
       volumes:
         - name: root
           hostPath:
@@ -84,3 +90,6 @@ spec:
             items:
               - path: exports
                 key: exports
+        - name: lib_modules
+          hostPath:
+            path: /lib/modules
