@@ -3,21 +3,26 @@
 set -ex
 
 echo "==> Set app"
-mkdir -p ../app/laravel/public
-cp lnmp/app/index.php ../app/laravel/public/
+# mkdir -p ../app/laravel/public
+# cp lnmp/app/index.php ../app/laravel/public/
+
+mkdir -p /nfs/lnmp/app/laravel/public
+cp lnmp/app/index.php /nfs/lnmp/app/laravel/public/
 
 echo "==> Up nfs server"
-if ! [ $(go env GOARCH) = 'amd64' ];then
-  sudo sed -i "s/erichough/klutchell/g" nfs-server/docker-compose.yml
-fi
-./lnmp-k8s nfs
+# if ! [ $(go env GOARCH) = 'amd64' ];then
+#   sudo sed -i "s/erichough/klutchell/g" nfs-server/docker-compose.yml
+# fi
+# ./lnmp-k8s nfs
+kubectl apply -k deploy/nfs-server
 sleep 30
 docker ps -a
 ./lnmp-k8s nfs logs
 sudo mkdir -p /tmp2
 # install nfs dep
 sudo apt install -y nfs-common
-sudo mount -t nfs4 -v ${SERVER_IP}:/lnmp/log /tmp2
+# sudo mount -t nfs4 -v ${SERVER_IP}:/lnmp/log /tmp2
+sudo mount -t nfs4 -v 10.254.0.49:/lnmp/log /tmp2
 sudo umount /tmp2
 
 echo "==> set LNMP_NFS_SERVER_HOST .env"
@@ -25,7 +30,8 @@ echo "==> set LNMP_NFS_SERVER_HOST .env"
 
 echo "==> Test LNMP with NFS"
 cd lnmp
-kubectl kustomize storage/pv/nfs | sed "s/192.168.199.100/${SERVER_IP}/g" | kubectl apply -f -
+# kubectl kustomize storage/pv/nfs | sed "s/10.254.0.49/${SERVER_IP}/g" | kubectl apply -f -
+kubectl apply -k storage/pv/nfs
 kubectl create ns lnmp
 kubectl apply -k storage/pvc/nfs -n lnmp
 kubectl apply -k redis/overlays/development -n lnmp
@@ -49,7 +55,8 @@ kubectl delete pv -l app=lnmp
 ./lnmp-k8s nfs down
 
 echo "==> Test LNMP with hostpath"
-cp -rf ../app ~/app-development
+# cp -rf ../app ~/app-development
+cp -rf /nfs/lnmp/app ~/app-development
 cd lnmp
 kubectl kustomize storage/pv/linux | sed "s/__USERNAME__/$(whoami)/g" | kubectl apply -f -
 kubectl create ns lnmp
