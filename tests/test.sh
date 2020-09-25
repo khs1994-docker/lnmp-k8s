@@ -6,8 +6,8 @@ echo "==> Set app"
 # mkdir -p ../app/laravel/public
 # cp lnmp/app/index.php ../app/laravel/public/
 
-mkdir -p /nfs/lnmp/app/laravel/public
-cp lnmp/app/index.php /nfs/lnmp/app/laravel/public/
+sudo mkdir -p /nfs/lnmp/app/laravel/public
+sudo cp lnmp/app/index.php /nfs/lnmp/app/laravel/public/
 
 echo "==> Up nfs server"
 # if ! [ $(go env GOARCH) = 'amd64' ];then
