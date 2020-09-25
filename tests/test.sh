@@ -15,9 +15,10 @@ echo "==> Up nfs server"
 # fi
 # ./lnmp-k8s nfs
 kubectl apply -k deploy/nfs-server
-sleep 30
-docker ps -a
-./lnmp-k8s nfs logs
+sleep 60
+# docker ps -a
+# ./lnmp-k8s nfs logs
+kubectl get all
 sudo mkdir -p /tmp2
 # install nfs dep
 sudo apt install -y nfs-common
@@ -52,7 +53,8 @@ curl -k https://laravel2.t.khs1994.com
 sudo ps aux || true
 kubectl delete ns lnmp
 kubectl delete pv -l app=lnmp
-./lnmp-k8s nfs down
+# ./lnmp-k8s nfs down
+kubectl delete -k deploy/nfs-server
 
 echo "==> Test LNMP with hostpath"
 # cp -rf ../app ~/app-development
