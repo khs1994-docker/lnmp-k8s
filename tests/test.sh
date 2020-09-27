@@ -18,7 +18,7 @@ echo "==> Up nfs server"
 # sudo modprobe nfsd || true
 kubectl apply -k deploy/nfs-server
 sleep 30
-kubectl logs $(kubectl get pod -l app=nfs-server --no-headers | cut -d ' ' -f 1) || true
+# kubectl logs $(kubectl get pod -l app=nfs-server --no-headers | cut -d ' ' -f 1) || true
 # docker ps -a
 # ./lnmp-k8s nfs logs
 kubectl get all
