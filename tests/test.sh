@@ -15,9 +15,9 @@ echo "==> Up nfs server"
 if ! [ $(go env GOARCH) = 'amd64' ];then
   sudo sed -i "s/erichough/klutchell/g" nfs-server/docker-compose.yml
 # fi
+sudo modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
+sudo modprobe nfsd || true
 ./lnmp-k8s nfs
-# sudo modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
-# sudo modprobe nfsd || true
 sleep 30
 docker ps -a
 ./lnmp-k8s nfs logs
