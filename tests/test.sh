@@ -3,40 +3,40 @@
 set -ex
 
 echo "==> Set app"
-if ! [ $(go env GOARCH) = 'amd64' ];then
-mkdir -p ../app/laravel/public
-cp lnmp/app/index.php ../app/laravel/public/
-else
+# if ! [ $(go env GOARCH) = 'amd64' ];then
+# mkdir -p ../app/laravel/public
+# cp lnmp/app/index.php ../app/laravel/public/
+# else
 sudo mkdir -p /nfs/lnmp/app/laravel/public
 sudo cp lnmp/app/index.php /nfs/lnmp/app/laravel/public/
-fi
+# fi
 
 echo "==> Up nfs server"
-if ! [ $(go env GOARCH) = 'amd64' ];then
-  sudo sed -i "s/erichough/klutchell/g" nfs-server/docker-compose.yml
+# if ! [ $(go env GOARCH) = 'amd64' ];then
+#   sudo sed -i "s/erichough/klutchell/g" nfs-server/docker-compose.yml
 # fi
 sudo modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
 sudo modprobe nfsd || true
-./lnmp-k8s nfs
-sleep 30
-docker ps -a
-./lnmp-k8s nfs logs
-else
+# ./lnmp-k8s nfs
+# sleep 30
+# docker ps -a
+# ./lnmp-k8s nfs logs
+# else
 kubectl apply -k deploy/nfs-server
 sleep 30
 kubectl logs $(kubectl get pod -l app=nfs-server --no-headers | cut -d ' ' -f 1) || true
 # docker ps -a
 # ./lnmp-k8s nfs logs
 kubectl get all
-fi
+# fi
 sudo mkdir -p /tmp2
 # install nfs dep
 sudo apt install -y nfs-common
-if ! [ $(go env GOARCH) = 'amd64' ];then
-sudo mount -t nfs4 -v ${SERVER_IP}:/lnmp/log /tmp2
-else
+# if ! [ $(go env GOARCH) = 'amd64' ];then
+# sudo mount -t nfs4 -v ${SERVER_IP}:/lnmp/log /tmp2
+# else
 sudo mount -t nfs4 -v 10.254.0.49:/lnmp/log /tmp2
-fi
+# fi
 sudo umount /tmp2
 
 echo "==> set LNMP_NFS_SERVER_HOST .env"
@@ -44,11 +44,11 @@ echo "==> set LNMP_NFS_SERVER_HOST .env"
 
 echo "==> Test LNMP with NFS"
 cd lnmp
-if ! [ $(go env GOARCH) = 'amd64' ];then
-kubectl kustomize storage/pv/nfs | sed "s/10.254.0.49/${SERVER_IP}/g" | kubectl apply -f -
-else
+# if ! [ $(go env GOARCH) = 'amd64' ];then
+# kubectl kustomize storage/pv/nfs | sed "s/10.254.0.49/${SERVER_IP}/g" | kubectl apply -f -
+# else
 kubectl apply -k storage/pv/nfs
-fi
+# fi
 kubectl create ns lnmp
 kubectl apply -k storage/pvc/nfs -n lnmp
 kubectl apply -k redis/overlays/development -n lnmp
@@ -69,18 +69,18 @@ curl -k https://laravel2.t.khs1994.com
 sudo ps aux || true
 kubectl delete ns lnmp
 kubectl delete pv -l app=lnmp
-if ! [ $(go env GOARCH) = 'amd64' ];then
-./lnmp-k8s nfs down
-else
+# if ! [ $(go env GOARCH) = 'amd64' ];then
+# ./lnmp-k8s nfs down
+# else
 kubectl delete -k deploy/nfs-server
-fi
+# fi
 
 echo "==> Test LNMP with hostpath"
-if ! [ $(go env GOARCH) = 'amd64' ];then
-cp -rf ../app ~/app-development
-else
+# if ! [ $(go env GOARCH) = 'amd64' ];then
+# cp -rf ../app ~/app-development
+# else
 cp -rf /nfs/lnmp/app ~/app-development
-fi
+# fi
 
 cd lnmp
 kubectl kustomize storage/pv/linux | sed "s/__USERNAME__/$(whoami)/g" | kubectl apply -f -
