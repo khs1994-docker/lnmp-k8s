@@ -1128,6 +1128,13 @@ _k8s_install_systemd(){
       /etc/systemd/system/kube-containerd@.service
   fi
 
+  ${_sudo} cp -a mount/. /etc/systemd/system/
+
+  ${_sudo} sed -i \
+  -e "s!/opt/k8s!${K8S_ROOT}!g" \
+  /etc/systemd/system/kube-mkdir@.service \
+  $(for item in $(cd mount && ls);do echo /etc/systemd/system/$item;done)
+
   cd - > /dev/null
 
   # https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/supported-platform.md
@@ -1291,7 +1298,8 @@ _k8s_join(){
 
   _cri_handler $2
 
-  _k8s_install_systemd kube-proxy kubelet kubelet@
+  # _k8s_install_systemd kube-proxy kubelet kubelet@
+  _k8s_install_systemd
 
   _k8s_install_mkdir
 
