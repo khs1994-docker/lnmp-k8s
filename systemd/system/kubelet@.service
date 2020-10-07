@@ -9,8 +9,12 @@ After=kube-reset-kubelet.service
 
 After=kube-apiserver.service
 
-After=cri-containerd@1.4.service \
-crio.service
+After=cri-containerd.service \
+cri-containerd@1.3.service \
+cri-containerd@1.4.service \
+cri-containerd@1.5.service
+
+After=cri-o.service
 
 After=etc-containers.mount \
 var-lib-cni.mount \
@@ -20,7 +24,6 @@ var-log-calico.mount \
 var-log-containers.mount \
 var-log-pods.mount
 
-; Requires=var-lib-kubelet.mount
 BindsTo=etc-containers.mount \
 var-lib-cni.mount \
 var-lib-k8s.mount \
@@ -29,10 +32,8 @@ var-log-calico.mount \
 var-log-containers.mount \
 var-log-pods.mount
 
+; Requires=var-lib-kubelet.mount
 ; RequiresMountsFor=/var/lib/kubelet
-
-; After=cri-containerd@1.4.service
-; Requires=cri-containerd@1.4.service
 
 # ConditionVirtualization=wsl
 # ConditionPathIsMountPoint=/wsl/wsl-k8s-data
@@ -106,8 +107,6 @@ ExecStart=/opt/k8s/bin/kubelet \
 --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
 --dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
 --v=2 \
-#
-;
 --container-runtime=remote \
 --container-runtime-endpoint=unix:///run/%i/%i.sock
 
