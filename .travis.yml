@@ -105,7 +105,6 @@ before_install:
   - echo ${DOCKER_VERSION}
   - sudo apt-get -y install docker-ce=${DOCKER_VERSION} docker-ce-cli=${DOCKER_VERSION} || sudo apt -f install
   - docker --version
-  - docker version
   - docker info
   # 升级最新 Docker Compose
   # - docker-compose --version
@@ -466,7 +465,7 @@ env:
   global:
     - DOCKER_CLI_EXPERIMENTAL=enabled
     - LNMP_CN_ENV=false
-    - LNMP_BRANCH=19.03
+    - LNMP_BRANCH=20.10
 
 jobs:
   include:
