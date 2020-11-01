@@ -1,0 +1,93 @@
+on:
+  workflow_dispatch:
+
+name: fcos
+
+defaults:
+  run:
+    shell: bash --noprofile --norc -exo pipefail {0}
+
+env:
+  LNMP_CN_ENV: false
+
+jobs:
+  ci:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+      - uses: actions/cache@v2
+        name: khs1994-docker-lnmp-caches
+        with:
+          path: ~/.khs1994-docker-lnmp/caches
+          key: khs1994-docker-lnmp-caches
+      - name: download
+        run: |
+          ./lnmp-k8s kubernetes-server
+
+          items="crictl containerd"
+          for item in $items;do ./lnmp-k8s _${item}_install --dry-run;done
+
+          sed -i 's/nm-settings.service/nm-settings.service.back/g' \
+          -e 's/eth1.nmconnection/eth1.nmconnection.back/g' \
+          coreos/ignition/fcc/merge-common.fcc
+
+          sed -i 's/eth0/enp1s0/g' \
+          ignition-n.node.template.fcc \
+          ignition-n.master.template.fcc
+
+          ./coreos server
+      - uses: ./actions/setup-libvirt
+      - name: libvirt
+        run: |
+          # sudo apt install -y virtinst
+          # sudo apt install -y libvirt-daemon-system
+
+          # {
+          #   echo 'user = "root"'
+          #   echo 'group = "root"'
+          # } | sudo tee -a /etc/libvirt/qemu.conf
+
+          # sudo systemctl start libvirtd
+          # sudo systemctl status libvirtd
+
+          virsh net-define coreos/libvirt/networks/vir-nat1.xml
+          virsh net-start vir-nat1
+      - run: |
+          cd coreos
+
+          ./coreos init qemu
+
+          ls -la current
+
+          ./coreos virt-install 1
+          ./coreos virt-install 2
+          ./coreos virt-install 3
+      - name: config ssh
+        run: |
+          {
+          echo 'Host *'
+          echo 'ServerAliveInterval 60'
+          echo 'StrictHostKeyChecking no'
+          echo 'UserKnownHostsFile /dev/null'
+          } | tee $HOME/.ssh/config
+
+          chmod 0600 $HOME/.ssh/config
+      - run: |
+          ssh core@192.168.57.110 systemctl
+
+          kubectl cluster-info
+
+          kubectl get node
+
+          kubectl get csr
+
+          kubectl certificate approve
+
+          kubectl apply -k addons/coredns
+
+          kubectl get all -A
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v2
+        if: ${{ always() }}
