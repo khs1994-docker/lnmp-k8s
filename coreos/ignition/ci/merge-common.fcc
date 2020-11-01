@@ -15,26 +15,6 @@ systemd:
 
         [Install]
         WantedBy=multi-user.target
-    - name: nm-settings.service
-      enabled: true
-      contents: |
-        [Unit]
-        Description=nm settings
-        After=NetworkManager.service
-        Wants=NetworkManager.service
-
-        [Service]
-        Restart=on-failure
-        RestartSec=5
-        ExecStartPre=ls /etc/NetworkManager/system-connections/eth0.nmconnection
-        ExecStartPre=ls /etc/NetworkManager/system-connections/eth1.nmconnection
-        ExecStartPre=nmcli con up eth0
-        ExecStartPre=nmcli con up eth1
-        ExecStartPre=route add default gw ${DEFAULT_GATEWAY}
-        ExecStart=sh -c "echo setup network"
-
-        [Install]
-        WantedBy=multi-user.target
     - name: cgroups-v2-karg.service
       enabled: true
       contents: |

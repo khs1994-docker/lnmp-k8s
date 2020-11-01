@@ -39,10 +39,10 @@ cleanup           Cleanup Cache
 mount-iso         Mount ISO [N]
 remove-iso        Remove ISO [N]
 
-virt-install
-virt-destroy
-virt-start
-virt-shutdown
+virt-install      [1|2|3]
+virt-destroy      [1|2|3]
+virt-start        [1|2|3]
+virt-shutdown     [1|2|3]
 "
 }
 
@@ -70,7 +70,9 @@ items="fedora-coreos-${FCOS_VERSION}-metal.x86_64.raw.xz \
       fedora-coreos-${FCOS_VERSION}-metal.x86_64.raw.xz.sig "
 
 if [ ${1:-''} = 'qemu' ];then
-  items=fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2.xz
+  local QEMU_QCOW2=fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2
+  if [ -f $QEMU_QCOW2 ];then echo "$QEMU_QCOW2 exists, skip download"; return; fi
+  items=$QEMU_QCOW2.xz
 fi
 
 for item in $items;do
@@ -109,7 +111,8 @@ case "$1" in
   fi
 
   cd ..
-  docker-compose up fcos-server
+  shift
+  docker-compose up $@ fcos-server
 
   ;;
 
@@ -189,14 +192,15 @@ case "$1" in
 
     # fcct $PWD/ignition/basic.fcc > $PWD/ignition/basic.ign
 
-    IGNITION_CONFIG=$PWD/ignition/basic.ign
+    IGNITION_CONFIG=$PWD/ignition/ignition-${num}.ign
     # IMAGE="/path/to/image.qcow2"
 
     IMAGE=$PWD/current/fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2
     VNC=none
     if [ `uname -a | grep -q WSL2 ; echo $?` -eq 0 ];then
       IMAGE=/wsl/wsl-k8s-data/fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2
-      VNC="vnc,listen=0.0.0.0"
+      VNC="vnc,listen=0.0.0.0,port=590${num}"
+      IGNITION_CONFIG=$PWD/ignition/basic.ign
     fi
 
     VM_NAME="fcos-test-0${num}"
