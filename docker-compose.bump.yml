@@ -11,7 +11,7 @@ services:
     image: k8s.gcr.io/coredns:1.7.0
 
   pause:
-    image: k8s.gcr.io/pause:3.2
+    image: k8s.gcr.io/pause:3.4.1
     # https://github.com/kubernetes/kubernetes/tree/master/build/pause
 
   new-pause:
@@ -24,7 +24,7 @@ services:
     image: calico/cni:v3.17.0
 
   ingress_nginx:
-    image: k8s.gcr.io/ingress-nginx/controller:v0.43.0
+    image: k8s.gcr.io/ingress-nginx/controller:v0.44.0
 
   ingress-kong:
     image: kong-docker-kubernetes-ingress-controller.bintray.io/kong-ingress-controller:0.9.1
