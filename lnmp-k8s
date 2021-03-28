@@ -505,19 +505,24 @@ _runc_install(){
     return
   fi
 
-  local url_official=https://github.com/opencontainers/runc/releases/download/v1.0.0-rc92/runc.amd64
-  local url=https://download.fastgit.org/opencontainers/runc/releases/download/v1.0.0-rc92/runc.amd64
+  local file_name=runc.${GOARCH}
+  local url_official=https://github.com/opencontainers/runc/releases/download/v${RUNC_VERSION}
+  local url=https://download.fastgit.org/opencontainers/runc/releases/download/v${RUNC_VERSION}
 
-  _use_cn_mirror $url || url=$url_official
+  if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
+    url=${CODING_URL}/${file_name}?version=${RUNC_VERSION}
+  else
+    _use_cn_mirror ${url}/${file_name} && url=${url}/${file_name} \
+                                       || url=${url_official}/${file_name}
+  fi
 
-  $(_sudo) $(_curl) $url \
-    -o /usr/bin/runc
+  $(_sudo) $(_curl) ${url} -o /usr/bin/runc
 
   $(_sudo) chmod +x /usr/bin/runc
 
   runc --version
 
-  _upload_to_coding /usr/bin/runc runc v1.0.0-rc92
+  _upload_to_coding /usr/bin/runc runc.${GOARCH} ${RUNC_VERSION}
 }
 
 _crun_containerd_conf(){
@@ -550,22 +555,38 @@ _crun_install(){
   if [ `command -v crun` ];then print_info "crun already install";\
     crun --version;return; fi
 
-  if ! [ "$GOARCH" = 'amd64' ];then
+  if ! [ "$GOARCH" = 'amd64' -o "$GOARCH" = 'arm64' ];then
     # print_info "install runc ..."
-    print_info "can't download crun on non-amd64"
+    print_info "Download crun only support amd64 and arm64"
 
     return
   fi
-  local url=https://download.fastgit.org/containers/crun/releases/download/0.15/crun-0.15-linux-amd64
-  local url_official=https://github.com/containers/crun/releases/download/0.15/crun-0.15-linux-amd64
-  _use_cn_mirror $url || url=$url_official
-  $(_sudo) $(_curl) $url \
-    -o /usr/bin/crun
 
-  url=https://download.fastgit.org/containers/crun/releases/download/0.15/crun-0.15-linux-amd64-disable-systemd
-  url_official=https://github.com/containers/crun/releases/download/0.15/crun-0.15-linux-amd64-disable-systemd
-  _use_cn_mirror $url || url=$url_official
-  $(_sudo) $(_curl) $url \
+  local file_name=crun-${CRUN_VERSION}-linux-${GOARCH}
+  local url=https://download.fastgit.org/containers/crun/releases/download/${CRUN_VERSION}
+  local url_official=https://github.com/containers/crun/releases/download/${CRUN_VERSION}
+
+  if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
+    url=${CODING_URL}/${file_name}?version=${CRUN_VERSION}
+  else
+    _use_cn_mirror ${url}/${file_name} && url=${url}/${file_name} \
+                                       || url=${url_official}/${file_name}
+  fi
+
+  $(_sudo) $(_curl) ${url} -o /usr/bin/crun
+
+  file_name=crun-${CRUN_VERSION}-linux-${GOARCH}-disable-systemd
+  url=https://download.fastgit.org/containers/crun/releases/download/${CRUN_VERSION}
+  url_official=https://github.com/containers/crun/releases/download/${CRUN_VERSION}
+
+  if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
+    url=${CODING_URL}/${file_name}?version=${CRUN_VERSION}
+  else
+    _use_cn_mirror ${url}/${file_name} && url=${url}/${file_name} \
+                                       || url=${url_official}/${file_name}
+  fi
+
+  $(_sudo) $(_curl) ${url} \
     -o /usr/bin/crun-disable-systemd
 
   $(_sudo) chmod +x /usr/bin/crun /usr/bin/crun-disable-systemd
@@ -573,8 +594,8 @@ _crun_install(){
   crun --version
   crun-disable-systemd --version
 
-  _upload_to_coding /usr/bin/crun crun "0.15"
-  _upload_to_coding /usr/bin/crun-disable-systemd crun-disable-systemd "0.15"
+  _upload_to_coding /usr/bin/crun crun-${CRUN_VERSION}-linux-${GOARCH} ${CRUN_VERSION}
+  _upload_to_coding /usr/bin/crun-disable-systemd crun-${CRUN_VERSION}-linux-${GOARCH}-disable-systemd ${CRUN_VERSION}
 }
 
 _containerd_install(){
@@ -592,34 +613,37 @@ _containerd_install(){
 
   print_info "install containerd 1.5 ..."
 
-  local url_official="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
-  local url="https://download.fastgit.org/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
+  if [ "$GOOS" = "linux" -a "$GOARCH" = 'arm64' ];then
+    local url_official="https://github.com/docker-practice/containerd/releases/download/nightly"
+    local url="https://download.fastgit.org/docker-practice/containerd/releases/download/nightly"
+    CONTAINERD_VERSION="nightly"
+  else
+    local url_official="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
+    local url="https://download.fastgit.org/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
+  fi
+
   local TAR_FILE="containerd-${CONTAINERD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
 
-  _use_cn_mirror ${url}/${TAR_FILE} || url=$url_official
+  if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
+    url=${CODING_URL}/${TAR_FILE}?version=${CONTAINERD_VERSION}
+    local sha256sum_url=${CODING_URL}/${TAR_FILE}.sha256sum?version=${CONTAINERD_VERSION}
+  else
+    _use_cn_mirror ${url}/${TAR_FILE} && url=${url}/${TAR_FILE} \
+                                      || url=${url_official}/${TAR_FILE}
 
-  __download(){
-    if [ "$GOOS" = "linux" -a "$GOARCH" = 'arm64' ];then
-      local url_official="https://github.com/docker-practice/containerd/releases/download/nightly/containerd-nightly-linux-arm64.tar.gz"
-      local url="https://download.fastgit.org/docker-practice/containerd/releases/download/nightly/containerd-nightly-linux-arm64.tar.gz"
-      _use_cn_mirror ${url} || url=$url_official
-      $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
-
-      return
-    fi
-    $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
-  }
+    local sha256sum_url=${url}.sha256sum
+  fi
 
   if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
     local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
-    local sha256_remote=`curl -fsSL ${url}/${TAR_FILE}.sha256sum | cut -d " " -f 1` || true
+    local sha256_remote=`curl -fsSL ${sha256sum_url} | cut -d " " -f 1` || true
 
     if [ $sha256 != "$sha256_remote" -a "$GOARCH" = 'amd64' ];then
       $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
-      __download
+      $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
     fi
   else
-      __download
+      $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
   fi
 
   if [ "$1" = "--dry-run" ];then
@@ -635,6 +659,8 @@ _containerd_install(){
   $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim-runc-v2 /usr/local/bin/
 
   _upload_to_coding ${TMP_ROOT}/${TAR_FILE} ${TAR_FILE} ${CONTAINERD_VERSION}
+  $(_sudo) $(_curl) ${sha256sum_url} -o ${TMP_ROOT}/${TAR_FILE}.sha256sum
+  _upload_to_coding ${TMP_ROOT}/${TAR_FILE}.sha256sum ${TAR_FILE}.sha256sum ${CONTAINERD_VERSION}
 }
 
 _cni_install(){
@@ -718,7 +744,12 @@ _crictl_install(){
   local url="https://download.fastgit.org/kubernetes-sigs/cri-tools/releases/download/v${CRICTL_VERSION}"
   local TAR_FILE="crictl-v${CRICTL_VERSION}-linux-${GOARCH}.tar.gz"
 
-  _use_cn_mirror ${url}/${TAR_FILE} || url=$url_official
+  if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
+    url=${CODING_URL}/${TAR_FILE}?version=${CRICTL_VERSION}
+  else
+    _use_cn_mirror ${url}/${TAR_FILE} && url=${url}/${TAR_FILE} \
+                                      || url=${url_official}/${TAR_FILE}
+  fi
 
   print_info "install crictl ..."
 
@@ -732,7 +763,7 @@ _crictl_install(){
     # fi
   # else
   if ! [ -f ${TMP_ROOT}/${TAR_FILE} ];then
-      $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
+      $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
   fi
 
   if [ "$1" = "--dry-run" ];then
