@@ -139,6 +139,19 @@ if [ $GOOS = 'darwin' ];then
   alias sed=gsed
 fi
 
+CODING_URL=https://pcit-generic.pkg.coding.net/khs1994-docker/kubernetes
+
+_upload_to_coding(){
+  if [ "$UPLOAD_TO_CODING" != 'true' ];then return; fi
+
+  local PKG_PATH=$1
+  local PKG=$2
+  local PKG_VERSION=$3
+
+  curl -T ${PKG_PATH} -u ${CODING_USERNAME}:${CODING_TOKEN} \
+  "${CODING_URL}/${PKG}?version=${PKG_VERSION}"
+}
+
 _get_kubernetes_server_by_docker_image(){
   local TYPE=server
   test -n "${1}" && local GOOS=$1
@@ -292,9 +305,6 @@ kubectl_info(){
 _nginx_build(){
   local url="https://nginx.org/download/"
   local TAR_FILE="nginx-${NGINX_VERSION}.tar.gz"
-  __download(){
-    $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
-  }
 
   if [ -f ${K8S_ROOT}/kube-nginx.tar.gz ];then
     print_info "${K8S_ROOT}/kube-nginx.tar.gz already exists"
@@ -307,7 +317,7 @@ _nginx_build(){
     true
   else
     rm -rf ${TMP_ROOT}/${TAR_FILE}
-    __download
+    $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   fi
 
   $(_sudo) mkdir -p ${TMP_ROOT}/kube-nginx
@@ -333,9 +343,9 @@ if [ "${LNMP_CN_ENV}" = 'false' ];then
   return 1;
 fi
 
-httpCode=`curl -X GET -sI ${1} | head -1 | awk '{print $2}'`
+local httpCode=`curl -X GET -sI ${1} | head -1 | awk '{print $2}'`
 
-if [ $httpCode != 200 ];then
+if [ "$httpCode" != 200 ];then
   echo 'cn mirror http response code is not 200, not use'
   return 1;
 fi
@@ -345,11 +355,6 @@ _etcd_install(){
   local url_official="https://github.com/etcd-io/etcd/releases/download"
   local url="https://mirrors.huaweicloud.com/etcd"
   local TAR_FILE="etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar"
-  __download(){
-    _use_cn_mirror ${url}/v${ETCD_VERSION}/${TAR_FILE} || url=$url_official
-
-    $(_sudo) $(_curl) ${url}/v${ETCD_VERSION}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
-  }
 
   if [ -f ${K8S_ROOT}/bin/etcd -a ! "$1" = "--dry-run" ];then
     print_info "etcd already install"
@@ -364,7 +369,9 @@ _etcd_install(){
     true
   else
     rm -rf ${TMP_ROOT}/${TAR_FILE}
-    __download
+    _use_cn_mirror ${url}/v${ETCD_VERSION}/${TAR_FILE} || url=$url_official
+
+    $(_sudo) $(_curl) ${url}/v${ETCD_VERSION}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   fi
 
   if [ "$1" = "--dry-run" ];then
@@ -463,7 +470,12 @@ _gvisor_install(){
   if [ "$1" = '-f' ];then $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}; fi
 
   if ! [ -f ${TMP_ROOT}/${TAR_FILE} ];then
-    __download
+    if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
+      $(_sudo) $(_curl) ${CODING_URL}/${TAR_FILE}?version=nightly \
+        -o ${TMP_ROOT}/${TAR_FILE}
+    else
+      __download
+    fi
   fi
 
   if [ "$1" = "--dry-run" ];then
@@ -474,6 +486,8 @@ _gvisor_install(){
   $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C /usr/local/bin
 
   runsc --version
+
+  _upload_to_coding ${TMP_ROOT}/${TAR_FILE} ${TAR_FILE} nightly
 }
 
 _runsc_install(){
@@ -502,6 +516,8 @@ _runc_install(){
   $(_sudo) chmod +x /usr/bin/runc
 
   runc --version
+
+  _upload_to_coding /usr/bin/runc runc v1.0.0-rc92
 }
 
 _crun_containerd_conf(){
@@ -556,6 +572,9 @@ _crun_install(){
 
   crun --version
   crun-disable-systemd --version
+
+  _upload_to_coding /usr/bin/crun crun "0.15"
+  _upload_to_coding /usr/bin/crun-disable-systemd crun-disable-systemd "0.15"
 }
 
 _containerd_install(){
@@ -614,6 +633,8 @@ _containerd_install(){
   $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim /usr/local/bin/cri-containerd-shim
   $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim-runc-v1 /usr/local/bin/
   $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim-runc-v2 /usr/local/bin/
+
+  _upload_to_coding ${TMP_ROOT}/${TAR_FILE} ${TAR_FILE} ${CONTAINERD_VERSION}
 }
 
 _cni_install(){
@@ -699,10 +720,6 @@ _crictl_install(){
 
   _use_cn_mirror ${url}/${TAR_FILE} || url=$url_official
 
-  __download(){
-    $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
-  }
-
   print_info "install crictl ..."
 
   # if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
@@ -715,7 +732,7 @@ _crictl_install(){
     # fi
   # else
   if ! [ -f ${TMP_ROOT}/${TAR_FILE} ];then
-      __download
+      $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   fi
 
   if [ "$1" = "--dry-run" ];then
@@ -725,6 +742,8 @@ _crictl_install(){
 
   # $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}/bin/
   $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C /usr/bin/
+
+  _upload_to_coding ${TMP_ROOT}/${TAR_FILE} ${TAR_FILE} ${CRICTL_VERSION}
 }
 
 _k8s_install_dep(){
@@ -798,20 +817,25 @@ _conmon_install(){
     return
   fi
 
-  local url=https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon
-  local url_official=https://download.fastgit.org/containers/conmon/releases/download/v${CONMON_VERSION}/conmon
+  local url=https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon.$GOARCH
+  local url_official=https://download.fastgit.org/containers/conmon/releases/download/v${CONMON_VERSION}/conmon.$GOARCH
 
-  _use_cn_mirror $url || url=$url_official
+  if [ $DOWNLOAD_FROM_CODING != "false" ];then
+    url=$CODING_URL/conmon.$GOARCH?version=${CONMON_VERSION}
+  else
+    _use_cn_mirror $url || url=$url_official
+  fi
 
-  if [ $OS = "Linux" -a $GOARCH = "amd64" ];then
-    $(_sudo) $(_curl) -o ${K8S_ROOT}/usr/local/bin/conmon \
-      $url \
-    || \
-    $(_sudo) $(_curl) -o ${K8S_ROOT}/usr/local/bin/conmon \
-      $url-${CONMON_VERSION}
+  if [ $OS = "Linux" ];then
+    if [ $GOARCH = "amd64" -o $GOARCH = "arm64" ];then
+      $(_sudo) $(_curl) -o ${K8S_ROOT}/usr/local/bin/conmon $url
 
-    $(_sudo) chmod +x ${K8S_ROOT}/usr/local/bin/conmon
-    return
+      $(_sudo) chmod +x ${K8S_ROOT}/usr/local/bin/conmon
+
+      _upload_to_coding ${K8S_ROOT}/usr/local/bin/conmon conmon.$GOARCH ${CONMON_VERSION}
+
+      return
+    fi
   fi
 
   cd /tmp
