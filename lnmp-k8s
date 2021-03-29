@@ -62,6 +62,12 @@ Commands:
   join                   New worker [NODE_IP] { CRI: --containerd (default) | --crio | --docker } {--hostname=HOST_NAME} {--skip-cp-k8s-bin}
 
   nfs                    Up NFS server { down | logs }
+
+ENV:
+  UPLOAD_TO_CODING=false
+  DOWNLOAD_FROM_CODING=true
+  CODING_USERNAME
+  CODING_TOKEN
 "
 }
 
@@ -461,21 +467,17 @@ _gvisor_install(){
   local url="https://download.fastgit.org/docker-practice/gvisor-mirror/releases/download/nightly"
   local TAR_FILE="runsc-${GOOS}-${GOARCH}.tar.gz"
 
-  _use_cn_mirror ${url}/${TAR_FILE} || url=$url_official
-
-  __download(){
-    $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
-  }
+  if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
+    url=${CODING_URL}/${TAR_FILE}?version=nightly
+  else
+    _use_cn_mirror ${url}/${TAR_FILE} && url=${url}/${TAR_FILE} \
+                                      || url=${url_official}/${TAR_FILE}
+  fi
 
   if [ "$1" = '-f' ];then $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}; fi
 
   if ! [ -f ${TMP_ROOT}/${TAR_FILE} ];then
-    if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
-      $(_sudo) $(_curl) ${CODING_URL}/${TAR_FILE}?version=nightly \
-        -o ${TMP_ROOT}/${TAR_FILE}
-    else
-      __download
-    fi
+    $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
   fi
 
   if [ "$1" = "--dry-run" ];then
@@ -495,8 +497,12 @@ _runsc_install(){
 }
 
 _runc_install(){
-  if [ `command -v runc` ];then print_info "runc already install";\
-    runc --version;return; fi
+  if [ `command -v runc` ];then
+    print_info "runc already install"
+    runc --version
+    _upload_to_coding /usr/bin/runc runc.${GOARCH} ${RUNC_VERSION}
+    return
+  fi
 
   if ! [ "$GOARCH" = 'amd64' ];then
     # print_info "install runc ..."
