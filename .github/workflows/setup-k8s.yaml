@@ -376,7 +376,7 @@ jobs:
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
 
          if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 21 ];then \
-           sudo install -m755 $(command -v kubectl) ${K8S_ROOT}/bin/kubectl
+           sudo install -m755 /usr/local/bin/kubectl ${K8S_ROOT:-/opt/k8s}/bin/kubectl
            kubectl version --client || true
          fi
 
