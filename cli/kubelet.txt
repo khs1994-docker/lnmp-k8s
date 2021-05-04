@@ -43,7 +43,6 @@ Flags:
       --cgroup-driver string                                     Driver that the kubelet uses to manipulate cgroups on the host.  Possible values: 'cgroupfs', 'systemd' (default "cgroupfs") (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
       --cgroup-root string                                       Optional root cgroup to use for pods. This is handled by the container runtime on a best effort basis. Default: '', which means use the container runtime default. (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
       --cgroups-per-qos                                          Enable creation of QoS cgroup hierarchy, if true top level QoS and pod cgroups are created. (default true) (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
-      --chaos-chance float                                       If > 0.0, introduce random client errors and latency. Intended for testing. (DEPRECATED: will be removed in a future version.)
       --client-ca-file string                                    If set, any request presenting a client certificate signed by one of the authorities in the client-ca-file is authenticated with an identity corresponding to the CommonName of the client certificate. (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
       --cloud-config string                                      The path to the cloud provider configuration file. Empty string for no configuration file. (DEPRECATED: will be removed in 1.23, in favor of removing cloud provider code from Kubelet.)
       --cloud-provider string                                    The provider for cloud services. Set to empty string for running with no cloud provider. If set, the cloud provider determines the name of the node (consult cloud provider documentation to determine if and how the hostname is used). (DEPRECATED: will be removed in 1.23, in favor of removing cloud provider code from Kubelet.)
@@ -163,11 +162,10 @@ Flags:
                 LogarithmicScaleDown=true|false (ALPHA - default=false)
                 MemoryManager=true|false (ALPHA - default=false)
                 MixedProtocolLBService=true|false (ALPHA - default=false)
-                NamespaceDefaultLabelName=true|false (BETA - default=true)
                 NetworkPolicyEndPort=true|false (ALPHA - default=false)
                 NonPreemptingPriority=true|false (BETA - default=true)
                 PodAffinityNamespaceSelector=true|false (ALPHA - default=false)
-                PodDeletionCost=true|false (ALPHA - default=false)
+                PodDeletionCost=true|false (BETA - default=true)
                 PodOverhead=true|false (BETA - default=true)
                 PreferNominatedNode=true|false (ALPHA - default=false)
                 ProbeTerminationGracePeriod=true|false (ALPHA - default=false)
@@ -176,13 +174,12 @@ Flags:
                 RemainingItemCount=true|false (BETA - default=true)
                 RemoveSelfLink=true|false (BETA - default=true)
                 RotateKubeletServerCertificate=true|false (BETA - default=true)
-                ServerSideApply=true|false (BETA - default=true)
                 ServiceInternalTrafficPolicy=true|false (ALPHA - default=false)
                 ServiceLBNodePortControl=true|false (ALPHA - default=false)
                 ServiceLoadBalancerClass=true|false (ALPHA - default=false)
                 ServiceTopology=true|false (ALPHA - default=false)
                 SetHostnameAsFQDN=true|false (BETA - default=true)
-                SizeMemoryBackedVolumes=true|false (ALPHA - default=false)
+                SizeMemoryBackedVolumes=true|false (BETA - default=true)
                 StorageVersionAPI=true|false (ALPHA - default=false)
                 StorageVersionHash=true|false (BETA - default=true)
                 SuspendJob=true|false (ALPHA - default=false)
@@ -228,8 +225,8 @@ Flags:
       --log-file string                                          If non-empty, use this log file
       --log-file-max-size uint                                   Defines the maximum size a log file can grow to. Unit is megabytes. If the value is 0, the maximum file size is unlimited. (default 1800)
       --log-flush-frequency duration                             Maximum number of seconds between log flushes (default 5s)
-      --logging-format string                                    Sets the log format. Permitted formats: "text", "json".
-                Non-default formats don't honor these flags: -add_dir_header, --alsologtostderr, --log_backtrace_at, --log_dir, --log_file, --log_file_max_size, --logtostderr, --skip_headers, --skip_log_headers, --stderrthreshold, --log-flush-frequency.
+      --logging-format string                                    Sets the log format. Permitted formats: "text", "json". 
+                Non-default formats don't honor these flags: --add-dir-header, --alsologtostderr, --log-backtrace-at, --log-dir, --log-file, --log-file-max-size, --logtostderr, --skip-headers, --skip-log-headers, --stderrthreshold, --log-flush-frequency. 
                 Non-default choices are currently alpha and subject to change without warning. (default "text") (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
       --logtostderr                                              log to standard error instead of files (default true)
       --machine-id-file string                                   Comma-separated list of files to check for machine-id. Use the first one that exists. (default "/etc/machine-id,/var/lib/dbus/machine-id") (DEPRECATED: This is a cadvisor flag that was mistakenly registered with the Kubelet. Due to legacy concerns, it will follow the standard CLI deprecation timeline before being removed.)
@@ -264,7 +261,6 @@ Flags:
       --qos-reserved mapStringString                             <Warning: Alpha feature> A set of ResourceName=Percentage (e.g. memory=50%) pairs that describe how pod resource requests are reserved at the QoS level. Currently only memory is supported. Requires the QOSReserved feature gate to be enabled. (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
       --read-only-port int32                                     The read-only port for the Kubelet to serve on with no authentication/authorization (set to 0 to disable) (default 10255) (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
       --really-crash-for-testing                                 If true, when panics occur crash. Intended for testing. (DEPRECATED: will be removed in a future version.)
-      --redirect-container-streaming                             [REMOVED] (DEPRECATED: Container streaming redirection has been removed from the kubelet as of v1.20, and this flag will be removed in v1.22. For more details, see http://git.k8s.io/enhancements/keps/sig-node/20191205-container-streaming-requests.md)
       --register-node                                            Register the node with the apiserver. If --kubeconfig is not provided, this flag is irrelevant, as the Kubelet won't have an apiserver to register with. (default true)
       --register-schedulable                                     Register the node as schedulable. Won't have any effect if register-node is false. (default true) (DEPRECATED: will be removed in a future version)
       --register-with-taints []api.Taint                         Register the node with the given list of taints (comma separated "<key>=<value>:<effect>"). No-op if register-node is false.
