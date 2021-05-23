@@ -1295,16 +1295,13 @@ _k8s_install_systemd(){
 
   $(_sudo) cp -r mount/. /etc/systemd/system/
 
-  cat /etc/systemd/system/kubelet@.service
-
   $(_sudo) sed -i \
-  -e "s!/opt/k8s!${K8S_ROOT}!g" \
-  -e 's!__opt/k8s__!/opt/k8s!g' \
-  /etc/systemd/system/kube-mkdir@.service \
-  /etc/systemd/system/kubelet@.service \
+  "s!/opt/k8s!${K8S_ROOT}!g" \
   $(for item in $(cd mount && ls);do echo /etc/systemd/system/$item;done)
 
-  cat /etc/systemd/system/kubelet@.service
+  $(_sudo) sed -i \
+  's!__opt/k8s__!/opt/k8s!g' \
+  /etc/systemd/system/kubelet@.service
 
   cd - > /dev/null
 
