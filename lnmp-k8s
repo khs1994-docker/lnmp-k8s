@@ -133,18 +133,6 @@ GOOS=`uname -s | tr A-Z  a-z`
 
 command -v curl > /dev/null || print_info "curl not install"
 
-if [ $GOOS = 'darwin' -a ! -f /usr/local/opt/gnu-sed/libexec/gnubin/sed ];then
-  print_info "please install gnu-sed by EXEC:
-
-\$ brew install gnu-sed"
-
-  exit 1
-fi
-
-if [ $GOOS = 'darwin' ];then
-  alias sed=gsed
-fi
-
 CODING_URL=https://pcit-generic.pkg.coding.net/khs1994-docker/kubernetes
 
 _upload_to_coding(){
@@ -222,6 +210,10 @@ _kubernetes_server_install(){
   if [ "$1" = "--url" ];then
     local get_by_url=1
     shift 1
+  fi
+
+  if [ "$GOOS" = 'darwin' ];then
+    local GOOS=linux
   fi
 
   test -n "${1}" && local GOOS=$1
@@ -1303,12 +1295,16 @@ _k8s_install_systemd(){
 
   $(_sudo) cp -r mount/. /etc/systemd/system/
 
+  cat /etc/systemd/system/kubelet@.service
+
   $(_sudo) sed -i \
   -e "s!/opt/k8s!${K8S_ROOT}!g" \
   -e 's!__opt/k8s__!/opt/k8s!g' \
   /etc/systemd/system/kube-mkdir@.service \
   /etc/systemd/system/kubelet@.service \
   $(for item in $(cd mount && ls);do echo /etc/systemd/system/$item;done)
+
+  cat /etc/systemd/system/kubelet@.service
 
   cd - > /dev/null
 
