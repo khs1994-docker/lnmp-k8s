@@ -145,7 +145,7 @@ Feature gate flags:
                                       InTreePluginGCEUnregister=true|false (ALPHA - default=false)
                                       InTreePluginOpenStackUnregister=true|false (ALPHA - default=false)
                                       InTreePluginvSphereUnregister=true|false (ALPHA - default=false)
-                                      IndexedJob=true|false (ALPHA - default=false)
+                                      IndexedJob=true|false (BETA - default=true)
                                       IngressClassNamespacedParams=true|false (ALPHA - default=false)
                                       KubeletCredentialProviders=true|false (ALPHA - default=false)
                                       KubeletPodResources=true|false (BETA - default=true)
@@ -157,7 +157,7 @@ Feature gate flags:
                                       MixedProtocolLBService=true|false (ALPHA - default=false)
                                       NetworkPolicyEndPort=true|false (ALPHA - default=false)
                                       NonPreemptingPriority=true|false (BETA - default=true)
-                                      PodAffinityNamespaceSelector=true|false (ALPHA - default=false)
+                                      PodAffinityNamespaceSelector=true|false (BETA - default=true)
                                       PodDeletionCost=true|false (BETA - default=true)
                                       PodOverhead=true|false (BETA - default=true)
                                       PreferNominatedNode=true|false (ALPHA - default=false)
@@ -181,10 +181,10 @@ Feature gate flags:
                                       TopologyManager=true|false (BETA - default=true)
                                       ValidateProxyRedirects=true|false (BETA - default=true)
                                       VolumeCapacityPriority=true|false (ALPHA - default=false)
-                                      WarningHeaders=true|false (BETA - default=true)
                                       WinDSR=true|false (ALPHA - default=false)
                                       WinOverlay=true|false (BETA - default=true)
                                       WindowsEndpointSliceProxying=true|false (BETA - default=true)
+                                      WindowsHostProcessContainers=true|false (ALPHA - default=false)
 
 Metrics flags:
 
