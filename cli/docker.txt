@@ -37,7 +37,7 @@ Management Commands:
   network     Manage networks
   node        Manage Swarm nodes
   plugin      Manage plugins
-  scan*       Docker Scan (Docker Inc., v0.7.0)
+  scan*       Docker Scan (Docker Inc., v0.8.0)
   secret      Manage Docker secrets
   service     Manage services
   stack       Manage Docker stacks
