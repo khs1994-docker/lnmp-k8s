@@ -62,20 +62,18 @@ Authorization flags:
 
 Deprecated flags:
 
-      --contention-profiling                       DEPRECATED: enable lock contention profiling, if profiling is enabled. This parameter is ignored if a config file is specified in --config. (default true)
-      --hard-pod-affinity-symmetric-weight int32   DEPRECATED: RequiredDuringScheduling affinity is not symmetric, but there is an implicit PreferredDuringScheduling affinity rule corresponding to every RequiredDuringScheduling affinity rule. --hard-pod-affinity-symmetric-weight represents the weight of implicit PreferredDuringScheduling affinity rule. Must be in the range 0-100.This parameter is ignored if a config file is specified in --config. (default 1)
-      --kube-api-burst int32                       DEPRECATED: burst to use while talking with kubernetes apiserver. This parameter is ignored if a config file is specified in --config. (default 100)
-      --kube-api-content-type string               DEPRECATED: content type of requests sent to apiserver. This parameter is ignored if a config file is specified in --config. (default "application/vnd.kubernetes.protobuf")
-      --kube-api-qps float32                       DEPRECATED: QPS to use while talking with kubernetes apiserver. This parameter is ignored if a config file is specified in --config. (default 50)
-      --kubeconfig string                          DEPRECATED: path to kubeconfig file with authorization and master location information. This parameter is ignored if a config file is specified in --config.
-      --lock-object-name string                    DEPRECATED: define the name of the lock object. Will be removed in favor of leader-elect-resource-name. This parameter is ignored if a config file is specified in --config. (default "kube-scheduler")
-      --lock-object-namespace string               DEPRECATED: define the namespace of the lock object. Will be removed in favor of leader-elect-resource-namespace. This parameter is ignored if a config file is specified in --config. (default "kube-system")
-      --policy-config-file string                  DEPRECATED: file with scheduler policy configuration. This file is used if policy ConfigMap is not provided or --use-legacy-policy-config=true. Note: The scheduler will fail if this is combined with Plugin configs
-      --policy-configmap string                    DEPRECATED: name of the ConfigMap object that contains scheduler's policy configuration. It must exist in the system namespace before scheduler initialization if --use-legacy-policy-config=false. The config must be provided as the value of an element in 'Data' map with the key='policy.cfg'. Note: The scheduler will fail if this is combined with Plugin configs
-      --policy-configmap-namespace string          DEPRECATED: the namespace where policy ConfigMap is located. The kube-system namespace will be used if this is not provided or is empty. Note: The scheduler will fail if this is combined with Plugin configs (default "kube-system")
-      --profiling                                  DEPRECATED: enable profiling via web interface host:port/debug/pprof/. This parameter is ignored if a config file is specified in --config. (default true)
-      --scheduler-name string                      DEPRECATED: name of the scheduler, used to select which pods will be processed by this scheduler, based on pod's "spec.schedulerName". This parameter is ignored if a config file is specified in --config. (default "default-scheduler")
-      --use-legacy-policy-config                   DEPRECATED: when set to true, scheduler will ignore policy ConfigMap and uses policy config file. Note: The scheduler will fail if this is combined with Plugin configs
+      --contention-profiling                DEPRECATED: enable lock contention profiling, if profiling is enabled. This parameter is ignored if a config file is specified in --config. (default true)
+      --kube-api-burst int32                DEPRECATED: burst to use while talking with kubernetes apiserver. This parameter is ignored if a config file is specified in --config. (default 100)
+      --kube-api-content-type string        DEPRECATED: content type of requests sent to apiserver. This parameter is ignored if a config file is specified in --config. (default "application/vnd.kubernetes.protobuf")
+      --kube-api-qps float32                DEPRECATED: QPS to use while talking with kubernetes apiserver. This parameter is ignored if a config file is specified in --config. (default 50)
+      --kubeconfig string                   DEPRECATED: path to kubeconfig file with authorization and master location information. This parameter is ignored if a config file is specified in --config.
+      --lock-object-name string             DEPRECATED: define the name of the lock object. Will be removed in favor of leader-elect-resource-name. This parameter is ignored if a config file is specified in --config. (default "kube-scheduler")
+      --lock-object-namespace string        DEPRECATED: define the namespace of the lock object. Will be removed in favor of leader-elect-resource-namespace. This parameter is ignored if a config file is specified in --config. (default "kube-system")
+      --policy-config-file string           DEPRECATED: file with scheduler policy configuration. This file is used if policy ConfigMap is not provided or --use-legacy-policy-config=true. Note: The predicates/priorities defined in this file will take precedence over any profiles define in ComponentConfig.
+      --policy-configmap string             DEPRECATED: name of the ConfigMap object that contains scheduler's policy configuration. It must exist in the system namespace before scheduler initialization if --use-legacy-policy-config=false. The config must be provided as the value of an element in 'Data' map with the key='policy.cfg'. Note: The predicates/priorities defined in this file will take precedence over any profiles define in ComponentConfig.
+      --policy-configmap-namespace string   DEPRECATED: the namespace where policy ConfigMap is located. The kube-system namespace will be used if this is not provided or is empty. Note: The predicates/priorities defined in this file will take precedence over any profiles define in ComponentConfig. (default "kube-system")
+      --profiling                           DEPRECATED: enable profiling via web interface host:port/debug/pprof/. This parameter is ignored if a config file is specified in --config. (default true)
+      --use-legacy-policy-config            DEPRECATED: when set to true, scheduler will ignore policy ConfigMap and uses policy config file. Note: The scheduler will fail if this is combined with Plugin configs
 
 Leader election flags:
 
@@ -98,7 +96,6 @@ Feature gate flags:
                                       AllBeta=true|false (BETA - default=false)
                                       AnyVolumeDataSource=true|false (ALPHA - default=false)
                                       AppArmor=true|false (BETA - default=true)
-                                      BalanceAttachedNodeVolumes=true|false (ALPHA - default=false)
                                       CPUManager=true|false (BETA - default=true)
                                       CSIInlineVolume=true|false (BETA - default=true)
                                       CSIMigration=true|false (BETA - default=true)
@@ -152,7 +149,7 @@ Feature gate flags:
                                       LogarithmicScaleDown=true|false (ALPHA - default=false)
                                       MemoryManager=true|false (ALPHA - default=false)
                                       MixedProtocolLBService=true|false (ALPHA - default=false)
-                                      NetworkPolicyEndPort=true|false (ALPHA - default=false)
+                                      NetworkPolicyEndPort=true|false (BETA - default=true)
                                       NonPreemptingPriority=true|false (BETA - default=true)
                                       PodAffinityNamespaceSelector=true|false (BETA - default=true)
                                       PodDeletionCost=true|false (BETA - default=true)
@@ -167,7 +164,6 @@ Feature gate flags:
                                       ServiceInternalTrafficPolicy=true|false (ALPHA - default=false)
                                       ServiceLBNodePortControl=true|false (ALPHA - default=false)
                                       ServiceLoadBalancerClass=true|false (ALPHA - default=false)
-                                      SetHostnameAsFQDN=true|false (BETA - default=true)
                                       SizeMemoryBackedVolumes=true|false (BETA - default=true)
                                       StatefulSetMinReadySeconds=true|false (ALPHA - default=false)
                                       StorageVersionAPI=true|false (ALPHA - default=false)
