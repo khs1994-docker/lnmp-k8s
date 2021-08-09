@@ -13,7 +13,7 @@ USAGE:
    containerd [global options] command [command options] [arguments...]
 
 VERSION:
-   v1.5.0-rc.1
+   v1.5.5
 
 DESCRIPTION:
    
