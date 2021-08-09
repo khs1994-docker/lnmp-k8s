@@ -39,7 +39,7 @@ jobs:
           cfssl
         name: build khs1994/k8s-cfssl
       - name: build khs1994/fcos
-      - run: |
+        run: |
           docker buildx build \
           --cache-from=ghcr.io/khs1994/fcos:cache \
           --cache-to=ghcr.io/khs1994/fcos:cache \
