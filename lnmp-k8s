@@ -1127,6 +1127,7 @@ encryption-config.yaml} \
 }
 
 # https://github.com/kubernetes/kubeadm/issues/273
+# https://www.cnblogs.com/k8s/p/12067580.html
 # 16.04 not use systemd-resolved
 # 18.04 use systemd-resolved
 
@@ -1542,10 +1543,6 @@ if [ "${LNMP_CN_ENV}" = 'false' ];then
   $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers/pause#k8s.gcr.io/pause#g" \
                `grep registry.cn-hangzhou.aliyuncs.com/google_containers/pause -rl $PWD/systemd` || true
   # $(_sudo) sed -i "s#quay.mirror#quay.io#g" `grep quay.mirror -rl $PWD/systemd` || true
-  $(_sudo) sed -i "s#ccr.ccs.tencentyun.com/gcr-mirror/metrics-server#k8s.gcr.io/metrics-server/metrics-server#g" \
-               `grep ccr.ccs.tencentyun.com/gcr-mirror/metrics-server -rl $PWD/addons` || true
-  $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers/pause#k8s.gcr.io/pause#g" \
-               `grep registry.cn-hangzhou.aliyuncs.com/google_containers/pause -rl $PWD/addons` || true
   print_info "[end] CN mirror disabled"
 fi
 
