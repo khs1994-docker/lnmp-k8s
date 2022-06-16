@@ -311,8 +311,8 @@ jobs:
          # sudo systemctl status kube-proxy
          # sudo systemctl status kubelet${KUBELET_SERVICE}
 
-         kubectl version
-         kubectl cluster-info
+         kubectl version || true
+         kubectl cluster-info || true
 
          sleep 30
 
