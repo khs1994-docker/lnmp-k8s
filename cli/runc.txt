@@ -27,11 +27,11 @@ USAGE:
    runc [global options] command [command options] [arguments...]
 
 VERSION:
-   1.1.0
-commit: v1.1.0-0-g067aaf85
+   1.1.1
+commit: v1.1.1-0-g52de29d7
 spec: 1.0.2-dev
-go: go1.17.2
-libseccomp: 2.5.1
+go: go1.17.9
+libseccomp: 2.5.3
 
 COMMANDS:
    checkpoint  checkpoint a running container
