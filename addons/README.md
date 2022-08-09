@@ -6,15 +6,15 @@
 
 * CoreDNS `1.9.3`
 
-* Dashboard `2.5.0`
+* Dashboard `2.6.0`
 
 * Istio `1.10.0`
 
 ## ingress
 
-* ingress-nginx `1.1.1`
+* ingress-nginx `1.3.0`
 
-* ingress-kong `1.3`
+* ingress-kong `2.5.0`
 
 ## CNI
 
