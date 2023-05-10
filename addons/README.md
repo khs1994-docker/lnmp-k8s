@@ -12,13 +12,13 @@
 
 ## ingress
 
-* ingress-nginx `1.3.0`
+* ingress-nginx `1.7.0`
 
 * ingress-kong `2.5.0`
 
 ## CNI
 
-* [calico](https://projectcalico.docs.tigera.io/getting-started/kubernetes/self-managed-onprem/) `3.24`
+* [calico](https://projectcalico.docs.tigera.io/getting-started/kubernetes/self-managed-onprem/) `3.25.1`
 
 ## CI/CD
 
