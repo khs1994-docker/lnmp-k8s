@@ -51,7 +51,6 @@ Generic flags:
                                                  CSIMigrationPortworx=true|false (BETA - default=false)
                                                  CSIVolumeHealth=true|false (ALPHA - default=false)
                                                  CloudControllerManagerWebhook=true|false (ALPHA - default=false)
-                                                 CloudDualStackNodeIPs=true|false (BETA - default=true)
                                                  ClusterTrustBundle=true|false (ALPHA - default=false)
                                                  ClusterTrustBundleProjection=true|false (ALPHA - default=false)
                                                  ComponentSLIs=true|false (BETA - default=true)
@@ -67,7 +66,7 @@ Generic flags:
                                                  DisableNodeKubeProxyVersion=true|false (ALPHA - default=false)
                                                  DynamicResourceAllocation=true|false (ALPHA - default=false)
                                                  ElasticIndexedJob=true|false (BETA - default=true)
-                                                 EventedPLEG=true|false (BETA - default=false)
+                                                 EventedPLEG=true|false (ALPHA - default=false)
                                                  GracefulNodeShutdown=true|false (BETA - default=true)
                                                  GracefulNodeShutdownBasedOnPodPriority=true|false (BETA - default=true)
                                                  HPAContainerMetrics=true|false (BETA - default=true)
@@ -85,14 +84,13 @@ Generic flags:
                                                  JobBackoffLimitPerIndex=true|false (BETA - default=true)
                                                  JobPodFailurePolicy=true|false (BETA - default=true)
                                                  JobPodReplacementPolicy=true|false (BETA - default=true)
-                                                 KubeProxyDrainingTerminatingNodes=true|false (ALPHA - default=false)
+                                                 KubeProxyDrainingTerminatingNodes=true|false (BETA - default=true)
                                                  KubeletCgroupDriverFromCRI=true|false (ALPHA - default=false)
                                                  KubeletInUserNamespace=true|false (ALPHA - default=false)
                                                  KubeletPodResourcesDynamicResources=true|false (ALPHA - default=false)
                                                  KubeletPodResourcesGet=true|false (ALPHA - default=false)
                                                  KubeletSeparateDiskGC=true|false (ALPHA - default=false)
                                                  KubeletTracing=true|false (BETA - default=true)
-                                                 LegacyServiceAccountTokenCleanUp=true|false (BETA - default=true)
                                                  LoadBalancerIPMode=true|false (ALPHA - default=false)
                                                  LocalStorageCapacityIsolationFSQuotaMonitoring=true|false (ALPHA - default=false)
                                                  LogarithmicScaleDown=true|false (BETA - default=true)
@@ -128,7 +126,6 @@ Generic flags:
                                                  RuntimeClassInImageCriApi=true|false (ALPHA - default=false)
                                                  SELinuxMountReadWriteOncePod=true|false (BETA - default=true)
                                                  SchedulerQueueingHints=true|false (BETA - default=false)
-                                                 SecurityContextDeny=true|false (ALPHA - default=false)
                                                  SeparateTaintEvictionController=true|false (BETA - default=true)
                                                  ServiceAccountTokenJTI=true|false (ALPHA - default=false)
                                                  ServiceAccountTokenNodeBinding=true|false (ALPHA - default=false)
@@ -136,9 +133,9 @@ Generic flags:
                                                  ServiceAccountTokenPodNodeInfo=true|false (ALPHA - default=false)
                                                  SidecarContainers=true|false (BETA - default=true)
                                                  SizeMemoryBackedVolumes=true|false (BETA - default=true)
-                                                 StableLoadBalancerNodeSet=true|false (BETA - default=true)
                                                  StatefulSetAutoDeletePVC=true|false (BETA - default=true)
                                                  StatefulSetStartOrdinal=true|false (BETA - default=true)
+                                                 StorageNamespaceIndex=true|false (BETA - default=true)
                                                  StorageVersionAPI=true|false (ALPHA - default=false)
                                                  StorageVersionHash=true|false (BETA - default=true)
                                                  StructuredAuthenticationConfiguration=true|false (ALPHA - default=false)
@@ -156,10 +153,10 @@ Generic flags:
                                                  VolumeAttributesClass=true|false (ALPHA - default=false)
                                                  VolumeCapacityPriority=true|false (ALPHA - default=false)
                                                  WatchList=true|false (ALPHA - default=false)
+                                                 WatchListClient=true|false (BETA - default=false)
                                                  WinDSR=true|false (ALPHA - default=false)
                                                  WinOverlay=true|false (BETA - default=true)
                                                  WindowsHostNetwork=true|false (ALPHA - default=true)
-                                                 ZeroLimitedNominalConcurrencyShares=true|false (BETA - default=false)
       --kube-api-burst int32                     Burst to use while talking with kubernetes apiserver. (default 30)
       --kube-api-content-type string             Content type of requests sent to apiserver. (default "application/vnd.kubernetes.protobuf")
       --kube-api-qps float32                     QPS to use while talking with kubernetes apiserver. (default 20)
@@ -188,9 +185,9 @@ Secure serving flags:
       --permit-port-sharing                    If true, SO_REUSEPORT will be used when binding the port, which allows more than one instance to bind on the same address and port. [default=false]
       --secure-port int                        The port on which to serve HTTPS with authentication and authorization. If 0, don't serve HTTPS at all. (default 10257)
       --tls-cert-file string                   File containing the default x509 Certificate for HTTPS. (CA cert, if any, concatenated after server cert). If HTTPS serving is enabled, and --tls-cert-file and --tls-private-key-file are not provided, a self-signed certificate and key are generated for the public address and saved to the directory specified by --cert-dir.
-      --tls-cipher-suites strings              Comma-separated list of cipher suites for the server. If omitted, the default Go cipher suites will be used.
-                                               Preferred values: TLS_AES_128_GCM_SHA256, TLS_AES_256_GCM_SHA384, TLS_CHACHA20_POLY1305_SHA256, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256, TLS_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_256_GCM_SHA384.
-                                               Insecure values: TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256, TLS_ECDHE_ECDSA_WITH_RC4_128_SHA, TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256, TLS_ECDHE_RSA_WITH_RC4_128_SHA, TLS_RSA_WITH_3DES_EDE_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA256, TLS_RSA_WITH_RC4_128_SHA.
+      --tls-cipher-suites strings              Comma-separated list of cipher suites for the server. If omitted, the default Go cipher suites will be used. 
+                                               Preferred values: TLS_AES_128_GCM_SHA256, TLS_AES_256_GCM_SHA384, TLS_CHACHA20_POLY1305_SHA256, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256. 
+                                               Insecure values: TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256, TLS_ECDHE_ECDSA_WITH_RC4_128_SHA, TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256, TLS_ECDHE_RSA_WITH_RC4_128_SHA, TLS_RSA_WITH_3DES_EDE_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA256, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_256_GCM_SHA384, TLS_RSA_WITH_RC4_128_SHA.
       --tls-min-version string                 Minimum TLS version supported. Possible values: VersionTLS10, VersionTLS11, VersionTLS12, VersionTLS13
       --tls-private-key-file string            File containing the default x509 private key matching --tls-cert-file.
       --tls-sni-cert-key namedCertKey          A pair of x509 certificate and private key file paths, optionally suffixed with a list of domain patterns which are fully qualified domain names, possibly with prefixed wildcard segments. The domain patterns also allow IP addresses, but IPs should only be used if the apiserver has visibility to the IP address requested by a client. If no domain patterns are provided, the names of the certificate are extracted. Non-wildcard matches trump over wildcard matches, explicit domain patterns trump over extracted names. For multiple key/certificate pairs, use the --tls-sni-cert-key multiple times. Examples: "example.crt,example.key" or "foo.crt,foo.key:*.foo.com,foo.com". (default [])
