@@ -1,5 +1,5 @@
-E1123 06:32:51.984099   24332 metrics.go:340] "failed to initialize nfacct client" err="nfacct sub-system not available"
-E1123 06:32:51.984160   24332 metrics.go:340] "failed to initialize nfacct client" err="nfacct sub-system not available"
+E0406 10:08:03.607738   24169 metrics.go:340] "failed to initialize nfacct client" err="nfacct sub-system not available"
+E0406 10:08:03.607823   24169 metrics.go:340] "failed to initialize nfacct client" err="nfacct sub-system not available"
 The Kubernetes network proxy runs on each node. This
 reflects services as defined in the Kubernetes API on each node and can do simple
 TCP, UDP, and SCTP stream forwarding or round robin TCP, UDP, and SCTP forwarding across a set of backends.

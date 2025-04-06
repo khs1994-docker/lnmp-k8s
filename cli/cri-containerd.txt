@@ -1,5 +1,5 @@
 NAME:
-   containerd -
+   containerd - 
                     __        _                     __
   _________  ____  / /_____ _(_)___  ___  _________/ /
  / ___/ __ \/ __ \/ __/ __ `/ / __ \/ _ \/ ___/ __  /
@@ -16,7 +16,7 @@ VERSION:
    v1.7.0
 
 DESCRIPTION:
-
+   
 containerd is a high performance container runtime whose daemon can be started
 by using this command. If none of the *config*, *publish*, *oci-hook*, or *help* commands
 are specified, the default action of the **containerd** command is to start the
