@@ -148,17 +148,6 @@ command -v curl > /dev/null || print_info "curl not install"
 
 CODING_URL=https://pcit-generic.pkg.coding.net/khs1994-docker/kubernetes
 
-_upload_to_coding(){
-  if [ "$UPLOAD_TO_CODING" != 'true' ];then return; fi
-
-  local PKG_PATH=$1
-  local PKG=$2
-  local PKG_VERSION=$3
-
-  curl -T ${PKG_PATH} -u ${CODING_USERNAME}:${CODING_TOKEN} \
-  "${CODING_URL}/${PKG}?version=${PKG_VERSION}"
-}
-
 _get_kubernetes_server_by_docker_image(){
   local TYPE=server
   test -n "${1}" && local GOOS=$1
@@ -441,17 +430,6 @@ _gvisor_containerd_conf(){
 
     return
   fi
-print_info "config containerd with gvisor(runsc) ..."
-# containerd 1.7.x
-cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/cri-containerd/1.7/config.toml
-
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
-  runtime_type = "io.containerd.runsc.v1"
-  # privileged_without_host_devices = false
-
-  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc.options]
-    SystemdCgroup = false
-EOF
 }
 
 _gvisor_crio_conf(){
@@ -495,8 +473,6 @@ _gvisor_install(){
   $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C /usr/local/bin
 
   runsc --version
-
-  _upload_to_coding ${TMP_ROOT}/${TAR_FILE} ${TAR_FILE} nightly
 }
 
 _runsc_install(){
@@ -507,7 +483,6 @@ _runc_install(){
   if [ `command -v runc` ];then
     print_info "runc already install"
     runc --version
-    _upload_to_coding /usr/bin/runc runc.${GOARCH} ${RUNC_VERSION}
     return
   fi
 
@@ -518,19 +493,26 @@ _runc_install(){
   local url=https://${GITHUB_MIRROR}/opencontainers/runc/releases/download/v${RUNC_VERSION}
 
   if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
-    url=${CODING_URL}/${file_name}?version=${RUNC_VERSION}
+    rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
+      khs1994-docker/lwpm/runc \
+      ${RUNC_VERSION} \
+      ${GOARCH} \
+      ${GOOS} \
+      "" 0 docker.cnb.cool)
+
+    $(_sudo) tar -zxvf $rootfs -C /tmp
+    $(_sudo) install -m 755 /tmp/runc/dist/runc /usr/bin/runc
   else
     _use_cn_mirror ${url}/${file_name} && url=${url}/${file_name} \
                                        || url=${url_official}/${file_name}
+
+
+    $(_sudo) $(_curl) ${url} -o /usr/bin/runc
+
+    $(_sudo) chmod +x /usr/bin/runc
   fi
 
-  $(_sudo) $(_curl) ${url} -o /usr/bin/runc
-
-  $(_sudo) chmod +x /usr/bin/runc
-
   runc --version
-
-  _upload_to_coding /usr/bin/runc runc.${GOARCH} ${RUNC_VERSION}
 }
 
 _crun_containerd_conf(){
@@ -553,7 +535,6 @@ _crun_install(){
   if [ `command -v crun` ];then
     print_info "crun already install"
     crun --version
-    _upload_to_coding /usr/bin/crun crun-${CRUN_VERSION}-linux-${GOARCH} ${CRUN_VERSION}
     return
   fi
 
@@ -595,9 +576,6 @@ _crun_install(){
 
   crun --version
   crun-disable-systemd --version
-
-  _upload_to_coding /usr/bin/crun crun-${CRUN_VERSION}-linux-${GOARCH} ${CRUN_VERSION}
-  _upload_to_coding /usr/bin/crun-disable-systemd crun-${CRUN_VERSION}-linux-${GOARCH}-disable-systemd ${CRUN_VERSION}
 }
 
 _containerd_install(){
@@ -614,36 +592,44 @@ _containerd_install(){
   fi
 
   if [ -f ${K8S_ROOT}/bin/cri-containerd -a ! "$1" = "--dry-run" ];then \
-    print_info "containerd 1.7 already install"; \
+    print_info "containerd 2.0 already install"; \
     ${K8S_ROOT}/bin/cri-containerd --version;return; fi
 
-  print_info "install containerd 1.7 ..."
+  print_info "install containerd 2.0 ..."
 
   local url_official="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
   local url="https://${GITHUB_MIRROR}/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
 
-  local TAR_FILE="cri-containerd-${CONTAINERD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
+  # local TAR_FILE="cri-containerd-${CONTAINERD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
+  local TAR_FILE="containerd-${CONTAINERD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
 
   if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
-    url=${CODING_URL}/${TAR_FILE}?version=${CONTAINERD_VERSION}
-    local sha256sum_url=${CODING_URL}/${TAR_FILE}.sha256sum?version=${CONTAINERD_VERSION}
+    rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
+      khs1994-docker/lwpm/containerd \
+      ${CONTAINERD_VERSION} \
+      ${GOARCH} \
+      ${GOOS} \
+      "" 0 docker.cnb.cool)
+    $(_sudo) cp ${rootfs} ${TMP_ROOT}/${TAR_FILE}
   else
     _use_cn_mirror ${url}/${TAR_FILE} && url=${url}/${TAR_FILE} \
                                       || url=${url_official}/${TAR_FILE}
 
     local sha256sum_url=${url}.sha256sum
-  fi
 
-  if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
-    local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
-    local sha256_remote=`curl -fsSL ${sha256sum_url} | cut -d " " -f 1` || true
 
-    if [ $sha256 != "$sha256_remote" ];then
-      $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
+    if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
+    true
+    # local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
+    # local sha256_remote=`curl -fsSL ${sha256sum_url} | cut -d " " -f 1` || true
+
+    # if [ $sha256 != "$sha256_remote" ];then
+    #   $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
+    #   $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
+    # fi
+    else
       $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
     fi
-  else
-      $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
   fi
 
   if [ "$1" = "--dry-run" ];then
@@ -654,14 +640,9 @@ _containerd_install(){
   $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}
 
   $(_sudo) install -m755 ${K8S_ROOT}/usr/local/bin/containerd              ${K8S_ROOT}/bin/cri-containerd
-  $(_sudo) install -m755 ${K8S_ROOT}/usr/local/bin/containerd-shim         /usr/local/bin/cri-containerd-shim
-  $(_sudo) install -m755 ${K8S_ROOT}/usr/local/bin/containerd-shim-runc-v1 /usr/local/bin/
   $(_sudo) install -m755 ${K8S_ROOT}/usr/local/bin/containerd-shim-runc-v2 /usr/local/bin/
-  $(_sudo) install -m755 ${K8S_ROOT}/usr/local/sbin/runc                   /usr/bin/
 
-  _upload_to_coding ${TMP_ROOT}/${TAR_FILE} ${TAR_FILE} ${CONTAINERD_VERSION}
-  $(_sudo) $(_curl) ${sha256sum_url} -o ${TMP_ROOT}/${TAR_FILE}.sha256sum
-  _upload_to_coding ${TMP_ROOT}/${TAR_FILE}.sha256sum ${TAR_FILE}.sha256sum ${CONTAINERD_VERSION}
+  # $(_sudo) $(_curl) ${sha256sum_url} -o ${TMP_ROOT}/${TAR_FILE}.sha256sum
 }
 
 _cni_install(){
@@ -684,17 +665,29 @@ _cni_install(){
   _use_cn_mirror ${url}/${TAR_FILE} || url=$url_official
 
   __download(){
-    $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
+    if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
+      rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
+        khs1994-docker/lwpm/cni \
+        ${CNI_VERSION} \
+        ${GOARCH} \
+        ${GOOS} \
+        "" 0 docker.cnb.cool)
+
+      $(_sudo) cp $rootfs  ${TMP_ROOT}/${TAR_FILE}
+    else
+      $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
+    fi
   }
 
   print_info "install cni ..."
 
   if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
-      local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
-    if ! [ $sha256 = `curl -fsSL ${url}/${TAR_FILE}.sha256 | cut -d " " -f 1` ];then
-      $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
-      __download
-    fi
+      # local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
+    # if ! [ $sha256 = `curl -fsSL ${url}/${TAR_FILE}.sha256 | cut -d " " -f 1` ];then
+    #   $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
+    #   __download
+    # fi
+    true
   else
       __download
   fi
@@ -746,11 +739,17 @@ _crictl_install(){
   local TAR_FILE="crictl-v${CRICTL_VERSION}-linux-${GOARCH}.tar.gz"
 
   if [ "$DOWNLOAD_FROM_CODING" != "false" ];then
-    url=${CODING_URL}/${TAR_FILE}?version=${CRICTL_VERSION}
+    rootfs=$(../windows/sdk/dockerhub/rootfs.sh \
+      khs1994-docker/lwpm/crictl \
+      ${CRICTL_VERSION} \
+      ${GOARCH} \
+      ${GOOS} \
+      "" 0 docker.cnb.cool)
+
+    $(_sudo) cp ${rootfs} ${TMP_ROOT}/${TAR_FILE}
   else
     _use_cn_mirror ${url}/${TAR_FILE} && url=${url}/${TAR_FILE} \
                                       || url=${url_official}/${TAR_FILE}
-  fi
 
   print_info "install crictl ..."
 
@@ -766,6 +765,7 @@ _crictl_install(){
   if ! [ -f ${TMP_ROOT}/${TAR_FILE} ];then
       $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
   fi
+  fi
 
   if [ "$1" = "--dry-run" ];then
     print_info "download crictl success"
@@ -774,8 +774,6 @@ _crictl_install(){
 
   # $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}/bin/
   $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C /usr/bin/
-
-  _upload_to_coding ${TMP_ROOT}/${TAR_FILE} ${TAR_FILE} ${CRICTL_VERSION}
 }
 
 _k8s_install_dep(){
@@ -863,8 +861,6 @@ _conmon_install(){
       $(_sudo) $(_curl) -o ${K8S_ROOT}/usr/local/bin/conmon $url
 
       $(_sudo) chmod +x ${K8S_ROOT}/usr/local/bin/conmon
-
-      _upload_to_coding ${K8S_ROOT}/usr/local/bin/conmon conmon.$GOARCH ${CONMON_VERSION}
 
       return
     fi
@@ -1283,7 +1279,7 @@ _k8s_install_systemd(){
     _enable_wsl_k8s_systemd_target kube-apiserver.service
     _enable_wsl_k8s_systemd_target kube-controller-manager.service
     _enable_wsl_k8s_systemd_target kube-scheduler.service
-    _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@1.7.service
+    _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@2.0.service
     _enable_wsl_k8s_systemd_target kubelet@.service kubelet@cri-containerd.service
     _enable_wsl_k8s_systemd_target etcd.service
 
