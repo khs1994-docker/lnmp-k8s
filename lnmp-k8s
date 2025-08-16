@@ -1065,7 +1065,7 @@ _containerd_cri_config(){
   fi
 
   if [ -n "$GITHUB_ACTIONS" ];then
-    $(_sudo) mkdir $CONTAINERD_CONF_ROOT/certs.d/docker.io
+    $(_sudo) mkdir -p $CONTAINERD_CONF_ROOT/certs.d/docker.io
 
     cat <<EOF | $(_sudo) tee $CONTAINERD_CONF_ROOT/certs.d/docker.io/hosts.toml
 server = "https://docker.io"
