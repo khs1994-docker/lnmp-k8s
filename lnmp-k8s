@@ -632,6 +632,14 @@ _containerd_install(){
   $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim-runc-v2 /usr/local/bin/
 
   # $(_sudo) $(_curl) ${sha256sum_url} -o ${TMP_ROOT}/${TAR_FILE}.sha256sum
+
+  if [ -n "$WSL2_SYSTEMD" ];then
+    _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@2.1.service
+    _enable_wsl_k8s_systemd_target kubelet@.service kubelet@cri-containerd.service
+
+    $(_sudo) rm -rf /etc/systemd/system/wsl-k8s.target.wants/cri-o.service
+    $(_sudo) rm -rf /etc/systemd/system/wsl-k8s.target.wants/kubelet@crio.service
+  fi
 }
 
 _cni_install(){
@@ -880,9 +888,19 @@ _crio_install(){
 
     $(_sudo) cp ${TMP_ROOT}/cri-o/bin/* ${K8S_ROOT}/bin/
 
-     $(_sudo) cp ${TMP_ROOT}/cri-o/bin/crun /usr/local/bin/crun
+    $(_sudo) cp ${TMP_ROOT}/cri-o/bin/crun /usr/local/bin/crun
+
+    $(_sudo) cp systemd/system/cri-o.service /etc/systemd/system/cri-o.service
 
     _crio_config
+
+    if [ -n "$WSL2_SYSTEMD" ];then
+      _enable_wsl_k8s_systemd_target cri-o.service cri-o.service
+      _enable_wsl_k8s_systemd_target kubelet@.service kubelet@crio.service
+
+      $(_sudo) rm -rf /etc/systemd/system/wsl-k8s.target.wants/cri-containerd@2.1.service
+      $(_sudo) rm -rf /etc/systemd/system/wsl-k8s.target.wants/kubelet@cri-containerd.service
+    fi
 
     return
   fi
@@ -1168,6 +1186,8 @@ _k8s_install_conf_replace(){
 }
 
 _enable_wsl_k8s_systemd_target(){
+  $(_sudo) mkdir -p /etc/systemd/system/wsl-k8s.target.wants
+
   $(_sudo) ln -sf /etc/systemd/system/$1 \
     /etc/systemd/system/wsl-k8s.target.wants/${2:-$1}
 }
@@ -1273,8 +1293,6 @@ _k8s_install_systemd(){
       's/${K8S_ETCD_HOST}/127.0.0.1/g' \
       /etc/systemd/system/etcd.service
 
-    $(_sudo) mkdir -p /etc/systemd/system/wsl-k8s.target.wants
-
     $(_sudo) cp target/wsl.target /etc/systemd/system/
     $(_sudo) cp target/wsl-k8s.target /etc/systemd/system/
     $(_sudo) cp target/wsl-k8s-shutdown.target /etc/systemd/system/
@@ -1282,8 +1300,6 @@ _k8s_install_systemd(){
     _enable_wsl_k8s_systemd_target kube-apiserver.service
     _enable_wsl_k8s_systemd_target kube-controller-manager.service
     _enable_wsl_k8s_systemd_target kube-scheduler.service
-    _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@2.1.service
-    _enable_wsl_k8s_systemd_target kubelet@.service kubelet@cri-containerd.service
     _enable_wsl_k8s_systemd_target etcd.service
 
     $(_sudo) mkdir -p /etc/systemd/system/kube-.service.d \

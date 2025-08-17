@@ -44,11 +44,11 @@ var-log-pods.mount
 Type=notify
 EnvironmentFile=-/opt/k8s/etc/sysconfig/crio
 Environment=GOTRACEBACK=crash
-Environment=CONTAINER_PINNS_PATH=/opt/k8s/usr/local/bin/pinns
+Environment=CONTAINER_PINNS_PATH=/opt/k8s/bin/pinns
 Environment=CONTAINER_CONFIG=/opt/k8s/etc/crio/crio.conf
 Environment=CONTAINER_CONFIG_DIR=/opt/k8s/etc/crio/crio.conf.d
 Environment=CONTAINER_HOOKS_DIR=/opt/k8s/usr/local/share/containers/oci/hooks.d
-Environment=CONTAINER_CONMON=/opt/k8s/usr/local/bin/conmon
+Environment=CONTAINER_CONMON=/opt/k8s/bin/conmon
 Environment="CONTAINER_MANAGE_NS_LIFECYCLE=true"
 Environment="CONTAINER_DROP_INFRA_CTR=true"
 Environment="CONTAINER_LOG_FORMAT=json"
