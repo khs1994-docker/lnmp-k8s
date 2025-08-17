@@ -179,7 +179,8 @@ _get_kubernetes_server_by_docker_image(){
   if [ -z "${K8S_IMAGE_REGISTRY}" ];then
     if [ "${LNMP_CN_ENV}" != 'false' ];then
       # 国内
-      K8S_IMAGE_REGISTRY="ccr.ccs.tencentyun.com"
+      K8S_IMAGE_REGISTRY="docker.cnb.cool"
+      K8S_IMAGE_NS="khs1994-docker/lwpm"
     # else
       # 国外
       # K8S_IMAGE_REGISTRY="useccr.ccs.tencentyun.com"
@@ -435,22 +436,6 @@ _helm_install(){
   $(_sudo) rm -rf ${TMP_ROOT}/${GOOS}-${GOARCH}
 }
 
-_gvisor_containerd_conf(){
-  if ! [ "$GOOS" = 'linux' -a "$GOARCH" = 'amd64' ];then
-    print_info "$GOOS $GOARCH not support gvisor, skip config containerd with runsc"
-
-    return
-  fi
-}
-
-_gvisor_crio_conf(){
-  print_info "config crio with gvisor(runsc) ..."
-  cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/crio/crio.conf
-[crio.runtime.runtimes.runsc]
-  runtime_path = "/usr/local/bin/runsc"
-EOF
-}
-
 _gvisor_install(){
   if ! [ "$GOOS" = 'linux' -a "$GOARCH" = 'amd64' ];then
     print_info "$GOOS $GOARCH not support gvisor"
@@ -534,22 +519,6 @@ _runc_install(){
   fi
 
   runc --version
-}
-
-_crun_containerd_conf(){
-  if ! [ "$GOOS" = 'linux' -a "$GOARCH" = 'amd64' ];then
-    print_info "$GOOS $GOARCH not support crun, skip config containerd with crun"
-
-    return
-  fi
-}
-
-_crun_crio_conf(){
-  print_info "config crio with crun ..."
-  cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/crio/crio.conf
-[crio.runtime.runtimes.crun]
-  runtime_path = "/usr/local/bin/crun"
-EOF
 }
 
 _crun_install(){
@@ -736,8 +705,8 @@ _crictl_crio_conf(){
   $(_sudo) rm -rf /etc/crictl.yaml
   print_info "conf crictl with cri-o"
   cat <<EOF | $(_sudo) tee -a /etc/crictl.yaml
-runtime-endpoint: unix:///var/run/crio/crio.sock
-image-endpoint: unix:///var/run/crio/crio.sock
+runtime-endpoint: unix:///var/run/cri-o/cri-o.sock
+image-endpoint: unix:///var/run/cri-o/cri-o.sock
 timeout: 10
 debug: false
 EOF
@@ -858,7 +827,7 @@ _cri_sysctl(){
 }
 
 _conmon_install(){
-  if [ -f ${K8S_ROOT}/usr/local/bin/conmon ];then
+  if [ -f ${K8S_ROOT}/bin/conmon ];then
     return
   fi
 
@@ -873,41 +842,53 @@ _conmon_install(){
           "" 0 ${DOWNLOAD_FROM_REGISTRY_URL})
     $(_sudo) tar -zxvf $rootfs -C ${TMP_ROOT}
 
-    $(_sudo) cp ${TMP_ROOT}/conmon/dist/conmon ${K8S_ROOT}/usr/local/bin/conmon
+    $(_sudo) cp ${TMP_ROOT}/conmon/dist/conmon ${K8S_ROOT}/bin/conmon
 
-    $(_sudo) chmod +x ${K8S_ROOT}/usr/local/bin/conmon
+    $(_sudo) chmod +x ${K8S_ROOT}/bin/conmon
   else
     url=$url_official
 
     if [ $OS = "Linux" ];then
       if [ $GOARCH = "amd64" -o $GOARCH = "arm64" ];then
-        $(_sudo) $(_curl) -o ${K8S_ROOT}/usr/local/bin/conmon $url
+        $(_sudo) $(_curl) -o ${K8S_ROOT}/bin/conmon $url
 
-        $(_sudo) chmod +x ${K8S_ROOT}/usr/local/bin/conmon
+        $(_sudo) chmod +x ${K8S_ROOT}/bin/conmon
 
         return
       fi
     fi
   fi
-
-  cd /tmp
-
-  if [ -d conmon/.git ];then
-    cd conmon
-    git fetch origin main --depth=1
-    git reset --hard origin/main
-  else
-    rm -rf conmon
-    git clone --depth=1 https://github.com/containers/conmon
-  fi
-
-  cd /tmp/conmon
-  make
-  $(_sudo) make PREFIX=${K8S_ROOT}/usr/local install
 }
 
 # https://github.com/cri-o/cri-o/blob/main/install.md#build-and-install-cri-o-from-source
 _crio_install(){
+  if [ $DOWNLOAD_FROM_REGISTRY = "true" ];then
+    rootfs=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
+          khs1994-docker/lwpm/cri-o \
+          1.33.0 \
+          ${GOARCH} \
+          ${GOOS} \
+          "" 0 ${DOWNLOAD_FROM_REGISTRY_URL})
+    $(_sudo) tar -zxvf $rootfs -C ${TMP_ROOT}
+
+    # _conmon_install
+
+    $(_sudo) mkdir -p ${K8S_ROOT}/etc/crio
+
+    $(_sudo) cp -r systemd/etc/containers/. ${K8S_ROOT}/etc/containers
+    $(_sudo) cp -r systemd/etc/crio/crio.conf ${K8S_ROOT}/etc/crio/crio.conf
+
+    $(_sudo) cp ${TMP_ROOT}/cri-o/bin/* ${K8S_ROOT}/bin/
+
+     $(_sudo) cp ${TMP_ROOT}/cri-o/bin/crun /usr/local/bin/crun
+
+    _crio_config
+
+    return
+  fi
+
+  return
+
   set +e
   command -v crio > /dev/null 2>&1
   if [ $? -eq 0 ];then print_info "cri-o already install" ; return;fi
@@ -1062,9 +1043,9 @@ _containerd_cri_config(){
   sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/2.1/config.toml \
     | $(_sudo) tee $CONTAINERD_CONF_ROOT/config.toml
 
-  if ! [ "${LNMP_CN_ENV}" = 'false' ];then
-    $(_sudo) cp -r systemd/etc/cri-containerd/2.1/certs.d $CONTAINERD_CONF_ROOT
-  fi
+  # if ! [ "${LNMP_CN_ENV}" = 'false' ];then
+  #   $(_sudo) cp -r systemd/etc/cri-containerd/2.1/certs.d $CONTAINERD_CONF_ROOT
+  # fi
 
   if [ -n "$GITHUB_ACTIONS" ];then
     $(_sudo) mkdir -p $CONTAINERD_CONF_ROOT/certs.d/docker.io
@@ -1116,14 +1097,12 @@ _cri_handler(){
     _containerd_install
     _containerd_cri_config
     _docker_default_conf
-    if [ "$GOOS" = 'linux' ];then _gvisor_containerd_conf;fi
     _crictl_containerd_conf
   elif [ "$CONTAINER_RUNTIME" = "--crio" ];then
     print_info "Kubelet Runtime is CRI-O"
     _crio_install
     _crio_config
     _docker_default_conf
-    if [ "$GOOS" = 'linux' ];then _gvisor_crio_conf;fi
     _crictl_crio_conf
   elif [ "$CONTAINER_RUNTIME" = "--docker" ];then
     print_info "Kubelet Runtime is Docker"
