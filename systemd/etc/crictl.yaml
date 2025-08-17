@@ -3,8 +3,8 @@ image-endpoint: unix:///var/run/dockershim.sock
 # runtime-endpoint: unix:///run/cri-containerd/containerd.sock
 # image-endpoint: unix:///run/cri-containerd/containerd.sock
 
-# runtime-endpoint: unix:///var/run/cri-o/cri-o.sock
-# image-endpoint: unix:///var/run/cri-o/cri-o.sock
+# runtime-endpoint: unix:///var/run/crio/crio.sock
+# image-endpoint: unix:///var/run/crio/crio.sock
 
 timeout: 10
 debug: false

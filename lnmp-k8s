@@ -705,8 +705,8 @@ _crictl_crio_conf(){
   $(_sudo) rm -rf /etc/crictl.yaml
   print_info "conf crictl with cri-o"
   cat <<EOF | $(_sudo) tee -a /etc/crictl.yaml
-runtime-endpoint: unix:///var/run/cri-o/cri-o.sock
-image-endpoint: unix:///var/run/cri-o/cri-o.sock
+runtime-endpoint: unix:///var/run/crio/crio.sock
+image-endpoint: unix:///var/run/crio/crio.sock
 timeout: 10
 debug: false
 EOF
@@ -865,7 +865,7 @@ _crio_install(){
   if [ $DOWNLOAD_FROM_REGISTRY = "true" ];then
     rootfs=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
           khs1994-docker/lwpm/cri-o \
-          1.33.0 \
+          ${KUBERNETES_VERSION} \
           ${GOARCH} \
           ${GOOS} \
           "" 0 ${DOWNLOAD_FROM_REGISTRY_URL})
