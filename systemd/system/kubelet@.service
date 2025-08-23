@@ -116,8 +116,7 @@ ExecStart=/opt/k8s/bin/kubelet \
 --config=${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml \
 --config-dir=${K8S_ROOT}/etc/kubernetes/kubelet.conf.d \
 --hostname-override=${NODE_NAME} \
---v=2 \
---container-runtime-endpoint=unix:///run/%i/%i.sock
+--v=2
 
 ; kubelet@cri-containerd
 ; kubelet@crio
