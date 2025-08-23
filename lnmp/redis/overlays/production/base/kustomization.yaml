@@ -1,0 +1,18 @@
+resources:
+- ../../../base
+configMapGenerator:
+- name: lnmp-redis-conf
+  files:
+  - redis.conf=config/redis.production.conf
+- name: lnmp-tz
+  literals:
+  - TZ=Asia/Shanghai
+# patchesStrategicMerge:
+# - hostpath.patch.yaml
+generatorOptions:
+  labels:
+    app: lnmp
+    tier: redis
+images:
+- name: redis
+  newName: ghcr.io/dpsigs/redis
