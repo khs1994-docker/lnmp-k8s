@@ -570,6 +570,10 @@ _crun_install(){
 }
 
 _containerd_install(){
+  $(_sudo) mkdir -p ${K8S_ROOT}/etc/kubernetes/kubelet.conf.d
+
+  cp systemd/etc/kubernetes/kubelet.conf.d/* ${K8S_ROOT}/etc/kubernetes/kubelet.conf.d/
+
   if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/bin/cri-containerd;fi
 
   if [ "$GOOS" = 'darwin' ];then
@@ -870,6 +874,10 @@ _conmon_install(){
 
 # https://github.com/cri-o/cri-o/blob/main/install.md#build-and-install-cri-o-from-source
 _crio_install(){
+  $(_sudo) mkdir -p ${K8S_ROOT}/etc/kubernetes/kubelet.conf.d
+
+  cp systemd/etc/kubernetes/kubelet.conf.d/* ${K8S_ROOT}/etc/kubernetes/kubelet.conf.d/
+
   if [ $DOWNLOAD_FROM_REGISTRY = "true" ];then
     rootfs=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
           khs1994-docker/lwpm/cri-o \
@@ -1417,10 +1425,6 @@ csr-crb.yaml,\
 kubectl.kubeconfig,\
 kube-proxy.kubeconfig} \
     ${K8S_ROOT}/etc/kubernetes
-
-   $(_sudo) mkdir -p ${K8S_ROOT}/etc/kubernetes/kubelet.conf.d
-
-   cp systemd/etc/kubernetes/kubelet.conf.d/* ${K8S_ROOT}/etc/kubernetes/kubelet.conf.d/
 }
 
 _k8s_join_conf_replace(){
