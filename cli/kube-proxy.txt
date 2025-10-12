@@ -129,7 +129,7 @@ Flags:
                                                      SELinuxChangePolicy=true|false (BETA - default=true)
                                                      SELinuxMount=true|false (BETA - default=false)
                                                      SELinuxMountReadWriteOncePod=true|false (BETA - default=true)
-                                                     SchedulerAsyncAPICalls=true|false (BETA - default=true)
+                                                     SchedulerAsyncAPICalls=true|false (BETA - default=false)
                                                      SchedulerAsyncPreemption=true|false (BETA - default=true)
                                                      SchedulerPopFromBackoffQ=true|false (BETA - default=true)
                                                      ServiceAccountNodeAudienceRestriction=true|false (BETA - default=true)
