@@ -1,4 +1,4 @@
-version = 3
+version = 4
 root = '/var/lib/containerd'
 state = '/run/containerd'
 temp = ''
@@ -7,33 +7,10 @@ required_plugins = []
 oom_score = 0
 imports = ['/etc/containerd/conf.d/*.toml']
 
-[grpc]
-  address = '/run/containerd/containerd.sock'
-  tcp_address = ''
-  tcp_tls_ca = ''
-  tcp_tls_cert = ''
-  tcp_tls_key = ''
-  uid = 0
-  gid = 0
-  max_recv_message_size = 16777216
-  max_send_message_size = 16777216
-  tcp_tls_common_name = ''
-
-[ttrpc]
-  address = ''
-  uid = 0
-  gid = 0
-
 [debug]
-  address = ''
-  uid = 0
-  gid = 0
   level = ''
   format = ''
-
-[metrics]
-  address = ''
-  grpc_histogram = false
+  log_trace_id = false
 
 [plugins]
   [plugins.'io.containerd.cri.v1.images']
@@ -48,7 +25,7 @@ imports = ['/etc/containerd/conf.d/*.toml']
     use_local_image_pull = false
 
     [plugins.'io.containerd.cri.v1.images'.pinned_images]
-      sandbox = 'registry.k8s.io/pause:3.10.1'
+      sandbox = 'registry.k8s.io/pause:3.10.2'
 
     [plugins.'io.containerd.cri.v1.images'.registry]
       config_path = ''
@@ -71,12 +48,12 @@ imports = ['/etc/containerd/conf.d/*.toml']
     netns_mounts_under_state_dir = false
     enable_unprivileged_ports = true
     enable_unprivileged_icmp = true
-    enable_cdi = true
     cdi_spec_dirs = ['/etc/cdi', '/var/run/cdi']
     drain_exec_sync_io_timeout = '0s'
     ignore_deprecation_warnings = []
+    stats_collect_period = ''
+    stats_retention_period = ''
     enable_criu = true
-    enable_experimental_restore_via_create = false
 
     [plugins.'io.containerd.cri.v1.runtime'.containerd]
       default_runtime_name = 'runc'
@@ -97,6 +74,7 @@ imports = ['/etc/containerd/conf.d/*.toml']
           cni_max_conf_num = 0
           snapshotter = ''
           sandboxer = 'podsandbox'
+          disable_pause_image_pull = false
           io_type = ''
 
           [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runc.options]
@@ -111,7 +89,6 @@ imports = ['/etc/containerd/conf.d/*.toml']
             SystemdCgroup = false
 
     [plugins.'io.containerd.cri.v1.runtime'.cni]
-      bin_dir = ''
       bin_dirs = ['/opt/cni/bin']
       conf_dir = '/etc/cni/net.d'
       max_conf_num = 1
@@ -123,6 +100,7 @@ imports = ['/etc/containerd/conf.d/*.toml']
   [plugins.'io.containerd.differ.v1.erofs']
     mkfs_options = []
     enable_tar_index = false
+    enable_dmverity = false
 
   [plugins.'io.containerd.gc.v1.scheduler']
     pause_threshold = 0.02
@@ -150,11 +128,12 @@ imports = ['/etc/containerd/conf.d/*.toml']
   [plugins.'io.containerd.internal.v1.opt']
     path = '/opt/containerd'
 
-  [plugins.'io.containerd.internal.v1.tracing']
-
   [plugins.'io.containerd.metadata.v1.bolt']
     content_sharing_policy = 'shared'
     no_sync = false
+
+  [plugins.'io.containerd.metrics.v1.grpc-prometheus']
+    grpc_histogram = false
 
   [plugins.'io.containerd.monitor.container.v1.restart']
     interval = '10s'
@@ -163,7 +142,6 @@ imports = ['/etc/containerd/conf.d/*.toml']
     no_prometheus = false
 
   [plugins.'io.containerd.mount-handler.v1.erofs']
-
   [plugins.'io.containerd.nri.v1.nri']
     disable = false
     socket_path = '/var/run/nri/nri.sock'
@@ -187,6 +165,35 @@ imports = ['/etc/containerd/conf.d/*.toml']
   [plugins.'io.containerd.runtime.v2.task']
     platforms = ['linux/amd64']
 
+  [plugins.'io.containerd.server.v1.debug']
+    address = ''
+    uid = 0
+    gid = 0
+
+  [plugins.'io.containerd.server.v1.grpc']
+    address = '/run/containerd/containerd.sock'
+    uid = 0
+    gid = 0
+    max_recv_message_size = 16777216
+    max_send_message_size = 16777216
+
+  [plugins.'io.containerd.server.v1.grpc-tcp']
+    address = ''
+    tls_ca = ''
+    tls_cert = ''
+    tls_key = ''
+    tls_common_name = ''
+    max_recv_message_size = 16777216
+    max_send_message_size = 16777216
+
+  [plugins.'io.containerd.server.v1.metrics']
+    address = ''
+
+  [plugins.'io.containerd.server.v1.ttrpc']
+    address = '/run/containerd/containerd.sock.ttrpc'
+    uid = 0
+    gid = 0
+
   [plugins.'io.containerd.service.v1.diff-service']
     default = ['walking']
     sync_fs = false
@@ -197,6 +204,7 @@ imports = ['/etc/containerd/conf.d/*.toml']
 
   [plugins.'io.containerd.shim.v1.manager']
     env = []
+    socket_dir = ''
 
   [plugins.'io.containerd.snapshotter.v1.blockfile']
     root_path = ''
@@ -223,6 +231,8 @@ imports = ['/etc/containerd/conf.d/*.toml']
     enable_fsverity = false
     set_immutable = false
     default_size = ''
+    dmverity_mode = ''
+    layer_content_caches = []
 
   [plugins.'io.containerd.snapshotter.v1.native']
     root_path = ''
@@ -236,8 +246,6 @@ imports = ['/etc/containerd/conf.d/*.toml']
 
   [plugins.'io.containerd.snapshotter.v1.zfs']
     root_path = ''
-
-  [plugins.'io.containerd.tracing.processor.v1.otlp']
 
   [plugins.'io.containerd.transfer.v1.local']
     max_concurrent_downloads = 3
