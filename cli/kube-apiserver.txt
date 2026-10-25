@@ -13,7 +13,7 @@ Generic flags:
       --emulated-version strings                           The versions different components emulate their capabilities (APIs, features, ...) of.
                                                            If set, the component will emulate the behavior of this version instead of the underlying binary version.
                                                            Version format could only be major.minor, for example: '--emulated-version=wardle=1.2,kube=1.31'.
-                                                           Options are: kube=1.34..1.37(default:1.37)
+                                                           Options are: kube=1.35..1.38(default:1.38)
                                                            If the component is not specified, defaults to "kube"
       --emulation-forward-compatible                       If true, for any beta+ APIs enabled by default or by --runtime-config at the emulation version, their future versions with higher priority/stability will be auto enabled even if they introduced after the emulation version. Can only be set to true if the emulation version is lower than the binary version.
       --external-hostname string                           The hostname to use when generating externalized URLs for this master (e.g. Swagger API Docs or OpenID Discovery).
@@ -36,6 +36,7 @@ Generic flags:
                                                            kube:CRDObservedGenerationTracking=true|false (BETA - default=true)
                                                            kube:CRIListStreaming=true|false (ALPHA - default=false)
                                                            kube:CSIVolumeHealth=true|false (ALPHA - default=false)
+                                                           kube:CertificateSigningRequestMLDSA=true|false (BETA - default=false), or CertificateSigningRequestMLDSA=true|false (BETA - default=true) if --min-compatibility-version>=1.38
                                                            kube:ClearingNominatedNodeNameAfterBinding=true|false (BETA - default=true)
                                                            kube:ClientsAllowCARotation=true|false (BETA - default=true)
                                                            kube:ClientsAllowCBOR=true|false (ALPHA - default=false)
@@ -43,6 +44,7 @@ Generic flags:
                                                            kube:ClientsPreferCBOR=true|false (ALPHA - default=false)
                                                            kube:CloudControllerManagerWatchBasedRoutesReconciliation=true|false (ALPHA - default=false)
                                                            kube:CloudControllerManagerWebhook=true|false (ALPHA - default=false)
+                                                           kube:CloudNodeAdditionalLabelsReconciliation=true|false (ALPHA - default=false)
                                                            kube:ComponentFlagz=true|false (BETA - default=true)
                                                            kube:ComponentStatusz=true|false (BETA - default=true)
                                                            kube:CompositePodGroup=true|false (ALPHA - default=false)
@@ -53,14 +55,13 @@ Generic flags:
                                                            kube:ContainerRestartRules=true|false (BETA - default=true)
                                                            kube:ContainerStopSignals=true|false (ALPHA - default=false)
                                                            kube:ContextualLogging=true|false (BETA - default=true)
-                                                           kube:ControllerManagerReleaseLeaderElectionLockOnExit=true|false (ALPHA - default=false)
                                                            kube:CoordinatedLeaderElection=true|false (BETA - default=false)
                                                            kube:CrossNamespaceVolumeDataSource=true|false (ALPHA - default=false)
                                                            kube:DRAConsumableCapacity=true|false (BETA - default=true)
                                                            kube:DRADerivedAttributes=true|false (ALPHA - default=false)
                                                            kube:DRADeviceBindingConditions=true|false (BETA - default=true)
                                                            kube:DRADeviceCompatibilityGroups=true|false (ALPHA - default=false)
-                                                           kube:DRAFractionalCapacityRange=true|false (BETA - default=false), or DRAFractionalCapacityRange=true|false (BETA - default=true) if --min-compatibility-version>=1.37
+                                                           kube:DRAFractionalCapacityRange=true|false (BETA - default=true)
                                                            kube:DRAListTypeAttributes=true|false (ALPHA - default=false)
                                                            kube:DRANodeAllocatableResources=true|false (ALPHA - default=false)
                                                            kube:DRAOptionalNodeOperations=true|false (ALPHA - default=false)
@@ -75,7 +76,6 @@ Generic flags:
                                                            kube:DeploymentReplicaSetTerminatingReplicas=true|false (BETA - default=true)
                                                            kube:DetectCacheInconsistency=true|false (BETA - default=true)
                                                            kube:EmptyDirVolumeMode=true|false (ALPHA - default=false)
-                                                           kube:EnvFiles=true|false (BETA - default=true)
                                                            kube:EtcdRangeStream=true|false (BETA - default=true)
                                                            kube:EventedPLEG=true|false (ALPHA - default=false)
                                                            kube:EvictionRequestAPI=true|false (ALPHA - default=false)
@@ -86,7 +86,6 @@ Generic flags:
                                                            kube:GracefulNodeShutdown=true|false (BETA - default=true)
                                                            kube:GracefulNodeShutdownBasedOnPodPriority=true|false (BETA - default=true)
                                                            kube:H2CContainerProbe=true|false (ALPHA - default=false)
-                                                           kube:HPAGeneration=true|false (BETA - default=true)
                                                            kube:HPAOptimizedSelectorStore=true|false (BETA - default=true)
                                                            kube:HPAScaleToZero=true|false (BETA - default=true)
                                                            kube:HugepageAwareEviction=true|false (BETA - default=true)
@@ -98,7 +97,7 @@ Generic flags:
                                                            kube:InPlacePodVerticalScalingMemoryBackedVolumes=true|false (ALPHA - default=false)
                                                            kube:InPlacePodVerticalScalingSchedulerPreemption=true|false (ALPHA - default=false)
                                                            kube:InterPodAffinityHostnameFastPath=true|false (ALPHA - default=false)
-                                                           kube:KubeProxyNFTablesLocalhostNodePorts=true|false (ALPHA - default=false)
+                                                           kube:KubeProxyNFTablesLocalhostNodePorts=true|false (BETA - default=true)
                                                            kube:KubeletAllocatedPodsEndpoint=true|false (ALPHA - default=false)
                                                            kube:KubeletCrashLoopBackOffMax=true|false (BETA - default=true)
                                                            kube:KubeletEnsureSecretPulledImages=true|false (BETA - default=true)
@@ -109,6 +108,7 @@ Generic flags:
                                                            kube:LocalStorageCapacityIsolationFSQuotaMonitoring=true|false (BETA - default=false)
                                                            kube:LoggingAlphaOptions=true|false (ALPHA - default=false)
                                                            kube:LoggingBetaOptions=true|false (BETA - default=true)
+                                                           kube:ManagedFieldsOptOut=true|false (ALPHA - default=false)
                                                            kube:ManifestBasedAdmissionControlConfig=true|false (BETA - default=true)
                                                            kube:MatchLabelKeysInPodTopologySpread=true|false (BETA - default=true)
                                                            kube:MatchLabelKeysInPodTopologySpreadSelectorMerge=true|false (BETA - default=true)
@@ -126,6 +126,7 @@ Generic flags:
                                                            kube:OpportunisticBatching=true|false (BETA - default=true)
                                                            kube:PersistentVolumeClaimUnusedSinceTime=true|false (BETA - default=true)
                                                            kube:PodAndContainerStatsFromCRI=true|false (BETA - default=false)
+                                                           kube:PodCertificateMLDSA=true|false (BETA - default=false), or PodCertificateMLDSA=true|false (BETA - default=true) if --min-compatibility-version>=1.38
                                                            kube:PodDeletionCost=true|false (BETA - default=true)
                                                            kube:PodGroupPreemptionPolicy=true|false (ALPHA - default=false)
                                                            kube:PodLevelResourceManagers=true|false (BETA - default=false)
@@ -163,7 +164,6 @@ Generic flags:
                                                            kube:StorageCapacityScoring=true|false (BETA - default=true)
                                                            kube:StorageVersionAPI=true|false (ALPHA - default=false)
                                                            kube:StorageVersionHash=true|false (BETA - default=true)
-                                                           kube:StrictIPCIDRValidation=true|false (BETA - default=true)
                                                            kube:StructuredAuthenticationConfigurationEgressSelector=true|false (BETA - default=true)
                                                            kube:StructuredAuthenticationConfigurationJWKSMetrics=true|false (BETA - default=true)
                                                            kube:TaintTolerationComparisonOperators=true|false (ALPHA - default=false)
@@ -182,7 +182,7 @@ Generic flags:
                                                            kube:WatchListClient=true|false (BETA - default=true)
                                                            kube:WatchListCompression=true|false (BETA - default=true)
                                                            kube:WebhookRoundTripLoadBalancing=true|false (BETA - default=true)
-                                                           kube:WindowsCPUAndMemoryAffinity=true|false (ALPHA - default=false)
+                                                           kube:WindowsCPUAndMemoryAffinity=true|false (BETA - default=true)
                                                            kube:WindowsGracefulNodeShutdown=true|false (BETA - default=true)
                                                            kube:WorkloadWithJob=true|false (ALPHA - default=false)
       --goaway-chance float                                To prevent HTTP/2 clients from getting stuck on a single apiserver, randomly close a connection (GOAWAY). The client's other in-flight requests won't be affected, and the client will reconnect, likely landing on a different apiserver after going through the load balancer again. This argument sets the fraction of requests that will be sent a GOAWAY. Clusters with single apiservers, or which don't use a load balancer, should NOT enable this. Min is 0 (off), Max is .02 (1/50 requests); .001 (1/1000) is a recommended starting point.
@@ -191,7 +191,7 @@ Generic flags:
       --max-requests-inflight int                          This and --max-mutating-requests-inflight are summed to determine the server's total concurrency limit (which must be positive) if --enable-priority-and-fairness is true. Otherwise, this flag limits the maximum number of non-mutating requests in flight, or a zero value disables the limit completely. (default 400)
       --min-compatibility-version strings                  The min version of control plane components the server should be compatible with.
                                                            Must be less or equal to the emulated-version. Version format could only be major.minor, for example: '--min-compatibility-version=wardle=1.2,kube=1.31'.
-                                                           Options are: kube=1.34..1.37(default:1.36)
+                                                           Options are: kube=1.35..1.38(default:1.37)
                                                            If the component is not specified, defaults to "kube"
       --min-request-timeout int                            An optional field indicating the minimum number of seconds a handler must keep a request open before timing it out. Currently only honored by the watch request handler, which picks a randomized value above this number as the connection timeout, to spread out load. (default 1800)
       --request-timeout duration                           An optional field indicating the duration a handler must keep a request open before timing it out. This is the default request timeout for requests but may be overridden by flags such as --min-request-timeout for specific types of requests. (default 1m0s)
@@ -235,8 +235,8 @@ Secure serving flags:
       --permit-port-sharing                    If true, SO_REUSEPORT will be used when binding the port, which allows more than one instance to bind on the same address and port. [default=false]
       --secure-port int                        The port on which to serve HTTPS with authentication and authorization. It cannot be switched off with 0. (default 6443)
       --tls-cert-file string                   File containing the default x509 Certificate for HTTPS. (CA cert, if any, concatenated after server cert). If HTTPS serving is enabled, and --tls-cert-file and --tls-private-key-file are not provided, a self-signed certificate and key are generated for the public address and saved to the directory specified by --cert-dir.
-      --tls-cipher-suites strings              Comma-separated list of cipher suites for the server. If omitted, the default Go cipher suites will be used.
-                                               Preferred values: TLS_AES_128_GCM_SHA256, TLS_AES_256_GCM_SHA384, TLS_CHACHA20_POLY1305_SHA256, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256.
+      --tls-cipher-suites strings              Comma-separated list of cipher suites for the server. If omitted, the default Go cipher suites will be used. 
+                                               Preferred values: TLS_AES_128_GCM_SHA256, TLS_AES_256_GCM_SHA384, TLS_CHACHA20_POLY1305_SHA256, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256. 
                                                Insecure values: TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256, TLS_ECDHE_ECDSA_WITH_RC4_128_SHA, TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256, TLS_ECDHE_RSA_WITH_RC4_128_SHA, TLS_RSA_WITH_3DES_EDE_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA256, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_256_GCM_SHA384, TLS_RSA_WITH_RC4_128_SHA.
       --tls-curve-preferences int32Slice       Comma-separated list of numeric Go crypto/tls CurveID values, as the allowed key exchange mechanisms for the server. The supported values depend on the Go version used. See https://pkg.go.dev/crypto/tls#CurveID for values supported for each Go version. The order of the list is ignored, and key exchange mechanisms are chosen by Go from this list using an internal preference order. If omitted, the default Go curves will be used. (default [])
       --tls-min-version string                 Minimum TLS version supported. Possible values: VersionTLS10, VersionTLS11, VersionTLS12, VersionTLS13
@@ -354,7 +354,7 @@ Admission flags:
 Metrics flags:
 
       --allow-metric-labels stringToString       The map from metric-label to value allow-list of this label. The key's format is <MetricName>,<LabelName>. The value's format is <allowed_value>,<allowed_value>...e.g. metric1,label1='v1,v2,v3', metric1,label2='v1,v2,v3' metric2,label1='v1,v2,v3'. (default [])
-      --allow-metric-labels-manifest string      The path to the manifest file that contains the allow-list mapping. The format of the file is the same as the flag --allow-metric-labels, i.e.,
+      --allow-metric-labels-manifest string      The path to the manifest file that contains the allow-list mapping. The format of the file is the same as the flag --allow-metric-labels, i.e., 
                                                  allowListMapping:
                                                    "metric1,label1": "value11,value12"
                                                    "metric2,label2": ""
@@ -395,8 +395,8 @@ Misc flags:
       --kubelet-timeout duration                         Timeout for kubelet operations. (default 5s)
       --kubernetes-service-node-port int                 If non-zero, the Kubernetes master service (which apiserver creates/maintains) will be of type NodePort, using this as the value of the port. If zero, the Kubernetes master service will be of type ClusterIP.
       --max-connection-bytes-per-sec int                 If non-zero, throttle each user connection to this number of bytes/sec. Currently only applies to long-running requests.
-      --peer-advertise-ip string                         If set and the UnknownVersionInteroperabilityProxy feature gate is enabled, this IP will be used by peer kube-apiservers to proxy requests to this kube-apiserver when the request cannot be handled by the peer due to version skew between the kube-apiservers. This flag is only used in clusters configured with multiple kube-apiservers for high availability.
-      --peer-advertise-port string                       If set and the UnknownVersionInteroperabilityProxy feature gate is enabled, this port will be used by peer kube-apiservers to proxy requests to this kube-apiserver when the request cannot be handled by the peer due to version skew between the kube-apiservers. This flag is only used in clusters configured with multiple kube-apiservers for high availability.
+      --peer-advertise-ip string                         If set and the UnknownVersionInteroperabilityProxy feature gate is enabled, this IP will be used by peer kube-apiservers to proxy requests to this kube-apiserver when the request cannot be handled by the peer due to version skew between the kube-apiservers. This flag is only used in clusters configured with multiple kube-apiservers for high availability. 
+      --peer-advertise-port string                       If set and the UnknownVersionInteroperabilityProxy feature gate is enabled, this port will be used by peer kube-apiservers to proxy requests to this kube-apiserver when the request cannot be handled by the peer due to version skew between the kube-apiservers. This flag is only used in clusters configured with multiple kube-apiservers for high availability. 
       --peer-ca-file string                              If set and the UnknownVersionInteroperabilityProxy feature gate is enabled, this file will be used to verify serving certificates of peer kube-apiservers. This flag is only used in clusters configured with multiple kube-apiservers for high availability.
       --proxy-client-cert-file string                    Client certificate used to prove the identity of the aggregator or kube-apiserver when it must call out during a request. This includes proxying requests to a user api-server and calling out to webhook admission plugins. It is expected that this cert includes a signature from the CA in the --requestheader-client-ca-file flag. That CA is published in the 'extension-apiserver-authentication' configmap in the kube-system namespace. Components receiving calls from kube-aggregator should use that CA to perform their half of the mutual TLS verification.
       --proxy-client-key-file string                     Private key for the client certificate used to prove the identity of the aggregator or kube-apiserver when it must call out during a request. This includes proxying requests to a user api-server and calling out to webhook admission plugins.
